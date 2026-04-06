@@ -195,16 +195,16 @@ export default function AppCoach() {
 
   // ─── Locally computed panel data (zero API calls) ───────────────────────────
   const systemStatus = useMemo(
-    () => getSystemStatus(pillarScores, todayCheckIn),
+    () => getSystemStatus(pillarScores as unknown as Record<string, number>, todayCheckIn),
     [pillarScores, todayCheckIn],
   );
   const tagsFokus = useMemo(
-    () => getTagesFokus(pillarScores, goalPlan),
+    () => getTagesFokus(pillarScores as unknown as Record<string, number>, goalPlan),
     [pillarScores, goalPlan],
   );
-  const weakest = useMemo(() => getWeakestPillar(pillarScores), [pillarScores]);
+  const weakest = useMemo(() => getWeakestPillar(pillarScores as unknown as Record<string, number>), [pillarScores]);
   const dynamicQuestions = useMemo(
-    () => getDynamicQuestions(pillarScores, todayCheckIn, goalPlan),
+    () => getDynamicQuestions(pillarScores as unknown as Record<string, number>, todayCheckIn, goalPlan),
     [pillarScores, todayCheckIn, goalPlan],
   );
 

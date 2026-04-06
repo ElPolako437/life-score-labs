@@ -1,7 +1,7 @@
 {
-  "name": "CALINESS – Longevity Intelligence",
-  "short_name": "CALINESS",
-  "description": "Dein Premium Longevity System mit KI-Coach und CALI.",
+  "name": "CALINESS Reset",
+  "short_name": "CALINESS Reset",
+  "description": "7-Tage Reset — Dein System beruhigen in 7 klaren Tagen.",
   "icons": [
     {
       "src": "/favicon-512.png",
@@ -13,6 +13,6 @@
   "theme_color": "#0a0c0e",
   "background_color": "#0a0c0e",
   "display": "standalone",
-  "start_url": "/app/home",
+  "start_url": "/",
   "scope": "/"
 }
