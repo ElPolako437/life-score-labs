@@ -199,7 +199,7 @@ export default function AppCoach() {
     [pillarScores, todayCheckIn],
   );
   const tagsFokus = useMemo(
-    () => getTagesFokus(pillarScores, goalPlan),
+    () => getTagesFokus(pillarScores as unknown as Record<string, number>, goalPlan),
     [pillarScores, goalPlan],
   );
   const weakest = useMemo(() => getWeakestPillar(pillarScores), [pillarScores]);
