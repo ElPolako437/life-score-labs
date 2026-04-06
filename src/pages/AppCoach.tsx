@@ -202,7 +202,7 @@ export default function AppCoach() {
     () => getTagesFokus(pillarScores as unknown as Record<string, number>, goalPlan),
     [pillarScores, goalPlan],
   );
-  const weakest = useMemo(() => getWeakestPillar(pillarScores), [pillarScores]);
+  const weakest = useMemo(() => getWeakestPillar(pillarScores as unknown as Record<string, number>), [pillarScores]);
   const dynamicQuestions = useMemo(
     () => getDynamicQuestions(pillarScores, todayCheckIn, goalPlan),
     [pillarScores, todayCheckIn, goalPlan],
