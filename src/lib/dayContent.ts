@@ -118,7 +118,8 @@ export const REFLECTION_TASK_OPTIONS = [
 ];
 
 export const SOFT_CONVERSION: Record<number, string> = {
+  3: 'Wenn dir selbst mit diesem Reset noch Struktur fehlt, liegt es oft nicht an Disziplin — sondern an fehlender Einordnung.',
   4: 'Viele merken an diesem Punkt: Die Basics funktionieren — aber es fehlt die Einordnung. Was genau braucht DEIN Körper? Das ist die Frage, die ein Reset allein nicht beantworten kann.',
-  5: 'Wenn du merkst, dass dir Struktur fehlt, ist der Reset oft nur der erste Schritt. Das Problem ist selten Disziplin — es ist fehlende Klarheit darüber, was wirklich zu dir passt.',
-  6: 'Viele nutzen den Reset als Einstieg und bauen danach mit einem persönlichen Plan darauf auf. Wenn du nach diesem Reset weitermachen willst — nicht allein, sondern mit klarer Begleitung — dann gibt es einen nächsten Schritt.',
+  5: 'Genau hier merken viele, dass ein allgemeiner Plan nicht mehr reicht. Was dir wirklich fehlt, ist keine Motivation — sondern Klarheit darüber, was zu DIR passt.',
+  6: 'Wenn dir diese Woche gutgetan hat, reagierst du auf Struktur — und genau darauf bauen wir im Sprint auf. Nicht allein, sondern mit klarer Begleitung.',
 };
