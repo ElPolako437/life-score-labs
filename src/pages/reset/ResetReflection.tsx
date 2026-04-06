@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { useReset, type ReflectionData } from '@/contexts/ResetContext';
-import { TASK_KEYS, TASKS } from '@/lib/dayContent';
+import { REFLECTION_TASK_OPTIONS } from '@/lib/dayContent';
 import { cn } from '@/lib/utils';
 
 const DIMENSIONS = [
@@ -14,17 +14,13 @@ const DIMENSIONS = [
   { key: 'body', label: 'Körpergefühl' },
 ] as const;
 
-const TASK_OPTIONS = TASKS.map((t, i) => ({
-  key: TASK_KEYS[i],
-  label: t.replace(/\(.*?\)/g, '').trim(),
-}));
-
 const HARDEST_FEEDBACK: Record<string, string> = {
-  movement: 'Wenn Bewegung schwerfiel, liegt es selten an Faulheit — sondern an Überforderung im Alltag.',
-  meals: 'Wenn Mahlzeiten dein Stolperstein waren, fehlt oft nicht Wissen — sondern eine klare Tagesstruktur.',
-  sleep: 'Wenn Schlaf schwierig war, braucht dein Nervensystem mehr Vorlaufzeit zum Runterfahren.',
   offline: 'Wenn Offline-Zeit am schwierigsten war, zeigt das, wie stark Reize deinen Alltag dominieren.',
-  alcohol: 'Wenn der Abend dein größter Stolperstein war, liegt das selten an Willenskraft — sondern an fehlender Tagesstruktur.',
+  meals: 'Wenn Mahlzeiten dein Stolperstein waren, fehlt oft nicht Wissen — sondern eine klare Tagesstruktur.',
+  movement: 'Wenn Bewegung schwerfiel, liegt es selten an Faulheit — sondern an Überforderung im Alltag.',
+  sleep: 'Wenn Schlaf schwierig war, braucht dein Nervensystem mehr Vorlaufzeit zum Runterfahren.',
+  evening: 'Wenn der Abend dein größter Stolperstein war, liegt das selten an Willenskraft — sondern an fehlender Tagesstruktur.',
+  preparation: 'Wenn Vorbereitung schwerfiel, fehlt nicht die Zeit — sondern ein einfaches System, das zu deinem Alltag passt.',
 };
 
 export default function ResetReflection() {
@@ -153,7 +149,7 @@ export default function ResetReflection() {
         <div className="mb-8">
           <p className="text-sm font-medium text-foreground mb-3">Was fiel dir am leichtesten?</p>
           <div className="space-y-2">
-            {TASK_OPTIONS.map(t => (
+            {REFLECTION_TASK_OPTIONS.map(t => (
               <button
                 key={t.key}
                 onClick={() => setEasiest(t.key)}
@@ -174,7 +170,7 @@ export default function ResetReflection() {
         <div className="mb-8">
           <p className="text-sm font-medium text-foreground mb-3">Was war am schwierigsten?</p>
           <div className="space-y-2">
-            {TASK_OPTIONS.map(t => (
+            {REFLECTION_TASK_OPTIONS.map(t => (
               <button
                 key={t.key}
                 onClick={() => setHardest(t.key)}

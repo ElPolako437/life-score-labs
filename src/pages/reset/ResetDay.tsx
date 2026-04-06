@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
-import { DAY_CONTENT, TASKS } from '@/lib/dayContent';
+import { DAY_CONTENT } from '@/lib/dayContent';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
@@ -18,7 +18,9 @@ export default function ResetDay() {
   const content = DAY_CONTENT[dayNum - 1];
   const dayData = getDayData(dayNum);
   const completedCount = completedTaskCount(dayNum);
-  const canComplete = completedCount >= 3;
+  const totalTasks = content?.tasks.length || 0;
+  const minRequired = Math.min(3, totalTasks);
+  const canComplete = completedCount >= minRequired;
 
   // Homescreen hint after day 1 completion
   useEffect(() => {
@@ -71,12 +73,12 @@ export default function ResetDay() {
         </h1>
         <p className="text-sm text-muted-foreground mb-2">{content.goal}</p>
         <p className="text-sm text-foreground/70 italic mb-8 leading-relaxed">
-          „{content.impulse}"
+          {content.impulse}
         </p>
 
         {/* Tasks */}
         <div className="space-y-3 mb-8">
-          {TASKS.map((task, i) => (
+          {content.tasks.map((task, i) => (
             <label
               key={i}
               className={cn(
@@ -87,7 +89,7 @@ export default function ResetDay() {
               )}
             >
               <Checkbox
-                checked={dayData.tasks[i]}
+                checked={dayData.tasks[i] || false}
                 onCheckedChange={() => toggleTask(dayNum, i)}
                 className="mt-0.5 transition-transform data-[state=checked]:scale-110"
               />
@@ -126,7 +128,7 @@ export default function ResetDay() {
 
         {!canComplete && !dayData.completed && (
           <p className="text-xs text-muted-foreground/50 text-center mt-3">
-            Erledige mindestens 3 Aufgaben
+            Erledige mindestens {minRequired} Aufgaben
           </p>
         )}
 
