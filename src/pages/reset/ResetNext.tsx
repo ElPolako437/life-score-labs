@@ -106,6 +106,21 @@ export default function ResetNext() {
           <ArrowRight className="w-4 h-4" />
         </Button>
 
+        {/* Human touch */}
+        <div className="flex items-center gap-3 mt-8 justify-center">
+          <img
+            src="/images/david-sarah.png"
+            alt="David & Sarah"
+            loading="lazy"
+            width={40}
+            height={40}
+            className="w-10 h-10 rounded-full object-cover grayscale brightness-75"
+          />
+          <p className="text-xs text-muted-foreground/60 text-left leading-snug">
+            David & Sarah — wir schauen uns<br />deine Situation persönlich an.
+          </p>
+        </div>
+
         {/* Secondary CTA */}
         <button
           onClick={() => window.open('https://www.instagram.com/caliness_/', '_blank')}
