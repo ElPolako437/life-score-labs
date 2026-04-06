@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import { DAY_CONTENT } from '@/lib/dayContent';
 
 export type Goal = 'energy' | 'fatloss' | 'structure' | 'sleep';
 export type Hurdle = 'stress' | 'time' | 'nutrition' | 'consistency' | 'evening';
@@ -44,12 +45,16 @@ interface ResetContextValue extends ResetState {
   completedTaskCount: (day: number) => number;
 }
 
-const DEFAULT_DAY: DayData = {
-  tasks: [false, false, false, false, false],
-  rating: null,
-  note: null,
-  completed: false,
-};
+function getDefaultDay(dayNum: number): DayData {
+  const content = DAY_CONTENT[dayNum - 1];
+  const taskCount = content ? content.tasks.length : 3;
+  return {
+    tasks: new Array(taskCount).fill(false),
+    rating: null,
+    note: null,
+    completed: false,
+  };
+}
 
 const STORAGE_KEY = 'caliness_reset';
 
@@ -97,7 +102,7 @@ export function ResetProvider({ children }: { children: ReactNode }) {
   const toggleTask = useCallback((day: number, taskIndex: number) => {
     setState(s => {
       const dayKey = String(day);
-      const existing = s.days[dayKey] || { ...DEFAULT_DAY, tasks: [...DEFAULT_DAY.tasks] };
+      const existing = s.days[dayKey] || getDefaultDay(day);
       const newTasks = [...existing.tasks];
       newTasks[taskIndex] = !newTasks[taskIndex];
       return {
@@ -110,7 +115,7 @@ export function ResetProvider({ children }: { children: ReactNode }) {
   const completeDay = useCallback((day: number, rating: Rating, note?: string) => {
     setState(s => {
       const dayKey = String(day);
-      const existing = s.days[dayKey] || { ...DEFAULT_DAY, tasks: [...DEFAULT_DAY.tasks] };
+      const existing = s.days[dayKey] || getDefaultDay(day);
       return {
         ...s,
         currentDay: Math.max(s.currentDay, day + 1),
@@ -144,7 +149,7 @@ export function ResetProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const getDayData = useCallback((day: number): DayData => {
-    return state.days[String(day)] || { ...DEFAULT_DAY, tasks: [...DEFAULT_DAY.tasks] };
+    return state.days[String(day)] || getDefaultDay(day);
   }, [state.days]);
 
   const completedTaskCount = useCallback((day: number): number => {
