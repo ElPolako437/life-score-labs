@@ -103,13 +103,20 @@ export default function ResetReflection() {
             </div>
           )}
 
+          {/* Pre-conversion bridge */}
+          <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 mb-8 animate-fade-in">
+            <p className="text-sm text-foreground/80 leading-relaxed">
+              Dieser Reset hat dir gezeigt, worauf dein Körper reagiert. Der nächste Schritt ist kein neuer Versuch — sondern ein Plan, der genau darauf aufbaut.
+            </p>
+          </div>
+
           <Button
             variant="premium"
             size="lg"
             className="w-full min-h-[48px]"
             onClick={() => navigate('/next')}
           >
-            Dein Ergebnis steht — wie geht es weiter?
+            Wie geht es jetzt weiter?
           </Button>
         </div>
       </div>
