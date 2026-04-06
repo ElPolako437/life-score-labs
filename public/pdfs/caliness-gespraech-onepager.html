@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caliness Academy · Das Longevity-Gespräch</title>
+  
+  <!-- Caliness Academy Favicon -->
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon-512.png">
+  <meta name="theme-color" content="#0a0c0e">
+  <meta name="application-name" content="Caliness Academy">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+    
+    :root {
+      /* Caliness Academy Dark Premium Theme */
+      --color-bg: #0a0c0e;
+      --color-bg-elevated: #10131a;
+      --color-bg-card: #141820;
+      --color-bg-surface: #1a1f2a;
+      
+      /* Caliness Neon Green */
+      --color-accent: #2dd36f;
+      --color-accent-soft: #24b85d;
+      --color-accent-glow: #3fe882;
+      --color-accent-muted: rgba(45, 211, 111, 0.15);
+      
+      /* Text Colors */
+      --color-text-primary: #fafafa;
+      --color-text-secondary: #a8b2c1;
+      --color-text-muted: #6b7a90;
+      
+      /* Borders */
+      --color-border: rgba(255, 255, 255, 0.08);
+      --color-border-accent: rgba(45, 211, 111, 0.25);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    /* Pixel-perfect PDF export settings */
+    @page {
+      size: 210mm 297mm;
+      margin: 0;
+    }
+    
+    html {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 400;
+      color: var(--color-text-primary);
+      line-height: 1.6;
+      font-size: 9.5pt;
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: -0.01em;
+      text-rendering: optimizeLegibility;
+    }
+    
+    .page {
+      width: 210mm;
+      height: 297mm;
+      max-height: 297mm;
+      min-height: 297mm;
+      padding: 18mm 24mm 16mm;
+      margin: 0 auto;
+      background: 
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(45, 211, 111, 0.05) 0%, transparent 50%),
+        var(--color-bg);
+      position: relative;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    
+    .brand {
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    
+    .logo-img {
+      width: 40px;
+      height: auto;
+      margin: 0 auto 3px;
+      filter: drop-shadow(0 0 20px rgba(45, 211, 111, 0.35));
+    }
+    
+    .logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 10pt;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      text-shadow: 0 0 25px rgba(45, 211, 111, 0.4);
+    }
+    
+    .academy {
+      font-family: 'Inter', sans-serif;
+      font-size: 6.5pt;
+      font-weight: 500;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-top: 3px;
+    }
+    
+    /* Longevity badge */
+    .longevity-badge {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 6pt;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      background: var(--color-accent-muted);
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid var(--color-border-accent);
+      margin-top: 6px;
+    }
+    
+    .title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20pt;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      margin-top: 5px;
+    }
+    
+    .subtitle {
+      font-size: 9pt;
+      color: var(--color-text-secondary);
+      margin-top: 6px;
+      font-weight: 400;
+    }
+    
+    /* Content Grid - Stable Flexbox Layout */
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 24px;
+    }
+    
+    .section {
+      margin-bottom: 0;
+      padding: 0;
+    }
+    
+    .section-full {
+      margin-bottom: 10px;
+    }
+    
+    .section-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 6pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--color-accent);
+      margin-bottom: 6px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    
+    .section p {
+      color: var(--color-text-secondary);
+      margin-bottom: 4px;
+      font-size: 8pt;
+      line-height: 1.5;
+    }
+    
+    .section p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .list-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 3px;
+      font-size: 8pt;
+      color: var(--color-text-secondary);
+      line-height: 1.4;
+    }
+    
+    .list-marker {
+      color: var(--color-accent);
+      margin-right: 8px;
+      font-size: 8pt;
+      line-height: 1.55;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    
+    .list-content {
+      flex: 1;
+    }
+    
+    .highlight-box {
+      background: var(--color-accent-muted);
+      padding: 8px 10px;
+      margin-top: 6px;
+      border-left: 2px solid var(--color-accent);
+      border-radius: 0 6px 6px 0;
+    }
+    
+    .highlight-box p {
+      margin-bottom: 0;
+      font-size: 7.5pt;
+      line-height: 1.4;
+      color: var(--color-text-primary);
+    }
+    
+    .not-list .list-marker {
+      color: var(--color-text-muted);
+    }
+    
+    .accent-text {
+      font-style: italic;
+      color: var(--color-accent);
+      margin-top: 6px;
+    }
+    
+    /* CTA / Closing Box */
+    .closing {
+      text-align: center;
+      padding: 10px 18px;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      margin-top: 12px;
+      border-radius: 8px;
+    }
+    
+    .closing-logo {
+      width: 22px;
+      height: auto;
+      margin: 0 auto 6px;
+      filter: drop-shadow(0 0 12px rgba(45, 211, 111, 0.25));
+    }
+    
+    .closing-text {
+      font-family: 'Inter', sans-serif;
+      font-style: italic;
+      font-size: 8.5pt;
+      font-weight: 300;
+      color: var(--color-text-primary);
+      max-width: 360px;
+      margin: 0 auto;
+      line-height: 1.4;
+    }
+    
+    /* Footer - Static positioning, clear separation */
+    .footer {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--color-border);
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .footer-logo {
+      width: 18px;
+      height: auto;
+      opacity: 0.6;
+    }
+    
+    .footer-brand {
+      font-family: 'Outfit', sans-serif;
+      font-size: 6.5pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-accent);
+    }
+    
+    .footer-tagline {
+      font-size: 6.5pt;
+      color: var(--color-text-muted);
+      letter-spacing: 0.05em;
+    }
+    
+    /* Founder Section - Clear container, no overlap */
+    .founder-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      margin-top: 6px;
+      border-top: 1px solid var(--color-border);
+    }
+    
+    .founder-portrait {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      filter: grayscale(15%);
+      border: 1px solid var(--color-border);
+    }
+    
+    .founder-text {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .founder-intro {
+      font-family: 'Inter', sans-serif;
+      font-size: 6.5pt;
+      color: var(--color-text-secondary);
+      line-height: 1.45;
+      margin: 0;
+    }
+    
+    .founder-name {
+      color: var(--color-text-primary);
+      font-weight: 500;
+    }
+    
+    .founder-role {
+      font-size: 6pt;
+      color: var(--color-text-muted);
+      margin-top: 1px;
+    }
+    
+    .disclaimer {
+      font-size: 5.5pt;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+      text-align: center;
+      padding-top: 8px;
+      margin-top: 8px;
+      border-top: 1px solid var(--color-border);
+    }
+    
+    /* PRINT STYLES - Pixel-perfect PDF export */
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      
+      html, body {
+        width: 210mm !important;
+        height: 297mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: var(--color-bg) !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      
+      body {
+        padding: 0 !important;
+      }
+      
+      .page {
+        width: 210mm !important;
+        height: 297mm !important;
+        max-height: 297mm !important;
+        min-height: 297mm !important;
+        margin: 0 !important;
+        padding: 18mm 24mm 16mm !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+        background: 
+          radial-gradient(ellipse 60% 40% at 50% 0%, rgba(45, 211, 111, 0.05) 0%, transparent 50%),
+          var(--color-bg) !important;
+      }
+      
+      .download-btn,
+      .download-buttons {
+        display: none !important;
+      }
+      
+      /* Lock fonts */
+      body, p, span, div {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      }
+      
+      h1, h2, .title, .logo, .cover-title {
+        font-family: 'Outfit', sans-serif !important;
+      }
+      
+      /* Ensure backgrounds print */
+      .highlight-box, .closing, .longevity-badge {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+    
+    @media screen {
+      body {
+        background: #000;
+        padding: 30px;
+      }
+      .page {
+        box-shadow: 
+          0 0 0 1px rgba(45, 211, 111, 0.1),
+          0 25px 80px rgba(0, 0, 0, 0.8);
+      }
+    }
+    
+    /* Responsive - Screen only */
+    @media screen and (max-width: 900px) {
+      .page {
+        width: 100%;
+        min-height: auto;
+        max-height: none;
+        height: auto;
+        padding: 24px;
+      }
+      .content-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+    
+    /* Download Buttons */
+    .download-buttons {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 1000;
+    }
+    
+    .download-btn {
+      background: var(--color-accent);
+      color: #000;
+      border: none;
+      padding: 12px 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 20px rgba(45, 211, 111, 0.3);
+    }
+    
+    .download-btn:hover {
+      background: var(--color-accent-glow);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(45, 211, 111, 0.4);
+    }
+    
+    .download-btn.secondary {
+      background: var(--color-bg-card);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .download-btn.secondary:hover {
+      background: var(--color-bg-surface);
+      border-color: var(--color-accent);
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <button class="download-btn" onclick="printPDF()">📥 Als PDF speichern</button>
+  
+  <script>
+    // Wait for fonts to load before printing for pixel-perfect PDF
+    async function printPDF() {
+      // Show loading state
+      const btn = document.querySelector('.download-btn');
+      const originalText = btn.textContent;
+      btn.textContent = '⏳ Fonts werden geladen...';
+      btn.disabled = true;
+      
+      try {
+        // Wait for all fonts to be loaded
+        await document.fonts.ready;
+        
+        // Additional delay to ensure rendering is complete
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Trigger print
+        window.print();
+      } catch (e) {
+        console.error('Font loading error:', e);
+        window.print();
+      } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    }
+    
+    // Preload fonts on page load
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        await document.fonts.load('400 10pt Inter');
+        await document.fonts.load('500 10pt Inter');
+        await document.fonts.load('600 10pt Inter');
+        await document.fonts.load('700 10pt Inter');
+        await document.fonts.load('400 10pt Outfit');
+        await document.fonts.load('600 10pt Outfit');
+        await document.fonts.load('700 10pt Outfit');
+      } catch (e) {
+        console.log('Font preload:', e);
+      }
+      
+      // Auto-trigger print if ?print=1 parameter is present
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('print') === '1') {
+        await new Promise(resolve => setTimeout(resolve, 800));
+        await document.fonts.ready;
+        window.print();
+      }
+    });
+  </script>
+
+  <div class="page" id="pdf-content">
+    
+    <!-- Header -->
+    <div class="header">
+      <div class="brand">
+        <img src="/images/caliness-logo-white.png" alt="Caliness" class="logo-img">
+        <div class="academy">Academy</div>
+        <div class="longevity-badge">Longevity Coaching</div>
+      </div>
+      <h1 class="title">Das Longevity-Gespräch</h1>
+      <p class="subtitle">Was dich erwartet – und was nicht</p>
+    </div>
+    
+    <!-- Content -->
+    <div class="content">
+      
+      <!-- Opening - Full Width -->
+      <div class="section section-full">
+        <div class="section-title">Warum dieses Gespräch existiert</div>
+        <p>
+          Der Bio-Age-Test zeigt Muster. Aber Muster sind erst dann nützlich, wenn sie eingeordnet werden – in deinen Kontext, deine Situation, deine Longevity-Prioritäten. Dieses Gespräch schafft genau diese Klarheit: nicht als Beratung, sondern als strukturierte Orientierung für dein biologisches Alter.
+        </p>
+      </div>
+      
+      <!-- Two Column Grid -->
+      <div class="content-grid">
+        
+        <!-- What happens -->
+        <div class="section">
+          <div class="section-title">Was im Gespräch passiert</div>
+          <div class="list-item">
+            <span class="list-marker">→</span>
+            <span class="list-content">Einordnung deines Longevity-Ergebnisses im Kontext der 5 Caliness-Säulen</span>
+          </div>
+          <div class="list-item">
+            <span class="list-marker">→</span>
+            <span class="list-content">Identifikation typischer Alterungsmuster und möglicher Hebelpunkte</span>
+          </div>
+          <div class="list-item">
+            <span class="list-marker">→</span>
+            <span class="list-content">Klärung von Longevity-Prioritäten – was zuerst zählt, was warten kann</span>
+          </div>
+          <div class="list-item">
+            <span class="list-marker">→</span>
+            <span class="list-content">Raum für deine Fragen zu Struktur und Orientierung</span>
+          </div>
+        </div>
+        
+        <!-- What it is NOT -->
+        <div class="section">
+          <div class="section-title">Was das Gespräch nicht ist</div>
+          <div class="list-item not-list">
+            <span class="list-marker">—</span>
+            <span class="list-content">Keine medizinische Beratung oder Diagnose</span>
+          </div>
+          <div class="list-item not-list">
+            <span class="list-marker">—</span>
+            <span class="list-content">Keine Therapie oder Behandlung</span>
+          </div>
+          <div class="list-item not-list">
+            <span class="list-marker">—</span>
+            <span class="list-content">Keine generischen Tipps oder Standardempfehlungen</span>
+          </div>
+          <div class="list-item not-list">
+            <span class="list-marker">—</span>
+            <span class="list-content">Kein Verkaufsgespräch mit Druck oder Erwartung</span>
+          </div>
+        </div>
+        
+        <!-- Who benefits -->
+        <div class="section">
+          <div class="section-title">Für wen das Gespräch gedacht ist</div>
+          <p>
+            Menschen, die Klarheit über ihre aktuelle Longevity-Situation suchen. Die offen sind für Reflexion und ehrliche Einordnung.
+          </p>
+          <p>
+            Die verstehen wollen, wo ihr echter Hebel für biologische Verjüngung liegt – nicht nach mehr Informationen suchen, sondern nach Struktur.
+          </p>
+          <div class="highlight-box">
+            <p>Das Gespräch ist kein Muss. Es ist ein Angebot für alle, die ihren nächsten Longevity-Schritt klarer sehen möchten.</p>
+          </div>
+        </div>
+        
+        <!-- How to prepare -->
+        <div class="section">
+          <div class="section-title">Vorbereitung</div>
+          <p>
+            Es ist keine besondere Vorbereitung erforderlich. Keine Dokumente, keine Vorab-Fragebögen.
+          </p>
+          <p>
+            Hilfreich ist, wenn du mit offenen Fragen kommst – zu deinem Longevity-Ergebnis, zu deinen Mustern, zu dem, was dich beschäftigt.
+          </p>
+          <p class="accent-text">
+            Alles andere ergibt sich im Gespräch.
+          </p>
+        </div>
+        
+      </div>
+      
+      <div class="closing">
+        <img src="/images/caliness-logo-white.png" alt="Caliness" class="closing-logo">
+        <p class="closing-text">
+          „Dieses Gespräch ist ein Raum für Longevity-Klarheit – ohne Erwartung, ohne Verpflichtung. Du entscheidest, was du daraus machst."
+        </p>
+      </div>
+      </div>
+      
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-content">
+        <div class="footer-left">
+          <img src="/images/caliness-logo-white.png" alt="Caliness" class="footer-logo">
+          <span class="footer-brand">Caliness Academy</span>
+        </div>
+        <span class="footer-tagline">Longevity · Systemisch · Nachhaltig</span>
+      </div>
+      
+      <div class="founder-section">
+        <img src="/images/founder-portrait.jpg" alt="Mitgründer" class="founder-portrait">
+        <div class="founder-text">
+          <p class="founder-intro">
+            <span class="founder-name">David Gogulla</span>, Mitgründer der Caliness Academy.<br>
+            Systemische Lifestyle-Analyse statt pauschaler Empfehlungen.
+          </p>
+          <div class="founder-role">Longevity & Performance Coaching</div>
+        </div>
+      </div>
+      
+      <p class="disclaimer">
+        Zur allgemeinen Lifestyle-Orientierung. Keine medizinische Beratung. © Caliness Academy
+      </p>
+    </div>
+    
+  </div>
+
+
+</body>
+</html>

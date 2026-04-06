@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CALINESS 7-Tage Reset</title>
+  
+  <!-- Caliness Academy Favicon -->
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon-512.png">
+  <meta name="theme-color" content="#0a0c0e">
+  <meta name="application-name" content="Caliness Academy">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    html, body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0a0c0e;
+      color: #e8e8e8;
+      font-size: 11pt;
+      line-height: 1.7;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    /* Download Button */
+    .download-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10, 12, 14, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      z-index: 1000;
+    }
+
+    .download-btn {
+      background: linear-gradient(135deg, #2dd36f, #1fa855);
+      color: #0a0c0e;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(45, 211, 111, 0.3);
+    }
+
+    .download-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .download-hint {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    @media print {
+      .download-bar {
+        display: none !important;
+      }
+      body {
+        padding-top: 0 !important;
+      }
+      
+      .page {
+        width: 210mm !important;
+        height: 297mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
+        margin: 0 !important;
+        padding: 20mm 22mm 24mm !important;
+        box-shadow: none !important;
+        page-break-after: always !important;
+        background: #0a0c0e !important;
+        overflow: hidden !important;
+      }
+      
+      .page:last-child {
+        page-break-after: auto !important;
+      }
+      
+      input[type="checkbox"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 13px;
+        height: 13px;
+        border: 1.5px solid #2dd36f;
+        border-radius: 3px;
+        background: rgba(45, 211, 111, 0.05);
+        cursor: pointer;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+
+    body {
+      padding-top: 70px;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      min-height: 297mm;
+      max-height: 297mm;
+      padding: 20mm 22mm 24mm;
+      background: #0a0c0e;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    /* Logo */
+    .logo {
+      height: 24px;
+      margin-bottom: 14px;
+    }
+
+    .logo-small {
+      height: 18px;
+    }
+
+    /* Cover Page */
+    .cover-page {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 32mm 24mm;
+    }
+
+    .cover-logo {
+      height: 48px;
+      margin-bottom: 40px;
+    }
+
+    .cover-badge {
+      font-family: 'Outfit', sans-serif;
+      font-size: 8pt;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #2dd36f;
+      margin-bottom: 20px;
+      padding: 6px 16px;
+      border: 1px solid rgba(45, 211, 111, 0.3);
+      border-radius: 4px;
+    }
+
+    .cover-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 32pt;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: -1px;
+      margin-bottom: 14px;
+      line-height: 1.1;
+    }
+
+    .cover-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 11pt;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.6);
+      max-width: 380px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .cover-divider {
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #2dd36f, transparent);
+      margin-bottom: 32px;
+    }
+
+    .cover-internal-notice {
+      font-size: 7pt;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.35);
+      position: absolute;
+      bottom: 24mm;
+    }
+
+    /* Section Headers */
+    .section-number {
+      font-family: 'Outfit', sans-serif;
+      font-size: 7pt;
+      font-weight: 500;
+      color: #2dd36f;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16pt;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+
+    .section-intro {
+      font-size: 8.5pt;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 12px;
+      max-width: 480px;
+      line-height: 1.55;
+    }
+
+    /* Content Typography */
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 10pt;
+      font-weight: 600;
+      color: #ffffff;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 8px;
+      line-height: 1.5;
+      font-size: 8.5pt;
+    }
+
+    .highlight-text {
+      color: #2dd36f;
+      font-weight: 500;
+    }
+
+    /* Pillar Cards - Compact */
+    .pillar-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+
+    .pillar-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .pillar-indicator {
+      width: 3px;
+      height: 16px;
+      background: #2dd36f;
+      border-radius: 2px;
+    }
+
+    .pillar-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 10pt;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .pillar-content {
+      padding-left: 13px;
+    }
+
+    .pillar-content .label {
+      font-family: 'Inter', sans-serif;
+      font-size: 6.5pt;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-top: 5px;
+      margin-bottom: 2px;
+    }
+
+    .pillar-content p {
+      font-size: 8pt;
+      margin-bottom: 3px;
+      line-height: 1.45;
+    }
+
+    .pillar-note {
+      font-size: 7.5pt;
+      color: rgba(255, 255, 255, 0.45);
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    /* Quote Block */
+    .quote-block {
+      border-left: 2px solid #2dd36f;
+      padding-left: 12px;
+      margin: 12px 0;
+    }
+
+    .quote-block p {
+      font-size: 9pt;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.45;
+      margin-bottom: 0;
+    }
+
+    /* List Styling */
+    .styled-list {
+      list-style: none;
+      margin: 6px 0;
+      padding-left: 12px;
+    }
+
+    .styled-list li {
+      position: relative;
+      padding-left: 12px;
+      margin-bottom: 3px;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.4;
+      font-size: 7.5pt;
+    }
+
+    .styled-list li::before {
+      content: "–";
+      position: absolute;
+      left: 0;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Protocol Grid */
+    .protocol-section {
+      margin-top: 12px;
+    }
+
+    .protocol-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .protocol-indicator {
+      width: 3px;
+      height: 18px;
+      background: #2dd36f;
+      border-radius: 2px;
+    }
+
+    .protocol-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13pt;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .protocol-grid {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
+
+    .protocol-grid th {
+      font-family: 'Outfit', sans-serif;
+      font-size: 6.5pt;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 6px 3px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .protocol-grid th:first-child {
+      text-align: left;
+      padding-left: 10px;
+      width: 160px;
+    }
+
+    .protocol-grid td {
+      padding: 6px 3px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .protocol-grid td:first-child {
+      text-align: left;
+      padding-left: 10px;
+      font-size: 7.5pt;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .protocol-grid tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Interactive Checkboxes */
+    input[type="checkbox"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 13px;
+      height: 13px;
+      border: 1.5px solid #2dd36f;
+      border-radius: 3px;
+      background: rgba(45, 211, 111, 0.05);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    input[type="checkbox"]:hover {
+      background: rgba(45, 211, 111, 0.15);
+    }
+
+    input[type="checkbox"]:checked {
+      background: #2dd36f;
+      position: relative;
+    }
+
+    input[type="checkbox"]:checked::after {
+      content: "✓";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #0a0c0e;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    /* Check-in Section */
+    .checkin-section {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+    }
+
+    .checkin-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 9pt;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    .checkin-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .checkin-label {
+      font-size: 8pt;
+      color: rgba(255, 255, 255, 0.75);
+      width: 90px;
+    }
+
+    .checkin-scale {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .checkin-scale label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .checkin-scale span {
+      font-size: 6.5pt;
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    /* Decision Section */
+    .decision-section {
+      margin-top: 12px;
+    }
+
+    .decision-title {
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .decision-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .decision-option span {
+      font-size: 8pt;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    /* Priority Box */
+    .priority-box {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: rgba(45, 211, 111, 0.04);
+      border: 1px solid rgba(45, 211, 111, 0.12);
+      border-radius: 8px;
+    }
+
+    .priority-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: #2dd36f;
+      margin-bottom: 6px;
+    }
+
+    .priority-list {
+      list-style: none;
+    }
+
+    .priority-list li {
+      font-size: 8pt;
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 3px;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .priority-list li span {
+      position: absolute;
+      left: 0;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Footer */
+    .page-footer {
+      position: absolute;
+      bottom: 16mm;
+      left: 22mm;
+      right: 22mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-brand img {
+      height: 14px;
+      opacity: 0.5;
+    }
+
+    .footer-tagline {
+      font-size: 7pt;
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .footer-page {
+      font-size: 7pt;
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Closing Note */
+    .closing-note {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .closing-note p {
+      font-size: 8pt;
+      color: rgba(255, 255, 255, 0.45);
+      font-style: italic;
+      margin-bottom: 0;
+    }
+
+    /* Two Column Layout for Pillars */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .pillar-card-compact {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 10px 11px;
+    }
+
+    .pillar-card-compact .pillar-header {
+      margin-bottom: 4px;
+    }
+
+    .pillar-card-compact .pillar-content p {
+      font-size: 7.5pt;
+      line-height: 1.4;
+      margin-bottom: 2px;
+    }
+
+    .pillar-card-compact .pillar-note {
+      font-size: 7pt;
+      margin-top: 3px;
+    }
+
+    .pillar-card-full {
+      grid-column: 1 / -1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Download Bar -->
+  <div class="download-bar">
+    <button class="download-btn" onclick="window.print()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Als PDF speichern
+    </button>
+    <span class="download-hint">Drucken → Als PDF speichern</span>
+  </div>
+
+  <!-- PAGE 1: Cover -->
+  <div class="page cover-page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="cover-logo">
+    
+    <div class="cover-badge">Internes Framework</div>
+    
+    <h1 class="cover-title">7-Tage Reset</h1>
+    
+    <p class="cover-subtitle">
+      Stabilisierung vor Optimierung.<br>
+      Ein strukturierter Ansatz zur Beruhigung des Systems.
+    </p>
+    
+    <div class="cover-divider"></div>
+    
+    <span class="cover-internal-notice">CALINESS Academy</span>
+  </div>
+
+  <!-- PAGE 2: Einordnung & Alle Säulen -->
+  <div class="page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="logo logo-small">
+    
+    <div class="section-number">Einordnung</div>
+    <h2 class="section-title">Worum es in diesem Reset geht</h2>
+    
+    <p class="section-intro">
+      Dieser Reset ist kein Trainingsplan, keine Challenge und kein Leistungsprogramm. Er dient dazu, dein System zu beruhigen und zu stabilisieren, bevor weitere Schritte folgen. Stabilität ist kein Stillstand – sie ist die Grundlage für langfristige Gesundheit.
+    </p>
+    
+    <div class="quote-block">
+      <p>Nicht mehr tun. Sondern das Richtige konstant tun. Sieben Tage mit identischer Struktur schaffen Verlässlichkeit für Körper und Nervensystem.</p>
+    </div>
+    
+    <div class="section-number" style="margin-top: 14px;">Die fünf Bereiche</div>
+    
+    <div class="pillars-grid">
+      <!-- Bewegung -->
+      <div class="pillar-card-compact">
+        <div class="pillar-header">
+          <div class="pillar-indicator"></div>
+          <span class="pillar-name">Bewegung</span>
+        </div>
+        <div class="pillar-content">
+          <p><strong>Ziel:</strong> Den Körper in einen natürlichen Tagesrhythmus bringen.</p>
+          <p><strong>Handlung:</strong> Täglich 30 Min ruhige Bewegung an der frischen Luft. 5.000–7.000 Schritte.</p>
+          <p class="pillar-note">Es geht um Rhythmus, nicht um Training.</p>
+        </div>
+      </div>
+      
+      <!-- Ernährung -->
+      <div class="pillar-card-compact">
+        <div class="pillar-header">
+          <div class="pillar-indicator"></div>
+          <span class="pillar-name">Ernährung</span>
+        </div>
+        <div class="pillar-content">
+          <p><strong>Ziel:</strong> Blutzucker stabilisieren und die Verdauung entlasten.</p>
+          <p><strong>Handlung:</strong> Zwei proteinreiche Mahlzeiten pro Tag. Keine Snacks.</p>
+          <p class="pillar-note">0,4–0,5g Protein pro kg Körpergewicht pro Mahlzeit.</p>
+        </div>
+      </div>
+      
+      <!-- Regeneration -->
+      <div class="pillar-card-compact">
+        <div class="pillar-header">
+          <div class="pillar-indicator"></div>
+          <span class="pillar-name">Regeneration</span>
+        </div>
+        <div class="pillar-content">
+          <p><strong>Ziel:</strong> Dem Nervensystem Vorhersehbarkeit geben und die nächtliche Regulation unterstützen.</p>
+          <p><strong>Handlung:</strong> Jeden Tag zur gleichen Zeit ins Bett gehen und mindestens 8 Stunden im Bett bleiben.</p>
+          <p style="font-size: 7pt; color: rgba(255,255,255,0.55); margin-top: 3px; line-height: 1.35;"><strong>Einordnung:</strong> Ein stabiler Schlafrhythmus ist einer der stärksten Regulatoren für das autonome Nervensystem. Regelmäßige Bettzeiten unterstützen hormonelle Prozesse (u.a. Melatonin und Cortisol) und fördern Erholung.</p>
+          <p class="pillar-note">Nicht Schlaf optimieren – Rhythmus stabilisieren.</p>
+        </div>
+      </div>
+      
+      <!-- Mentale Balance -->
+      <div class="pillar-card-compact">
+        <div class="pillar-header">
+          <div class="pillar-indicator"></div>
+          <span class="pillar-name">Mentale Balance</span>
+        </div>
+        <div class="pillar-content">
+          <p><strong>Ziel:</strong> Mentale Daueranspannung reduzieren und kognitive Überlastung abbauen.</p>
+          <p><strong>Handlung:</strong> Mindestens 30 Minuten bewusst offline. Kein Bildschirm. Keine Informationen. Keine Kommunikation.</p>
+          <p style="font-size: 7pt; color: rgba(255,255,255,0.55); margin-top: 3px; line-height: 1.35;"><strong>Einordnung:</strong> Dauerhafte Informationsreize erhöhen die neuronale Grundaktivierung und erschweren Regeneration. Phasen ohne Input ermöglichen dem Gehirn, in einen ruhigeren Grundzustand zurückzukehren.</p>
+          <p class="pillar-note">Einfach Raum für Ruhe.</p>
+        </div>
+      </div>
+      
+      <!-- Biologische Optimierung - Full Width -->
+      <div class="pillar-card-compact pillar-card-full">
+        <div class="pillar-header">
+          <div class="pillar-indicator"></div>
+          <span class="pillar-name">Biologische Optimierung</span>
+        </div>
+        <div class="pillar-content">
+          <p><strong>Ziel:</strong> Natürliche Regulationsprozesse entlasten und interne Balance unterstützen.</p>
+          <p><strong>Handlung:</strong> Für diese sieben Tage bewusst auf Alkohol verzichten. <strong>Zusätzlich:</strong> Keine neuen Routinen, Maßnahmen oder Interventionen beginnen. Alles, was sich bereits bewährt hat, bleibt unverändert.</p>
+          <p style="font-size: 7pt; color: rgba(255,255,255,0.55); margin-top: 3px; line-height: 1.35;"><strong>Einordnung:</strong> Alkohol beeinflusst Schlafarchitektur, Blutzuckerregulation und entzündliche Prozesse. Eine temporäre Pause reduziert systemische Belastung und ermöglicht dem Körper, bestehende Anpassungsprozesse ohne zusätzliche Störfaktoren auszuführen.</p>
+          <p class="pillar-note">Diese Phase dient der Beruhigung – nicht der Veränderung.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="page-footer">
+      <div class="footer-brand">
+        <img src="/images/caliness-logo-white.png" alt="CALINESS">
+        <span class="footer-tagline">Longevity als System.</span>
+      </div>
+      <span class="footer-page">2 / 3</span>
+    </div>
+  </div>
+
+  <!-- PAGE 3: Protokoll -->
+  <div class="page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="logo logo-small">
+    
+    <div class="protocol-section">
+      <div class="protocol-header">
+        <div class="protocol-indicator"></div>
+        <span class="protocol-title">7-Tage Reset – Protokoll</span>
+      </div>
+      
+      <table class="protocol-grid">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Mo</th>
+            <th>Di</th>
+            <th>Mi</th>
+            <th>Do</th>
+            <th>Fr</th>
+            <th>Sa</th>
+            <th>So</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>30 Min ruhige Bewegung</td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+          </tr>
+          <tr>
+            <td>5.000–7.000 Schritte</td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+          </tr>
+          <tr>
+            <td>Zwei proteinreiche Mahlzeiten</td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+          </tr>
+          <tr>
+            <td>Keine Snacks</td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+          </tr>
+          <tr>
+            <td>Feste Schlafenszeit (8h)</td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+          </tr>
+          <tr>
+            <td>30 Min Offline</td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+          </tr>
+          <tr>
+            <td>Kein Alkohol</td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="priority-box">
+        <div class="priority-title">Priorisierung bei stressigen Tagen</div>
+        <ul class="priority-list">
+          <li><span>1.</span> Schlafrhythmus einhalten</li>
+          <li><span>2.</span> Zwei proteinreiche Mahlzeiten</li>
+          <li><span>3.</span> Reize reduzieren</li>
+        </ul>
+        <p style="font-size: 7.5pt; color: rgba(255,255,255,0.45); margin-top: 6px; margin-bottom: 0;">
+          Stabilität entsteht durch Entlastung, nicht durch Perfektion.
+        </p>
+      </div>
+      
+      <div class="checkin-section">
+        <div class="checkin-title">Tag-7 Check-in</div>
+        
+        <div class="checkin-row">
+          <span class="checkin-label">Energie</span>
+          <div class="checkin-scale">
+            <label><input type="checkbox" name="energie" value="1"><span>1</span></label>
+            <label><input type="checkbox" name="energie" value="2"><span>2</span></label>
+            <label><input type="checkbox" name="energie" value="3"><span>3</span></label>
+            <label><input type="checkbox" name="energie" value="4"><span>4</span></label>
+            <label><input type="checkbox" name="energie" value="5"><span>5</span></label>
+          </div>
+        </div>
+        
+        <div class="checkin-row">
+          <span class="checkin-label">Schlafqualität</span>
+          <div class="checkin-scale">
+            <label><input type="checkbox" name="schlaf" value="1"><span>1</span></label>
+            <label><input type="checkbox" name="schlaf" value="2"><span>2</span></label>
+            <label><input type="checkbox" name="schlaf" value="3"><span>3</span></label>
+            <label><input type="checkbox" name="schlaf" value="4"><span>4</span></label>
+            <label><input type="checkbox" name="schlaf" value="5"><span>5</span></label>
+          </div>
+        </div>
+        
+        <div class="checkin-row">
+          <span class="checkin-label">Innere Ruhe</span>
+          <div class="checkin-scale">
+            <label><input type="checkbox" name="ruhe" value="1"><span>1</span></label>
+            <label><input type="checkbox" name="ruhe" value="2"><span>2</span></label>
+            <label><input type="checkbox" name="ruhe" value="3"><span>3</span></label>
+            <label><input type="checkbox" name="ruhe" value="4"><span>4</span></label>
+            <label><input type="checkbox" name="ruhe" value="5"><span>5</span></label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="decision-section">
+        <div class="decision-title">Entscheidung:</div>
+        <div class="decision-option">
+          <input type="checkbox">
+          <span>Reset für weitere 7 Tage fortsetzen</span>
+        </div>
+        <div class="decision-option">
+          <input type="checkbox">
+          <span>Übergang in den nächsten Schritt</span>
+        </div>
+      </div>
+      
+      <div class="closing-note">
+        <p>Langfristige Gesundheit entsteht nicht durch Tempo, sondern durch klare, ruhige Richtung.</p>
+      </div>
+    </div>
+    
+    <div class="page-footer">
+      <div class="footer-brand">
+        <img src="/images/caliness-logo-white.png" alt="CALINESS">
+        <span class="footer-tagline">Longevity als System.</span>
+      </div>
+      <span class="footer-page">3 / 3</span>
+    </div>
+  </div>
+
+  <script>
+    // Auto-trigger print dialog when ?print=1 is in URL
+    if (window.location.search.includes('print=1')) {
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          window.print();
+        }, 500);
+      });
+    }
+  </script>
+</body>
+</html>

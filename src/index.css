@@ -1,0 +1,1287 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Caliness Premium Brand Design System - Luxury Health Brand */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    /* Caliness Academy Dark Theme */
+    --background: 220 18% 5%;
+    --foreground: 0 0% 98%;
+
+    --card: 220 16% 9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 220 16% 7%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Caliness Academy Neon Green - Exact match */
+    --primary: 142 76% 46%;
+    --primary-foreground: 220 18% 5%;
+
+    --secondary: 220 16% 12%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 220 16% 11%;
+    --muted-foreground: 220 14% 55%;
+
+    --accent: 142 76% 46%;
+    --accent-foreground: 220 18% 5%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 14% 18%;
+    --input: 220 16% 12%;
+    --ring: 142 76% 46%;
+
+    --radius: 0.75rem;
+
+    /* Caliness Academy Custom Design Tokens */
+    --neon-green: 142 76% 46%;
+    --neon-green-glow: 142 80% 55%;
+    --neon-green-soft: 142 60% 40%;
+    --dark-surface: 220 16% 9%;
+    --darker-surface: 220 18% 5%;
+    --elevated-surface: 220 16% 12%;
+    --text-primary: 0 0% 98%;
+    --text-secondary: 220 12% 75%;
+    --text-muted: 220 10% 50%;
+
+    /* Caliness Academy Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(142 76% 46%) 0%, hsl(142 70% 38%) 100%);
+    --gradient-dark: linear-gradient(180deg, hsl(220 16% 9%) 0%, hsl(220 18% 5%) 100%);
+    --gradient-glow: linear-gradient(135deg, hsl(142 76% 46% / 0.1) 0%, hsl(142 70% 38% / 0.04) 100%);
+    --gradient-radial: radial-gradient(ellipse at center, hsl(142 76% 46% / 0.08) 0%, transparent 70%);
+    --gradient-card: linear-gradient(165deg, hsl(220 16% 11%) 0%, hsl(220 16% 8%) 100%);
+    --gradient-hero: radial-gradient(ellipse 80% 50% at 50% -20%, hsl(142 76% 46% / 0.12) 0%, transparent 50%);
+
+    /* Caliness Academy Shadows & Glows */
+    --shadow-glow: 0 0 20px hsl(142 76% 46% / 0.3), 0 0 40px hsl(142 76% 46% / 0.12);
+    --shadow-glow-lg: 0 0 30px hsl(142 76% 46% / 0.35), 0 0 60px hsl(142 76% 46% / 0.18), 0 0 100px hsl(142 76% 46% / 0.06);
+    --shadow-glow-subtle: 0 0 16px hsl(142 76% 46% / 0.18);
+    --shadow-card: 0 4px 24px -4px hsl(220 18% 2% / 0.6), 0 8px 48px -8px hsl(220 18% 2% / 0.45);
+    --shadow-card-hover: 0 8px 32px -4px hsl(220 18% 2% / 0.7), 0 16px 64px -8px hsl(220 18% 2% / 0.55);
+    --shadow-elegant: 0 24px 64px -16px hsl(220 18% 2% / 0.55);
+    --shadow-inner: inset 0 1px 0 hsl(0 0% 100% / 0.04);
+    --shadow-border-glow: 0 0 0 1px hsl(142 76% 46% / 0.15);
+
+    /* Animation Timings */
+    --transition-smooth: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-glow: box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-fast: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 14% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    letter-spacing: -0.01em;
+  }
+
+  /* Premium Selection Color */
+  ::selection {
+    background: hsl(142 76% 46% / 0.3);
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer components {
+  /* Premium Neon Glow Effects */
+  .glow-neon {
+    box-shadow: var(--shadow-glow);
+    transition: var(--transition-glow);
+    position: relative;
+  }
+
+  .glow-neon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: -1;
+    filter: blur(16px);
+  }
+
+  .glow-neon:hover {
+    box-shadow: var(--shadow-glow-lg);
+    transform: translateY(-3px);
+  }
+
+  .glow-neon:hover::before {
+    opacity: 0.4;
+  }
+
+  .glow-neon:active {
+    transform: translateY(-1px);
+  }
+
+  /* Elegant Card Styling */
+  .card-elegant {
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-card), var(--shadow-inner);
+    border: 1px solid hsl(var(--border) / 0.6);
+    backdrop-filter: blur(24px);
+    transition: var(--transition-smooth);
+  }
+
+  .card-elegant:hover {
+    box-shadow: var(--shadow-card-hover), var(--shadow-inner), var(--shadow-border-glow);
+    border-color: hsl(var(--border) / 0.8);
+  }
+
+  /* Premium Text Glow */
+  .text-glow {
+    text-shadow: 0 0 24px hsl(142 76% 46% / 0.45), 0 0 48px hsl(142 76% 46% / 0.22);
+  }
+
+  .text-glow-subtle {
+    text-shadow: 0 0 16px hsl(142 76% 46% / 0.35);
+  }
+
+  /* Pulsing Glow Animation */
+  .pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(142 76% 46% / 0.25), 0 0 40px hsl(142 76% 46% / 0.12);
+    }
+    50% {
+      box-shadow: 0 0 28px hsl(142 76% 46% / 0.4), 0 0 56px hsl(142 76% 46% / 0.22);
+    }
+  }
+
+  /* Premium Gradient Text */
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 4px hsl(127 71% 52% / 0.2));
+  }
+
+  /* Progress Bar Glow */
+  .progress-glow {
+    background: var(--gradient-primary);
+    box-shadow: 0 0 16px hsl(142 76% 46% / 0.45), inset 0 1px 0 hsl(0 0% 100% / 0.18);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, hsl(0 0% 100% / 0.18) 50%, transparent 100%);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* Premium Float Animation */
+  .floating-icon {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { 
+      transform: translateY(0px) rotate(0deg); 
+    }
+    33% { 
+      transform: translateY(-8px) rotate(1deg); 
+    }
+    66% { 
+      transform: translateY(-4px) rotate(-1deg); 
+    }
+  }
+
+  /* Blur Background Effect */
+  .brand-blur {
+    backdrop-filter: blur(12px) saturate(150%);
+    background: hsl(var(--background) / 0.85);
+  }
+
+  /* Premium Lift Hover Effect */
+  .hover-lift {
+    transition: var(--transition-smooth);
+    will-change: transform, box-shadow;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-elegant);
+  }
+
+  /* Premium Brand Header */
+  .brand-header {
+    background: linear-gradient(180deg, hsl(220 14% 10% / 0.97) 0%, hsl(220 16% 6% / 0.95) 100%);
+    backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid hsl(var(--border) / 0.4);
+    box-shadow: 0 4px 32px hsl(220 16% 2% / 0.3);
+  }
+
+  /* Brand Logo Styles */
+  .brand-logo-large {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    letter-spacing: -0.03em;
+    filter: drop-shadow(0 4px 24px hsl(var(--primary) / 0.25));
+  }
+
+  .brand-logo-premium {
+    filter: drop-shadow(0 8px 32px hsl(var(--primary) / 0.35));
+    transition: var(--transition-smooth);
+  }
+
+  .brand-logo-premium:hover {
+    filter: drop-shadow(0 12px 48px hsl(var(--primary) / 0.45));
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  /* Premium Benefit Cards - Caliness Academy Style */
+  .benefit-card {
+    background: linear-gradient(165deg, hsl(220 16% 11% / 0.95) 0%, hsl(220 16% 7% / 0.98) 100%);
+    border: 1px solid hsl(var(--border) / 0.5);
+    backdrop-filter: blur(20px);
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+  }
+
+  .benefit-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-radial);
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .benefit-card:hover {
+    transform: translateY(-6px);
+    border-color: hsl(142 76% 46% / 0.35);
+    box-shadow: 
+      var(--shadow-card-hover),
+      0 0 36px hsl(142 76% 46% / 0.1);
+  }
+
+  .benefit-card:hover::before {
+    opacity: 1;
+  }
+
+  /* Premium Icon Containers - Caliness Academy Style */
+  .icon-container {
+    background: linear-gradient(135deg, hsl(142 76% 46% / 0.14) 0%, hsl(142 70% 38% / 0.07) 100%);
+    border: 1px solid hsl(142 76% 46% / 0.18);
+    backdrop-filter: blur(8px);
+    transition: var(--transition-smooth);
+    position: relative;
+  }
+
+  .icon-container::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: -1;
+    filter: blur(12px);
+  }
+
+  .icon-container:hover {
+    background: linear-gradient(135deg, hsl(142 76% 46% / 0.2) 0%, hsl(142 70% 38% / 0.12) 100%);
+    border-color: hsl(142 76% 46% / 0.3);
+    box-shadow: var(--shadow-glow-subtle);
+    transform: scale(1.06);
+  }
+
+  .icon-container:hover::after {
+    opacity: 0.35;
+  }
+
+  /* Brand Watermarks */
+  .brand-watermark {
+    opacity: 0.02;
+    position: absolute;
+    pointer-events: none;
+    filter: blur(0.5px);
+  }
+
+  /* Premium Typography */
+  .hero-headline {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .section-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  .body-text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.7;
+  }
+
+  /* Premium Input Focus States */
+  .input-premium {
+    transition: var(--transition-smooth);
+  }
+
+  .input-premium:focus {
+    box-shadow: var(--shadow-glow-subtle), 0 0 0 2px hsl(142 76% 46% / 0.18);
+  }
+
+  /* Subtle entrance animation */
+  .animate-enter {
+    animation: enter 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Stagger children animation */
+  .stagger-children > * {
+    animation: enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+  }
+
+  .stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+  .stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+  .stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+  .stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+  .stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+  .stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+
+  /* Subtle grain texture overlay */
+  .grain-overlay::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.015;
+    z-index: 9999;
+  }
+
+  /* Hero background gradient */
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  /* ═══ PREMIUM DOPAMIN ANIMATIONS ═══ */
+
+  /* Score counter entry */
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(12px) scale(0.8); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* CALI reveal animation */
+  @keyframes caliReveal {
+    0% { opacity: 0; transform: scale(0.3); filter: blur(8px); }
+    60% { opacity: 1; transform: scale(1.08); filter: blur(0); }
+    100% { opacity: 1; transform: scale(1); filter: blur(0); }
+  }
+
+  @keyframes ringFill {
+    from { stroke-dashoffset: var(--ring-circumference); }
+    to { stroke-dashoffset: var(--ring-target); }
+  }
+
+  /* Glow pulse green */
+  @keyframes glowPulseGreen {
+    0%, 100% { box-shadow: 0 0 8px hsl(142 76% 46% / 0.15), 0 0 24px hsl(142 76% 46% / 0.08); }
+    50% { box-shadow: 0 0 16px hsl(142 76% 46% / 0.3), 0 0 48px hsl(142 76% 46% / 0.15); }
+  }
+
+  /* Glow pulse gold */
+  @keyframes glowPulseGold {
+    0%, 100% { box-shadow: 0 0 8px hsl(45 90% 55% / 0.2), 0 0 24px hsl(45 90% 55% / 0.1); }
+    50% { box-shadow: 0 0 20px hsl(45 90% 55% / 0.4), 0 0 50px hsl(45 90% 55% / 0.2); }
+  }
+
+  /* Celebration burst */
+  @keyframes celebrationBurst {
+    0% { transform: scale(0); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.8; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  /* Confetti particle */
+  @keyframes confettiFloat {
+    0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+    100% { transform: translateY(-120px) rotate(720deg) scale(0); opacity: 0; }
+  }
+
+  /* Check mark draw */
+  @keyframes checkDraw {
+    0% { stroke-dashoffset: 24; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  /* Card slide up — staggered */
+  @keyframes cardSlideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Shimmer for loading and premium elements */
+  @keyframes shimmerPremium {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Number tick */
+  @keyframes numberTick {
+    0% { transform: translateY(0); opacity: 1; }
+    30% { transform: translateY(-100%); opacity: 0; }
+    31% { transform: translateY(100%); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Streak flame */
+  @keyframes flameDance {
+    0%, 100% { transform: scaleY(1) scaleX(1); }
+    25% { transform: scaleY(1.15) scaleX(0.92); }
+    50% { transform: scaleY(1.05) scaleX(1.05); }
+    75% { transform: scaleY(1.2) scaleX(0.88); }
+  }
+
+  /* Ripple expand */
+  @keyframes rippleExpand {
+    0% { transform: scale(0.3); opacity: 0.6; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  /* Milestone reveal */
+  @keyframes milestoneReveal {
+    0% { transform: scale(0.5) rotate(-10deg); opacity: 0; filter: blur(8px); }
+    60% { transform: scale(1.08) rotate(2deg); opacity: 1; filter: blur(0); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0); }
+  }
+
+  /* Pillar bar fill */
+  @keyframes pillarFill {
+    from { width: 0%; }
+    to { width: var(--pillar-width); }
+  }
+
+  /* Evolution flash */
+  @keyframes evolutionFlash {
+    0% { opacity: 0; transform: scale(0.8); filter: brightness(3) blur(10px); }
+    30% { opacity: 1; transform: scale(1.15); filter: brightness(2) blur(4px); }
+    60% { transform: scale(1.05); filter: brightness(1.3) blur(1px); }
+    100% { transform: scale(1); filter: brightness(1) blur(0); }
+  }
+
+  /* Floating particles */
+  @keyframes floatParticle {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    25% { transform: translate(8px, -15px) scale(1.2); opacity: 1; }
+    50% { transform: translate(-5px, -25px) scale(0.8); opacity: 0.8; }
+    75% { transform: translate(10px, -10px) scale(1.1); opacity: 0.5; }
+  }
+
+  /* Score impact wave */
+  @keyframes scoreImpact {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.12); }
+    30% { transform: scale(0.95); }
+    45% { transform: scale(1.05); }
+    60% { transform: scale(0.98); }
+    100% { transform: scale(1); }
+  }
+
+  /* Streak milestone explosion */
+  @keyframes streakExplosion {
+    0% { transform: scale(0.3); opacity: 0; }
+    40% { transform: scale(1.3); opacity: 1; }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Haptic shake */
+  @keyframes hapticShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-2px); }
+    40% { transform: translateX(2px); }
+    60% { transform: translateX(-1px); }
+    80% { transform: translateX(1px); }
+  }
+
+  /* Score boost float-up "+3" */
+  @keyframes scoreBoostFloat {
+    0% { transform: translateY(0); opacity: 0; }
+    15% { opacity: 1; }
+    100% { transform: translateY(-24px); opacity: 0; }
+  }
+
+  /* CALI bounce on tracking */
+  @keyframes caliBounce {
+    0%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-6px); }
+    60% { transform: translateY(-2px); }
+  }
+
+  /* Pillar card glow flash */
+  @keyframes pillarGlowFlash {
+    0% { box-shadow: 0 0 0 0 hsl(142 76% 46% / 0); }
+    30% { box-shadow: 0 0 12px 2px hsl(142 76% 46% / 0.35); }
+    100% { box-shadow: 0 0 0 0 hsl(142 76% 46% / 0); }
+  }
+
+  /* Mini confetti dots floating up */
+  @keyframes confettiDot {
+    0% { transform: translateY(0) translateX(var(--x-offset, 0px)) scale(1); opacity: 1; }
+    100% { transform: translateY(-50px) translateX(var(--x-offset, 0px)) scale(0.3); opacity: 0; }
+  }
+
+  /* Score ring pulse celebration */
+  @keyframes ringPulseGreen {
+    0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+    50% { filter: drop-shadow(0 0 8px hsl(142 76% 46% / 0.5)); }
+  }
+
+  /* Tag-ziel banner slide */
+  @keyframes tagZielBanner {
+    0% { transform: translateY(-100%); opacity: 0; }
+    10% { transform: translateY(0); opacity: 1; }
+    85% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-100%); opacity: 0; }
+  }
+
+  /* Quick track bar pillar pulse */
+  @keyframes pillarBarPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+  }
+
+  /* Slide-in notification */
+  @keyframes slideInFromTop {
+    0% { transform: translateY(-100%) scale(0.95); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  /* Progress glow */
+  @keyframes progressGlow {
+    0%, 100% { filter: drop-shadow(0 0 3px hsl(142 76% 46% / 0.3)); }
+    50% { filter: drop-shadow(0 0 8px hsl(142 76% 46% / 0.6)); }
+  }
+
+  /* Bio age counter */
+  @keyframes bioAgeCount {
+    0% { opacity: 0; transform: scale(0.5) translateY(20px); filter: blur(4px); }
+    60% { opacity: 1; transform: scale(1.1) translateY(-3px); filter: blur(0); }
+    100% { transform: scale(1) translateY(0); }
+  }
+
+  /* Companion happy bounce */
+  @keyframes companionCelebrate {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    20% { transform: translateY(-8px) rotate(-2deg); }
+    40% { transform: translateY(-3px) rotate(1deg); }
+    60% { transform: translateY(-6px) rotate(-1deg); }
+    80% { transform: translateY(-2px) rotate(0.5deg); }
+  }
+
+  /* Evening mode transition */
+  @keyframes eveningFade {
+    from { filter: brightness(1) saturate(1); }
+    to { filter: brightness(0.85) saturate(0.9); }
+  }
+
+  /* Morning sunrise */
+  @keyframes morningGlow {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  /* ═══ MICRO-INTERACTION CLASSES ═══ */
+
+  /* All tappable cards */
+  .card-elegant {
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+  }
+  .card-elegant:active {
+    transform: scale(0.97);
+  }
+
+  /* Check-in option cards */
+  .checkin-option {
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .checkin-option.selected {
+    transform: scale(1.04);
+    box-shadow: 0 0 0 2px hsl(var(--primary)), 0 0 15px hsl(var(--primary) / 0.2);
+  }
+
+  /* Bottom Nav bounce */
+  nav button {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  nav button:active {
+    transform: scale(0.9);
+  }
+
+  /* Evening mode atmosphere */
+  .evening-mode {
+    --primary: 142 56% 40%;
+  }
+  .evening-mode .card-elegant {
+    border-color: hsl(var(--border) / 0.2);
+  }
+  .evening-mode .companion-root {
+    filter: saturate(0.85) brightness(0.92);
+  }
+
+  /* ═══ COMPANION ANIMATION SYSTEM ═══ */
+
+  /* State transition — smooth morphing between companion states */
+  .companion-root {
+    --comp-h: 142;
+    --comp-s: 55;
+    --comp-l: 35;
+    --comp-glow: 0.5;
+    --comp-env: 0.08;
+    transition:
+      --comp-h 2s cubic-bezier(0.22, 1, 0.36, 1),
+      --comp-s 2s cubic-bezier(0.22, 1, 0.36, 1),
+      --comp-l 2s cubic-bezier(0.22, 1, 0.36, 1),
+      --comp-glow 2s cubic-bezier(0.22, 1, 0.36, 1),
+      --comp-env 2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Breathing — slow, organic, alive */
+  @keyframes companion-breathe {
+    0%, 100% { transform: scale(0.975); }
+    50% { transform: scale(1.025); }
+  }
+
+  /* Core glow pulsation */
+  @keyframes companion-glow {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.65; }
+  }
+
+  /* Ambient particles — floating, drifting */
+  @keyframes companion-particle {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0.1; }
+    20% { transform: translateY(-8px) translateX(4px); opacity: 0.45; }
+    50% { transform: translateY(-3px) translateX(-3px); opacity: 0.25; }
+    80% { transform: translateY(5px) translateX(2px); opacity: 0.4; }
+  }
+
+  /* Blink — natural, irregular feel */
+  @keyframes companion-blink {
+    0%, 88%, 100% { opacity: 1; transform: scaleY(1); }
+    91%, 94% { opacity: 0.1; transform: scaleY(0.1); }
+  }
+
+  /* Head drift — subtle looking/awareness */
+  @keyframes companion-head-drift {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(1.5px, -0.8px) rotate(0.3deg); }
+    50% { transform: translate(0.5px, 0.3px) rotate(-0.1deg); }
+    75% { transform: translate(-1.2px, 0.5px) rotate(-0.2deg); }
+  }
+
+  /* Heartbeat — double pulse for vital state */
+  @keyframes companion-heartbeat {
+    0%, 100% { transform: scale(1); opacity: 0.35; }
+    7% { transform: scale(1.2); opacity: 0.75; }
+    14% { transform: scale(1); opacity: 0.35; }
+    21% { transform: scale(1.14); opacity: 0.6; }
+    28% { transform: scale(1); opacity: 0.35; }
+  }
+
+  /* Belly breathing — independent torso expansion */
+  @keyframes companion-belly-breathe {
+    0%, 100% { transform: scaleY(1) scaleX(1); }
+    50% { transform: scaleY(1.025) scaleX(1.01); }
+  }
+
+  /* Sanctuary atmospheric pulse */
+  @keyframes companion-sanctuary-pulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+  }
+
+  /* Tail sway — gentle, resting motion */
+  @keyframes companion-tail-sway {
+    0%, 100% { transform: rotate(0deg); }
+    30% { transform: rotate(1.5deg); }
+    70% { transform: rotate(-1deg); }
+  }
+
+  /* State transition flash — subtle radial bloom when state changes */
+  @keyframes companion-state-flash {
+    0% { opacity: 0; transform: scale(0.8); }
+    15% { opacity: 0.18; transform: scale(1); }
+    40% { opacity: 0.12; transform: scale(1.1); }
+    100% { opacity: 0; transform: scale(1.3); }
+  }
+
+  /* Nostril breathing — subtle flare */
+  @keyframes companion-nostril-breathe {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(1.4); }
+  }
+
+  /* Pupil micro-shift — looking alive */
+  @keyframes companion-pupil-shift {
+    0%, 100% { transform: translate(0, 0); }
+    15% { transform: translate(0.3px, -0.2px); }
+    35% { transform: translate(-0.2px, 0.1px); }
+    55% { transform: translate(0.15px, 0.15px); }
+    75% { transform: translate(-0.3px, -0.1px); }
+  }
+
+  /* ═══ EMOTIONAL BREATHING VARIANTS ═══ */
+
+  /* Heavy/exhausted breathing — deep, slow, labored */
+  @keyframes companion-heavy-breathe {
+    0%, 100% { transform: scale(0.96); }
+    50% { transform: scale(1.04); }
+  }
+
+  /* Tense breathing — shallow, fast, tight */
+  @keyframes companion-tense-breathe {
+    0%, 100% { transform: scale(0.99); }
+    50% { transform: scale(1.015); }
+  }
+
+  /* Shell breathing — subtle dome expansion */
+  @keyframes companion-shell-breathe {
+    0%, 100% { transform: scaleY(1) scaleX(1); }
+    50% { transform: scaleY(1.015) scaleX(1.008); }
+  }
+
+  /* Tail tense — stiff, barely moving */
+  @keyframes companion-tail-tense {
+    0%, 100% { transform: rotate(0deg) scaleX(0.9); }
+    50% { transform: rotate(0.3deg) scaleX(0.92); }
+  }
+
+  /* Tail droop — hanging, exhausted */
+  @keyframes companion-tail-droop {
+    0%, 100% { transform: rotate(3deg) translateY(2px); }
+    50% { transform: rotate(4deg) translateY(3px); }
+  }
+
+  /* Tail wag — happy, vital */
+  @keyframes companion-tail-wag {
+    0%, 100% { transform: rotate(0deg); }
+    20% { transform: rotate(4deg); }
+    40% { transform: rotate(-3deg); }
+    60% { transform: rotate(3deg); }
+    80% { transform: rotate(-2deg); }
+  }
+
+  /* Core flicker — unsteady energy for tense state */
+  @keyframes companion-core-flicker {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    10% { opacity: 0.6; transform: scale(1.05); }
+    20% { opacity: 0.2; transform: scale(0.95); }
+    35% { opacity: 0.55; transform: scale(1.08); }
+    50% { opacity: 0.15; transform: scale(0.92); }
+    65% { opacity: 0.5; transform: scale(1.03); }
+    80% { opacity: 0.25; transform: scale(0.97); }
+    90% { opacity: 0.6; transform: scale(1.06); }
+  }
+
+  /* Head droop for exhausted state */
+  @keyframes companion-head-droop {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(1.5px) rotate(1deg); }
+  }
+
+  /* Particle drift — slow, tired */
+  @keyframes companion-particle-slow {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0.04; }
+    50% { transform: translateY(-3px) translateX(1px); opacity: 0.12; }
+  }
+
+  /* Particle agitated — fast, tense */
+  @keyframes companion-particle-agitated {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0.08; }
+    15% { transform: translateY(-6px) translateX(5px); opacity: 0.35; }
+    35% { transform: translateY(3px) translateX(-4px); opacity: 0.15; }
+    55% { transform: translateY(-4px) translateX(-3px); opacity: 0.4; }
+    75% { transform: translateY(2px) translateX(4px); opacity: 0.1; }
+  }
+
+  /* Tear drop falling */
+  @keyframes companion-tear-fall {
+    0% { transform: translateY(0); opacity: 0.5; }
+    60% { transform: translateY(8px); opacity: 0.35; }
+    100% { transform: translateY(14px); opacity: 0; }
+  }
+
+  /* Yawn mouth opening */
+  @keyframes companion-yawn {
+    0%, 100% { transform: scaleY(1); opacity: 0; }
+    10% { transform: scaleY(1); opacity: 0; }
+    20% { transform: scaleY(1.8); opacity: 0.4; }
+    50% { transform: scaleY(2.5); opacity: 0.5; }
+    70% { transform: scaleY(1.5); opacity: 0.35; }
+    85% { transform: scaleY(1); opacity: 0; }
+  }
+
+  /* Happy eye squint — 😊 smile eyes */
+  @keyframes companion-smile-squint {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.6); }
+  }
+
+  /* Worry line pulse */
+  @keyframes companion-worry-pulse {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 0.35; }
+  }
+
+  /* Blush pulse for happy states */
+  @keyframes companion-blush-pulse {
+    0%, 100% { opacity: 0.12; transform: scale(1); }
+    50% { opacity: 0.22; transform: scale(1.08); }
+  }
+
+  /* Emotional body sway */
+  @keyframes companion-happy-sway {
+    0%, 100% { transform: rotate(0deg) translateX(0); }
+    25% { transform: rotate(1.2deg) translateX(1px); }
+    75% { transform: rotate(-1.2deg) translateX(-1px); }
+  }
+
+  /* Tense body shiver */
+  @keyframes companion-shiver {
+    0%, 100% { transform: translateX(0); }
+    10% { transform: translateX(0.5px); }
+    20% { transform: translateX(-0.5px); }
+    30% { transform: translateX(0.3px); }
+    40% { transform: translateX(-0.3px); }
+    50% { transform: translateX(0); }
+  }
+
+  /* Eyebrow furrow — tense micro-movement */
+  @keyframes companion-brow-furrow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(0.5px); }
+  }
+
+  /* ═══ MOOD ANIMATIONS ═══ */
+  @keyframes moodHappyBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  @keyframes moodCelebrateGlow {
+    0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
+    30% { transform: translateY(-6px) scale(1.02); filter: brightness(1.15); }
+    60% { transform: translateY(-2px) scale(1.01); }
+  }
+
+  @keyframes moodConcernedDroop {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(2px); }
+  }
+
+  @keyframes moodSleepySway {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(1px) rotate(1deg); }
+  }
+
+  @keyframes pulseWeakPillar {
+    0%, 100% { border-color: hsl(142 76% 46% / 0.15); }
+    50% { border-color: hsl(142 76% 46% / 0.4); }
+  }
+
+  @keyframes pulseNutritionFab {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+
+  /* ═══ CALI PREMIUM UPGRADE ANIMATIONS ═══ */
+
+  /* Tap interaction — satisfying bounce-pulse */
+  @keyframes companion-tap-bounce {
+    0% { transform: scale(1); }
+    20% { transform: scale(0.94); }
+    50% { transform: scale(1.06); }
+    70% { transform: scale(0.98); }
+    100% { transform: scale(1); }
+  }
+
+  /* Tap ripple — emanates from Cali */
+  @keyframes companion-tap-ripple {
+    0% { transform: scale(0.5); opacity: 0.4; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  /* Idle attention — occasional curiosity gesture */
+  @keyframes companion-idle-attention {
+    0%, 85%, 100% { transform: translateY(0) rotate(0deg); }
+    88% { transform: translateY(-2px) rotate(-1.5deg); }
+    91% { transform: translateY(-3px) rotate(-2deg); }
+    94% { transform: translateY(-1px) rotate(-0.5deg); }
+    97% { transform: translateY(0) rotate(0.3deg); }
+  }
+
+  /* Idle ear perk — subtle ear twitch */
+  @keyframes companion-ear-perk {
+    0%, 80%, 100% { transform: rotate(0deg) scaleY(1); }
+    84% { transform: rotate(-4deg) scaleY(1.1); }
+    88% { transform: rotate(-6deg) scaleY(1.15); }
+    92% { transform: rotate(-2deg) scaleY(1.05); }
+    96% { transform: rotate(1deg) scaleY(0.98); }
+  }
+
+  /* Shell shimmer — premium light sweep */
+  @keyframes companion-shell-shimmer {
+    0%, 100% { opacity: 0; transform: translateX(-60px); }
+    45% { opacity: 0; transform: translateX(-60px); }
+    55% { opacity: 0.12; transform: translateX(0px); }
+    65% { opacity: 0.06; transform: translateX(40px); }
+    75% { opacity: 0; transform: translateX(80px); }
+  }
+
+  /* Aura pulse — breathing outer ring */
+  @keyframes companion-aura-ring {
+    0%, 100% { transform: scale(1); opacity: 0.06; }
+    50% { transform: scale(1.04); opacity: 0.12; }
+  }
+
+  /* Ambient mote float — gentle firefly drift */
+  @keyframes companion-mote-float {
+    0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+    15% { opacity: 0.5; }
+    50% { transform: translate(var(--mote-dx, 12px), var(--mote-dy, -18px)) scale(1); opacity: 0.35; }
+    85% { opacity: 0.15; }
+    100% { transform: translate(var(--mote-dx2, -8px), var(--mote-dy2, -30px)) scale(0.4); opacity: 0; }
+  }
+
+  /* State transition bloom — richer color burst */
+  @keyframes companion-state-bloom {
+    0% { transform: scale(0.6); opacity: 0; filter: blur(12px); }
+    20% { transform: scale(1); opacity: 0.25; filter: blur(6px); }
+    40% { transform: scale(1.15); opacity: 0.15; filter: blur(8px); }
+    100% { transform: scale(1.4); opacity: 0; filter: blur(16px); }
+  }
+
+  /* Celebration sparkle burst */
+  @keyframes companion-sparkle {
+    0% { transform: translate(0, 0) scale(0); opacity: 1; }
+    50% { transform: translate(var(--spark-x, 20px), var(--spark-y, -20px)) scale(1.2); opacity: 0.8; }
+    100% { transform: translate(var(--spark-x2, 30px), var(--spark-y2, -35px)) scale(0); opacity: 0; }
+  }
+
+  /* Premium vitality rings — orbiting subtle halos */
+  @keyframes companion-orbit {
+    0% { transform: rotate(0deg) translateX(var(--orbit-r, 70px)) rotate(0deg); }
+    100% { transform: rotate(360deg) translateX(var(--orbit-r, 70px)) rotate(-360deg); }
+  }
+
+  /* Gentle idle float — gives Cali sense of weightlessness */
+  @keyframes companion-idle-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+
+  /* Shell highlight sweep — premium light reflection */
+  @keyframes companion-highlight-sweep {
+    0%, 100% { opacity: 0.02; }
+    50% { opacity: 0.08; }
+  }
+
+  /* ═══ CALI PREMIUM LIFE v2 ═══ */
+
+  /* Premium slow blink — elegant, not cartoon */
+  @keyframes companion-premium-blink {
+    0%, 42%, 48%, 100% { transform: scaleY(1); }
+    44%, 46% { transform: scaleY(0.05); }
+  }
+
+  /* Eye drift — idle look-around */
+  @keyframes companion-eye-drift {
+    0%, 100% { transform: translate(0, 0); }
+    12% { transform: translate(0.6px, -0.3px); }
+    28% { transform: translate(1.2px, 0.2px); }
+    42% { transform: translate(-0.4px, 0.4px); }
+    58% { transform: translate(-1px, -0.2px); }
+    72% { transform: translate(0.3px, 0.5px); }
+    88% { transform: translate(-0.6px, -0.1px); }
+  }
+
+  /* Tap flash — bright burst on interact */
+  @keyframes companion-tap-flash {
+    0% { opacity: 0; transform: scale(0.7); }
+    15% { opacity: 0.5; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.4); }
+  }
+
+  /* Heart float on tap — emits from Cali */
+  @keyframes companion-heart-float {
+    0% { transform: translateY(0) scale(0.4); opacity: 0; }
+    15% { transform: translateY(-4px) scale(1); opacity: 0.9; }
+    60% { transform: translateY(-18px) scale(0.9); opacity: 0.6; }
+    100% { transform: translateY(-30px) scale(0.5); opacity: 0; }
+  }
+
+  /* Tap sparkle burst — multiple small sparkles */
+  @keyframes companion-tap-sparkle {
+    0% { transform: translate(0, 0) scale(0); opacity: 1; }
+    30% { transform: translate(var(--tap-sx, 10px), var(--tap-sy, -10px)) scale(1.3); opacity: 0.9; }
+    100% { transform: translate(var(--tap-ex, 18px), var(--tap-ey, -22px)) scale(0); opacity: 0; }
+  }
+
+  /* Tap eye widen — surprised eyes */
+  @keyframes companion-tap-eyes-wide {
+    0%, 100% { transform: scaleY(1) scaleX(1); }
+    20% { transform: scaleY(1.25) scaleX(1.1); }
+    60% { transform: scaleY(1.12) scaleX(1.05); }
+  }
+
+  /* Layered aura outer ring — atmospheric breathing */
+  @keyframes companion-aura-outer {
+    0%, 100% { transform: scale(1); opacity: 0.03; }
+    50% { transform: scale(1.06); opacity: 0.07; }
+  }
+
+  /* Layered aura mid ring */
+  @keyframes companion-aura-mid {
+    0%, 100% { transform: scale(1); opacity: 0.06; }
+    50% { transform: scale(1.03); opacity: 0.12; }
+  }
+
+  /* Layered aura inner core */
+  @keyframes companion-aura-inner {
+    0%, 100% { transform: scale(1); opacity: 0.12; }
+    50% { transform: scale(1.015); opacity: 0.2; }
+  }
+
+  /* Shell inner light glow — translucent dome feel */
+  @keyframes companion-inner-light {
+    0%, 100% { opacity: 0.04; transform: scale(0.98); }
+    50% { opacity: 0.1; transform: scale(1.01); }
+  }
+
+  /* Specular dome highlight — glossy reflection */
+  @keyframes companion-specular-shift {
+    0%, 100% { opacity: 0.06; transform: translateY(0); }
+    50% { opacity: 0.12; transform: translateY(-0.5px); }
+  }
+
+  /* Habitat ambient mote — for companion page background */
+  @keyframes habitat-mote-drift {
+    0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+    20% { opacity: 0.4; }
+    50% { transform: translate(var(--hm-dx, 20px), var(--hm-dy, -30px)) scale(1); opacity: 0.25; }
+    80% { opacity: 0.1; }
+    100% { transform: translate(var(--hm-dx2, -10px), var(--hm-dy2, -50px)) scale(0.3); opacity: 0; }
+  }
+
+  /* Habitat ambient pulse — background atmosphere */
+  @keyframes habitat-ambient-pulse {
+    0%, 100% { opacity: 0.03; transform: scale(1); }
+    50% { opacity: 0.06; transform: scale(1.02); }
+  }
+
+  /* State bloom pulse — for transitioning between states */
+  @keyframes companion-bloom-pulse {
+    0% { opacity: 0; transform: scale(0.5); filter: blur(20px); }
+    25% { opacity: 0.3; transform: scale(1); filter: blur(10px); }
+    50% { opacity: 0.15; transform: scale(1.2); filter: blur(15px); }
+    100% { opacity: 0; transform: scale(1.5); filter: blur(25px); }
+  }
+
+  /* Celebrating bounce — energetic multi-bounce */
+  @keyframes companion-celebrate-bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    15% { transform: translateY(-10px) scale(1.03); }
+    30% { transform: translateY(0) scale(0.98); }
+    45% { transform: translateY(-6px) scale(1.02); }
+    60% { transform: translateY(0) scale(0.99); }
+    75% { transform: translateY(-3px) scale(1.01); }
+  }
+
+  /* ═══ CALI PSYCHOLOGY LAYER ANIMATIONS ═══ */
+
+  /* Streak arc pulse — golden breathing for 14+ day streaks */
+  @keyframes cali-streak-pulse {
+    0%, 100% { stroke-opacity: 0.18; filter: drop-shadow(0 0 3px hsl(45 85% 55% / 0.2)); }
+    50% { stroke-opacity: 0.35; filter: drop-shadow(0 0 8px hsl(45 85% 55% / 0.4)); }
+  }
+
+  /* Streak arc glow for companion page */
+  @keyframes cali-streak-arc-glow {
+    0%, 100% { filter: drop-shadow(0 0 4px hsl(45 85% 55% / 0.3)); }
+    50% { filter: drop-shadow(0 0 10px hsl(45 85% 55% / 0.6)); }
+  }
+
+  /* Crown shimmer — for 30+ streak */
+  @keyframes cali-crown-shimmer {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+
+  /* Golden aura for mastery/radiance stages */
+  @keyframes cali-golden-aura {
+    0%, 100% { stroke-opacity: 0.08; transform: scale(1); }
+    50% { stroke-opacity: 0.18; transform: scale(1.02); }
+  }
+
+  /* Attention hunger — floating question mark */
+  @keyframes cali-question-float {
+    0%, 100% { opacity: 0; transform: translateY(0); }
+    15% { opacity: 0.25; transform: translateY(-4px); }
+    30% { opacity: 0.15; transform: translateY(-8px); }
+    50% { opacity: 0; transform: translateY(-14px); }
+  }
+
+  /* Attention hunger — waiting ring breathe */
+  @keyframes cali-waiting-ring {
+    0%, 100% { stroke-opacity: 0.03; transform: scale(1); }
+    50% { stroke-opacity: 0.08; transform: scale(1.02); }
+  }
+
+  /* Attention gaze — eyes look forward toward user */
+  @keyframes cali-attention-gaze {
+    0% { transform: translate(0, 0); }
+    30% { transform: translate(0.5px, 0); }
+    60% { transform: translate(0.3px, -0.2px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  /* Pillar need: bewegung — subtle stretch/wiggle */
+  @keyframes cali-need-stretch {
+    0%, 85%, 100% { transform: translateY(0) rotate(0deg); }
+    87% { transform: translateY(-1px) rotate(0.5deg); }
+    89% { transform: translateY(0) rotate(-0.3deg); }
+    91% { transform: translateY(-0.5px) rotate(0.2deg); }
+    93% { transform: translateY(0) rotate(0deg); }
+  }
+
+  /* Pillar need: ernaehrung — cheek dimming */
+  @keyframes cali-cheek-dim {
+    0%, 100% { opacity: 0.02; }
+    50% { opacity: 0.05; }
+  }
+
+  /* Pillar need: regeneration/mental — floating z particles */
+  @keyframes cali-need-particle {
+    0%, 100% { opacity: 0; transform: translateY(0) scale(0.8); }
+    20% { opacity: 0.2; transform: translateY(-4px) scale(1); }
+    40% { opacity: 0.12; transform: translateY(-10px) scale(0.9); }
+    60% { opacity: 0; transform: translateY(-16px) scale(0.6); }
+  }
+
+  /* Pillar need: mental — foggy aura pulse */
+  @keyframes cali-fog-pulse {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.04; }
+  }
+
+  /* Celebration memory — happiness bloom (used after check-in) */
+  @keyframes cali-happiness-bloom {
+    0% { transform: scale(0.8); opacity: 0; filter: blur(8px); }
+    20% { transform: scale(1.05); opacity: 0.3; filter: blur(3px); }
+    40% { transform: scale(1.1); opacity: 0.2; filter: blur(6px); }
+    100% { transform: scale(1.3); opacity: 0; filter: blur(12px); }
+  }
+
+  /* Celebration memory — happy eye squint (crescents) */
+  @keyframes cali-happy-squint {
+    0%, 100% { transform: scaleY(1); }
+    20% { transform: scaleY(0.3); }
+    80% { transform: scaleY(0.3); }
+  }
+
+  /* Stage evolution celebration — bloom + sparkle burst */
+  @keyframes cali-stage-evolve {
+    0% { transform: scale(0.9); opacity: 0; filter: brightness(1.5) blur(6px); }
+    25% { transform: scale(1.08); opacity: 0.4; filter: brightness(1.3) blur(2px); }
+    50% { transform: scale(1.12); opacity: 0.25; filter: brightness(1.1) blur(4px); }
+    100% { transform: scale(1.2); opacity: 0; filter: brightness(1) blur(10px); }
+  }
+}

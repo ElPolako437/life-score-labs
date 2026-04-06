@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caliness Academy · Grundlagen-Guide für Longevity</title>
+  
+  <!-- Caliness Academy Favicon -->
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon-512.png">
+  <meta name="theme-color" content="#0a0c0e">
+  <meta name="application-name" content="Caliness Academy">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+    
+    :root {
+      /* Caliness Academy Dark Premium Theme */
+      --color-bg: #0a0c0e;
+      --color-bg-elevated: #10131a;
+      --color-bg-card: #141820;
+      --color-bg-surface: #1a1f2a;
+      
+      /* Caliness Neon Green */
+      --color-accent: #2dd36f;
+      --color-accent-soft: #24b85d;
+      --color-accent-glow: #3fe882;
+      --color-accent-muted: rgba(45, 211, 111, 0.15);
+      
+      /* Text Colors */
+      --color-text-primary: #fafafa;
+      --color-text-secondary: #a8b2c1;
+      --color-text-muted: #6b7a90;
+      
+      /* Borders */
+      --color-border: rgba(255, 255, 255, 0.08);
+      --color-border-accent: rgba(45, 211, 111, 0.25);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    /* Pixel-perfect PDF export settings */
+    @page {
+      size: 210mm 297mm;
+      margin: 0;
+    }
+    
+    html {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 400;
+      color: var(--color-text-primary);
+      line-height: 1.75;
+      font-size: 10.5pt;
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: -0.01em;
+      text-rendering: optimizeLegibility;
+    }
+    
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 28mm 32mm;
+      padding-bottom: 35mm; /* Extra space for footer */
+      margin: 0 auto;
+      background: var(--color-bg);
+      page-break-after: always;
+      /* REMOVED: page-break-inside: avoid - causes empty pages in print */
+      position: relative;
+      overflow: visible; /* Allow content to flow, no clipping */
+      box-sizing: border-box;
+    }
+    
+    .page:last-child {
+      page-break-after: auto;
+    }
+    
+    /* Cover Page */
+    .cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: 
+        radial-gradient(ellipse 80% 50% at 50% 30%, rgba(45, 211, 111, 0.08) 0%, transparent 50%),
+        linear-gradient(180deg, #0a0c0e 0%, #0d0f12 100%);
+    }
+    
+    .cover-brand {
+      margin-bottom: 50px;
+      text-align: center;
+    }
+    
+    .cover-logo-img {
+      width: 90px;
+      height: auto;
+      margin: 0 auto 8px;
+      filter: drop-shadow(0 0 25px rgba(45, 211, 111, 0.4));
+    }
+    
+    .cover-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13pt;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      text-shadow: 0 0 30px rgba(45, 211, 111, 0.4);
+    }
+    
+    .cover-academy {
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      font-weight: 500;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-top: 8px;
+    }
+    
+    .cover-divider {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(180deg, transparent 0%, var(--color-accent) 50%, transparent 100%);
+      margin: 40px 0;
+      opacity: 0.6;
+    }
+    
+    .cover-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 48pt;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 18px;
+      color: var(--color-text-primary);
+    }
+    
+    .cover-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 12pt;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      max-width: 380px;
+      line-height: 1.7;
+      margin-bottom: 50px;
+    }
+    
+    .cover-accent-line {
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+      margin: 35px 0;
+    }
+    
+    .cover-quote {
+      font-family: 'Inter', sans-serif;
+      font-style: italic;
+      font-size: 12pt;
+      font-weight: 300;
+      color: var(--color-text-muted);
+      max-width: 360px;
+      line-height: 1.65;
+    }
+    
+    /* Content Pages */
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28pt;
+      font-weight: 700;
+      margin-bottom: 28px;
+      color: var(--color-text-primary);
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+    }
+    
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16pt;
+      font-weight: 600;
+      margin-top: 36px;
+      margin-bottom: 16px;
+      color: var(--color-text-primary);
+      letter-spacing: -0.02em;
+    }
+    
+    h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 8.5pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--color-accent);
+      margin-top: 32px;
+      margin-bottom: 14px;
+    }
+    
+    p {
+      margin-bottom: 16px;
+      color: var(--color-text-secondary);
+    }
+    
+    .lead {
+      font-size: 12pt;
+      line-height: 1.85;
+      color: var(--color-text-primary);
+      margin-bottom: 24px;
+      font-weight: 400;
+    }
+    
+    .quote {
+      font-family: 'Inter', sans-serif;
+      font-style: italic;
+      font-size: 14pt;
+      font-weight: 300;
+      color: var(--color-text-primary);
+      padding: 28px 0;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      margin: 32px 0;
+      text-align: center;
+      line-height: 1.55;
+    }
+    
+    .highlight-box {
+      background: var(--color-accent-muted);
+      padding: 24px 28px;
+      margin: 24px 0;
+      border-left: 2px solid var(--color-accent);
+      border-radius: 0 8px 8px 0;
+    }
+    
+    .highlight-box p {
+      margin-bottom: 0;
+      font-size: 10pt;
+      color: var(--color-text-primary);
+    }
+    
+    .pillar {
+      margin: 20px 0; /* Reduced from 24px */
+      padding: 18px 0; /* Reduced from 22px */
+      border-bottom: 1px solid var(--color-border);
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    
+    .pillar:last-child {
+      border-bottom: none;
+    }
+    
+    .pillar-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 12pt; /* Reduced from 13pt */
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 8px; /* Reduced from 10px */
+      letter-spacing: -0.01em;
+    }
+    
+    .pillar-desc {
+      font-size: 9pt; /* Reduced from 9.5pt */
+      color: var(--color-text-secondary);
+      margin-bottom: 0;
+      line-height: 1.6; /* Reduced from 1.7 */
+    }
+    
+    .pattern-item {
+      display: grid;
+      grid-template-columns: 110px 1fr; /* Slightly smaller label column */
+      gap: 14px; /* Reduced from 16px */
+      margin: 10px 0; /* Reduced from 12px */
+      padding: 12px 16px; /* Reduced from 14px 18px */
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      align-items: start;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    
+    .pattern-label {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      color: var(--color-accent);
+      font-size: 7pt; /* Reduced from 7.5pt */
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      line-height: 1.4;
+      word-wrap: break-word;
+      overflow-wrap: anywhere;
+      hyphens: auto;
+    }
+    
+    .pattern-meaning {
+      color: var(--color-text-secondary);
+      font-size: 8pt; /* Reduced from 8.5pt */
+      line-height: 1.5; /* Reduced from 1.55 */
+    }
+    
+    .principle {
+      margin: 18px 0; /* Reduced from 22px */
+      padding-left: 18px; /* Reduced from 20px */
+      border-left: 2px solid var(--color-accent);
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    
+    .principle-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 5px; /* Reduced from 6px */
+      font-size: 10.5pt; /* Reduced from 11pt */
+    }
+    
+    .principle p {
+      font-size: 9pt; /* Reduced from 9.5pt */
+    }
+    
+    .closing-section {
+      background: 
+        radial-gradient(ellipse 80% 50% at 50% 70%, rgba(45, 211, 111, 0.06) 0%, transparent 50%),
+        var(--color-bg);
+      padding: 28mm 32mm 25mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-top: 55mm;
+    }
+    
+    .closing-message {
+      font-family: 'Inter', sans-serif;
+      font-size: 16pt;
+      line-height: 1.55;
+      color: var(--color-text-primary);
+      text-align: center;
+      max-width: 380px;
+      margin: 0 auto 30px;
+      font-weight: 400;
+    }
+    
+    .closing-note {
+      text-align: center;
+      font-size: 10pt;
+      color: var(--color-text-secondary);
+      max-width: 340px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+    
+    .divider {
+      width: 35px;
+      height: 1px;
+      background: var(--color-accent);
+      margin: 28px 0;
+      opacity: 0.5;
+    }
+    
+    /* Page Header with Logo */
+    .page-header {
+      position: absolute;
+      top: 18mm;
+      left: 32mm;
+      right: 32mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .page-header-logo {
+      width: 32px;
+      height: auto;
+      opacity: 0.8;
+      filter: drop-shadow(0 0 10px rgba(45, 211, 111, 0.2));
+    }
+    
+    .page-header-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      opacity: 0.7;
+    }
+    
+    .page-footer {
+      position: absolute;
+      bottom: 18mm;
+      left: 32mm;
+      right: 32mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 7.5pt;
+      color: var(--color-text-muted);
+      letter-spacing: 0.03em;
+    }
+    
+    .page-footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .page-footer-logo {
+      width: 22px;
+      height: auto;
+      opacity: 0.6;
+    }
+    
+    .page-footer-brand {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-accent);
+    }
+    
+    .page-footer-title {
+      font-weight: 400;
+    }
+    
+    .disclaimer {
+      font-size: 7.5pt;
+      color: var(--color-text-muted);
+      line-height: 1.55;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--color-border);
+      text-align: center;
+    }
+    
+    .brand-footer {
+      text-align: center;
+      margin-top: 60px;
+    }
+    
+    .brand-footer-logo-img {
+      width: 50px;
+      height: auto;
+      margin: 0 auto 12px;
+      filter: drop-shadow(0 0 20px rgba(45, 211, 111, 0.35));
+    }
+    
+    .brand-footer-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 11pt;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      text-shadow: 0 0 30px rgba(45, 211, 111, 0.35);
+    }
+    
+    .brand-footer-tagline {
+      font-size: 8pt;
+      color: var(--color-text-muted);
+      margin-top: 10px;
+      letter-spacing: 0.08em;
+    }
+    
+    /* Founder Section */
+    .founder-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-top: 45px;
+      padding: 22px 0;
+      border-top: 1px solid var(--color-border);
+    }
+    
+    .founder-portrait {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      filter: grayscale(15%);
+    }
+    
+    .founder-text {
+      flex: 1;
+    }
+    
+    .founder-intro {
+      font-family: 'Inter', sans-serif;
+      font-size: 8.5pt;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      margin: 0;
+    }
+    
+    .founder-name {
+      color: var(--color-text-primary);
+      font-weight: 500;
+    }
+    
+    .founder-role {
+      font-size: 7.5pt;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+    
+    /* System Map Styles */
+    .system-map-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      padding-top: 25mm;
+      background: 
+        radial-gradient(ellipse 70% 50% at 50% 50%, rgba(45, 211, 111, 0.03) 0%, transparent 60%),
+        var(--color-bg);
+    }
+    
+    .system-map-header {
+      margin-bottom: 30px;
+    }
+    
+    .system-map-logo {
+      width: 60px;
+      height: auto;
+      filter: drop-shadow(0 0 16px rgba(45, 211, 111, 0.25));
+    }
+    
+    .system-map-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--color-text-primary);
+      margin-bottom: 45px;
+    }
+    
+    .system-visual {
+      position: relative;
+      width: 340px;
+      height: 340px;
+      margin: 0 auto 50px;
+    }
+    
+    .system-svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .system-center-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Outfit', sans-serif;
+      font-size: 9pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--color-accent);
+    }
+    
+    .node-label {
+      position: absolute;
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      font-weight: 400;
+      color: var(--color-text-secondary);
+      line-height: 1.45;
+      text-align: center;
+      width: 95px;
+    }
+    
+    /* Pentagon node positions */
+    .node-1 { top: -8px; left: 50%; transform: translateX(-50%); }
+    .node-2 { top: 80px; right: -45px; }
+    .node-3 { bottom: 30px; right: -25px; }
+    .node-4 { bottom: 30px; left: -25px; }
+    .node-5 { top: 80px; left: -45px; }
+    
+    .system-insight {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .system-insight p {
+      font-family: 'Inter', sans-serif;
+      font-size: 10pt;
+      font-weight: 300;
+      color: var(--color-text-secondary);
+      line-height: 1.9;
+      margin-bottom: 0;
+    }
+    
+    /* Longevity badge */
+    .longevity-badge {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      background: var(--color-accent-muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--color-border-accent);
+    }
+    
+    .cover-testimonial {
+      margin-top: 35px;
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt;
+      font-weight: 300;
+      color: var(--color-text-muted);
+      max-width: 320px;
+      line-height: 1.6;
+    }
+    
+    .testimonial-highlight {
+      color: var(--color-accent);
+      font-weight: 500;
+    }
+    
+    /* PRINT STYLES - Pixel-perfect PDF export */
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      
+      html, body {
+        width: 210mm;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: var(--color-bg) !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      
+      .page {
+        width: 210mm !important;
+        min-height: 297mm !important;
+        height: 297mm !important; /* Fixed height for consistent page breaks */
+        max-height: 297mm !important; /* Fixed max height */
+        margin: 0 !important;
+        padding: 28mm 32mm 35mm !important; /* Extra bottom padding for footer */
+        box-shadow: none !important;
+        page-break-after: always;
+        /* REMOVED: page-break-inside: avoid - causes empty pages */
+        background: var(--color-bg) !important;
+        overflow: hidden !important; /* Clip to page bounds */
+      }
+      
+      .page:last-child {
+        page-break-after: auto;
+      }
+      
+      .download-btn {
+        display: none !important;
+      }
+      
+      /* Lock fonts */
+      body, p, span, div {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      }
+      
+      h1, h2, .cover-title, .pillar-title, .principle-title {
+        font-family: 'Outfit', sans-serif !important;
+      }
+      
+      /* Prevent breaks inside elements */
+      .pillar, .principle, .pattern-item, .highlight-box, .founder-section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      
+      /* Allow page breaks before major sections if needed */
+      .closing-section {
+        page-break-before: auto;
+        page-break-inside: avoid;
+      }
+      
+      /* Ensure backgrounds print */
+      .cover, .highlight-box, .pattern-item, .closing-section, .longevity-badge, .system-map-page {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+    
+    @media screen {
+      body {
+        background: #000;
+        padding: 30px;
+      }
+      .page {
+        box-shadow: 
+          0 0 0 1px rgba(45, 211, 111, 0.1),
+          0 25px 80px rgba(0, 0, 0, 0.8);
+        margin-bottom: 30px;
+      }
+    }
+    
+    /* Download Button */
+    .download-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--color-accent);
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 1000;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 20px rgba(45, 211, 111, 0.3);
+    }
+    
+    .download-btn:hover {
+      background: var(--color-accent-glow);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(45, 211, 111, 0.4);
+    }
+    
+    .download-btn:disabled {
+      opacity: 0.7;
+      cursor: wait;
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <button class="download-btn" onclick="printPDF()">📥 Als PDF speichern</button>
+  
+  <script>
+    // Wait for fonts to load before printing for pixel-perfect PDF
+    async function printPDF() {
+      const btn = document.querySelector('.download-btn');
+      const originalText = btn.textContent;
+      btn.textContent = '⏳ Fonts werden geladen...';
+      btn.disabled = true;
+      
+      try {
+        await document.fonts.ready;
+        await new Promise(resolve => setTimeout(resolve, 500));
+        window.print();
+      } catch (e) {
+        console.error('Font loading error:', e);
+        window.print();
+      } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        await document.fonts.load('400 10pt Inter');
+        await document.fonts.load('500 10pt Inter');
+        await document.fonts.load('600 10pt Inter');
+        await document.fonts.load('700 10pt Inter');
+        await document.fonts.load('400 10pt Outfit');
+        await document.fonts.load('600 10pt Outfit');
+        await document.fonts.load('700 10pt Outfit');
+      } catch (e) {
+        console.log('Font preload:', e);
+      }
+      
+      // Auto-trigger print if ?print=1 parameter is present
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('print') === '1') {
+        // Wait a bit for fonts to fully render, then auto-print
+        await new Promise(resolve => setTimeout(resolve, 800));
+        await document.fonts.ready;
+        window.print();
+      }
+    });
+  </script>
+
+  <!-- Page 1: Cover -->
+  <div class="page cover">
+    <div class="cover-brand">
+      <img src="/images/caliness-logo-white.png" alt="Caliness" class="cover-logo-img">
+      <div class="cover-academy">Academy</div>
+    </div>
+    <div class="longevity-badge">Longevity Framework</div>
+    <div class="cover-divider"></div>
+    <h1 class="cover-title">Grundlagen-Guide</h1>
+    <p class="cover-subtitle">
+      Orientierung und Klarheit für Phasen,<br>
+      in denen Veränderung schwer fällt
+    </p>
+    <div class="cover-accent-line"></div>
+    <p class="cover-quote">
+      „Verstehen, warum es gerade nicht funktioniert –<br>
+      ist der erste Schritt zu dem, was funktionieren kann."
+    </p>
+    <div class="cover-testimonial">
+      <span class="testimonial-highlight">100+ Athleten & Executives</span> haben mit diesem Framework ihre biologische Vitalität nachhaltig verbessert
+    </div>
+  </div>
+
+  <!-- Page 2: Opening -->
+  <div class="page">
+    <div class="page-header">
+      <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-header-logo">
+      <span class="page-header-text">Longevity Coaching</span>
+    </div>
+    
+    <h1>Das ist kein Versagen</h1>
+    
+    <p class="lead">
+      Wenn Veränderungen nicht greifen, liegt es selten an fehlendem Wissen oder mangelnder Motivation. Es liegt an der aktuellen Belastungssituation – und daran, wie Ihr System auf Longevity-Maßnahmen reagiert.
+    </p>
+    
+    <p>
+      Das, was Sie gerade erleben, hat einen Namen: Überlastung kombiniert mit hoher Reibung. Ihr System – Körper, Geist, Alltag – befindet sich in einem Zustand, in dem zusätzliche Anforderungen nicht integriert werden können.
+    </p>
+    
+    <p>
+      Das ist keine Schwäche. Es ist eine normale Reaktion auf eine Situation, die zu viel verlangt.
+    </p>
+    
+    <div class="quote">
+      „Der Körper schützt sich, indem er Kapazität reduziert.<br>
+      Das ist Intelligenz, nicht Versagen."
+    </div>
+    
+    <p>
+      Vielleicht haben Sie bereits mehrfach versucht, etwas zu ändern. Mehr Bewegung. Bessere Ernährung. Weniger Stress. Und vielleicht haben Sie erlebt, dass diese Versuche nicht nachhaltig waren.
+    </p>
+    
+    <p>
+      Das liegt nicht daran, dass die Maßnahmen falsch waren. Es liegt daran, dass sie zum falschen Zeitpunkt kamen – in einem System, das bereits am Limit operiert.
+    </p>
+    
+    <div class="highlight-box">
+      <p>
+        Dieser Guide bietet keine neuen Maßnahmen. Er bietet einen Rahmen für Verständnis. Denn Klarheit darüber, wo Sie stehen, ist die Grundlage für nachhaltige Longevity.
+      </p>
+    </div>
+    
+    <div class="page-footer">
+      <div class="page-footer-left">
+        <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-footer-logo">
+        <span class="page-footer-brand">Caliness Academy</span>
+      </div>
+      <span class="page-footer-title">Grundlagen-Guide</span>
+    </div>
+  </div>
+
+  <!-- Page 3: Why Change Fails -->
+  <div class="page">
+    <div class="page-header">
+      <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-header-logo">
+      <span class="page-header-text">Longevity Coaching</span>
+    </div>
+    
+    <h1 style="margin-bottom: 20px;">Warum Veränderung scheitert</h1>
+    
+    <p class="lead" style="margin-bottom: 18px;">
+      Longevity ist kein Projekt. Sie ist ein System – und Systeme folgen eigenen Regeln.
+    </p>
+    
+    <h2 style="margin-top: 24px; margin-bottom: 12px;">Das System-Prinzip</h2>
+    
+    <p style="margin-bottom: 10px;">
+      Stellen Sie sich Ihre Gesundheit als ein Netzwerk vor. Schlaf beeinflusst Energie. Energie beeinflusst Entscheidungen. Entscheidungen beeinflussen Ernährung. Ernährung beeinflusst Schlaf.
+    </p>
+    
+    <p style="margin-bottom: 14px;">
+      Wenn dieses Netzwerk stabil ist, können Veränderungen integriert werden. Wenn es instabil ist, werden dieselben Veränderungen zu zusätzlicher Belastung.
+    </p>
+    
+    <div class="divider" style="margin: 18px 0;"></div>
+    
+    <h2 style="margin-top: 18px; margin-bottom: 12px;">Das Kapazitäts-Problem</h2>
+    
+    <p style="margin-bottom: 10px;">
+      Jede Veränderung erfordert Kapazität: mentale Energie, emotionale Stabilität, zeitliche Ressourcen.
+    </p>
+    
+    <p style="margin-bottom: 14px;">
+      In Phasen von Überlastung ist diese Kapazität aufgebraucht. Das System priorisiert Überleben, nicht Optimierung – aus Selbstschutz, nicht aus Trägheit.
+    </p>
+    
+    <div class="highlight-box" style="padding: 18px 22px; margin: 18px 0;">
+      <p>
+        Die Frage ist nicht: „Was sollte ich tun?"<br>
+        Die Frage ist: „Was kann mein System gerade tragen?"
+      </p>
+    </div>
+    
+    <h2 style="margin-top: 18px; margin-bottom: 12px;">Der Timing-Faktor</h2>
+    
+    <p style="margin-bottom: 10px;">
+      Dieselbe Maßnahme kann in einer stabilen Phase transformativ wirken – und in einer instabilen Phase das System weiter destabilisieren.
+    </p>
+    
+    <p style="margin-bottom: 0;">
+      Das erklärt, warum Ratschläge, die für andere funktionieren, bei Ihnen nicht greifen. Es liegt nicht am Ratschlag. Es liegt am Timing.
+    </p>
+    
+    <div class="page-footer">
+      <div class="page-footer-left">
+        <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-footer-logo">
+        <span class="page-footer-brand">Caliness Academy</span>
+      </div>
+      <span class="page-footer-title">Grundlagen-Guide</span>
+    </div>
+  </div>
+
+  <!-- Page 4: The 5 Pillars -->
+  <div class="page">
+    <div class="page-header">
+      <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-header-logo">
+      <span class="page-header-text">Longevity Coaching</span>
+    </div>
+    
+    <h1>Die 5 Caliness-Säulen der Longevity</h1>
+    
+    <p class="lead">
+      Nachhaltige Longevity entsteht im Zusammenspiel von fünf Bereichen. Keiner davon funktioniert isoliert.
+    </p>
+    
+    <div class="pillar">
+      <div class="pillar-title">Bewegung & körperliche Leistungsfähigkeit</div>
+      <p class="pillar-desc">
+        Funktionelles Training auf allen Ebenen: Krafttraining für Muskulatur und Knochendichte, Ausdauertraining für kardiovaskuläre Gesundheit, Mobilität für Gelenkgesundheit. Die Grundlage für ein langes, aktives Leben.
+      </p>
+    </div>
+    
+    <div class="pillar">
+      <div class="pillar-title">Ernährung & Mikronährstoffversorgung</div>
+      <p class="pillar-desc">
+        Weniger eine Frage von Diäten, mehr eine Frage von Versorgung. Hat der Körper, was er braucht, um zu regenerieren, zu regulieren, zu funktionieren? Entzündungsbalance und Nährstoffverfügbarkeit sind Schlüsselfaktoren für Longevity.
+      </p>
+    </div>
+    
+    <div class="pillar">
+      <div class="pillar-title">Regeneration & Schlafqualität</div>
+      <p class="pillar-desc">
+        Der unterschätzte Hebel für Longevity. Nicht nur Schlafdauer, sondern Schlaftiefe. Die Fähigkeit des Nervensystems, tatsächlich herunterzufahren. Ohne Regeneration bleibt jede andere Maßnahme oberflächlich.
+      </p>
+    </div>
+    
+    <div class="pillar">
+      <div class="pillar-title">Mentale Balance & Stresskompetenz</div>
+      <p class="pillar-desc">
+        Die Kapazität, mit Belastung umzugehen, ohne dauerhaft im Alarmmodus zu operieren. Chronischer Stress beschleunigt biologische Alterung. Fokus, emotionale Stabilität und Entscheidungsfähigkeit sind Longevity-Faktoren.
+      </p>
+    </div>
+    
+    <div class="pillar">
+      <div class="pillar-title">Biologische Optimierung & Lifestyle-Strategien</div>
+      <p class="pillar-desc">
+        Der langfristige Blick auf Longevity: Wie altert der Körper? Wie kohärent ist der Lebensstil über Zeit? Nicht einzelne Biohacks, sondern die Frage, ob das Gesamtsystem in eine gute Richtung läuft.
+      </p>
+    </div>
+    
+    <div class="highlight-box">
+      <p>
+        Diese Säulen sind keine Checkliste. Sie sind ein Modell, um zu verstehen, wo Energie verloren geht – und wo der Schlüssel zu echter Longevity liegt.
+      </p>
+    </div>
+    
+    <div class="page-footer">
+      <div class="page-footer-left">
+        <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-footer-logo">
+        <span class="page-footer-brand">Caliness Academy</span>
+      </div>
+      <span class="page-footer-title">Grundlagen-Guide</span>
+    </div>
+  </div>
+
+  <!-- Page 5: System Map -->
+  <div class="page system-map-page">
+    <div class="page-header">
+      <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-header-logo">
+      <span class="page-header-text">Longevity Coaching</span>
+    </div>
+    
+    <div class="system-map-header">
+      <img src="/images/caliness-logo-white.png" alt="Caliness" class="system-map-logo">
+    </div>
+    
+    <div class="system-map-title">Longevity System Map</div>
+    
+    <div class="system-visual">
+      <!-- Central ring with nodes positioned around it -->
+      <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="system-svg">
+        <!-- Outer subtle ring -->
+        <circle cx="200" cy="200" r="140" stroke="rgba(45, 211, 111, 0.08)" stroke-width="1" fill="none"/>
+        
+        <!-- Connection lines between all nodes (pentagon with inner star) -->
+        <polygon 
+          points="200,60 330,155 280,310 120,310 70,155" 
+          fill="none" 
+          stroke="rgba(45, 211, 111, 0.15)" 
+          stroke-width="1"
+        />
+        <!-- Inner star connections -->
+        <line x1="200" y1="60" x2="120" y2="310" stroke="rgba(45, 211, 111, 0.08)" stroke-width="1"/>
+        <line x1="200" y1="60" x2="280" y2="310" stroke="rgba(45, 211, 111, 0.08)" stroke-width="1"/>
+        <line x1="330" y1="155" x2="120" y2="310" stroke="rgba(45, 211, 111, 0.08)" stroke-width="1"/>
+        <line x1="70" y1="155" x2="280" y2="310" stroke="rgba(45, 211, 111, 0.08)" stroke-width="1"/>
+        <line x1="330" y1="155" x2="70" y2="155" stroke="rgba(45, 211, 111, 0.08)" stroke-width="1"/>
+        
+        <!-- Center circle -->
+        <circle cx="200" cy="200" r="45" fill="rgba(45, 211, 111, 0.08)" stroke="rgba(45, 211, 111, 0.25)" stroke-width="1"/>
+        
+        <!-- Node dots with glow -->
+        <circle cx="200" cy="60" r="6" fill="#2dd36f"/>
+        <circle cx="330" cy="155" r="6" fill="#2dd36f"/>
+        <circle cx="280" cy="310" r="6" fill="#2dd36f"/>
+        <circle cx="120" cy="310" r="6" fill="#2dd36f"/>
+        <circle cx="70" cy="155" r="6" fill="#2dd36f"/>
+      </svg>
+      
+      <!-- Center label -->
+      <div class="system-center-label">Longevity</div>
+      
+      <!-- Node labels positioned around the circle -->
+      <div class="node-label node-1">Bewegung &<br>Leistungsfähigkeit</div>
+      <div class="node-label node-2">Ernährung &<br>Mikronährstoffe</div>
+      <div class="node-label node-3">Regeneration &<br>Schlafqualität</div>
+      <div class="node-label node-4">Mentale Balance &<br>Stresskompetenz</div>
+      <div class="node-label node-5">Biologische<br>Optimierung</div>
+    </div>
+    
+    <div class="system-insight">
+      <p>
+        Die fünf Säulen bilden kein lineares Modell, sondern ein dynamisches Zusammenspiel für nachhaltige Longevity.<br>
+        Jede Veränderung in einem Bereich beeinflusst die Kapazität und Stabilität der anderen.<br>
+        Echte Longevity entsteht dort, wo das Gesamtsystem berücksichtigt wird.
+      </p>
+    </div>
+    
+    <div class="page-footer">
+      <div class="page-footer-left">
+        <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-footer-logo">
+        <span class="page-footer-brand">Caliness Academy</span>
+      </div>
+      <span class="page-footer-title">Grundlagen-Guide</span>
+    </div>
+  </div>
+
+  <!-- Page 6: Pattern Map -->
+  <div class="page">
+    <div class="page-header">
+      <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-header-logo">
+      <span class="page-header-text">Longevity Coaching</span>
+    </div>
+    
+    <h1>Typische Muster</h1>
+    
+    <p class="lead">
+      Bestimmte Erfahrungen tauchen immer wieder auf, wenn das System unter Druck steht – und Longevity-Ziele dadurch gefährdet sind. Sie zu erkennen ist der erste Schritt.
+    </p>
+    
+    <h3>Energie</h3>
+    <div class="pattern-item">
+      <div class="pattern-label">Morgens erschöpft</div>
+      <div class="pattern-meaning">Oft ein Zeichen dafür, dass Schlaf nicht regenerativ ist – unabhängig von der Dauer. Das Nervensystem fährt nachts nicht vollständig herunter. Ein kritischer Faktor für biologische Alterung.</div>
+    </div>
+    
+    <div class="pattern-item">
+      <div class="pattern-label">Energie-Einbrüche</div>
+      <div class="pattern-meaning">Häufig verbunden mit Blutzucker-Dynamiken und/oder chronisch erhöhtem Cortisolspiegel. Der Körper wechselt zwischen Überkompensation und Crash.</div>
+    </div>
+    
+    <h3>Stress & Belastung</h3>
+    <div class="pattern-item">
+      <div class="pattern-label">Dauerspannung</div>
+      <div class="pattern-meaning">Das Nervensystem bleibt im Bereitschaftsmodus. Entspannung fühlt sich fremd an – manchmal sogar unangenehm. Ein Zustand, der Longevity nachweislich verkürzt.</div>
+    </div>
+    
+    <div class="pattern-item">
+      <div class="pattern-label">Entscheidungsmüdigkeit</div>
+      <div class="pattern-meaning">Jede kleine Entscheidung fühlt sich groß an. Ein typisches Zeichen für kognitive Überlastung und erschöpfte Selbstregulation.</div>
+    </div>
+    
+    <h3>Schlaf & Regeneration</h3>
+    <div class="pattern-item">
+      <div class="pattern-label">Einschlafschwierigkeiten</div>
+      <div class="pattern-meaning">Gedanken, die nicht zur Ruhe kommen. Oft ein Zeichen dafür, dass der Tag keinen echten Abschluss findet – mit direkten Auswirkungen auf zelluläre Regeneration.</div>
+    </div>
+    
+    <div class="pattern-item">
+      <div class="pattern-label">Nächtliches Erwachen</div>
+      <div class="pattern-meaning">Häufig zwischen 2 und 4 Uhr. Kann mit Blutzucker, Cortisol oder unverarbeiteter Anspannung zusammenhängen.</div>
+    </div>
+    
+    <div class="page-footer">
+      <div class="page-footer-left">
+        <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-footer-logo">
+        <span class="page-footer-brand">Caliness Academy</span>
+      </div>
+      <span class="page-footer-title">Grundlagen-Guide</span>
+    </div>
+  </div>
+
+  <!-- Page 7: What Matters First -->
+  <div class="page">
+    <div class="page-header">
+      <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-header-logo">
+      <span class="page-header-text">Longevity Coaching</span>
+    </div>
+    
+    <h1>Was zuerst zählt</h1>
+    
+    <p class="lead">
+      Nicht alles ist gleich wichtig. In Phasen von Instabilität gelten andere Prioritäten als in stabilen Zeiten. Diese Prinzipien bilden die Grundlage für nachhaltige Longevity.
+    </p>
+    
+    <div class="principle">
+      <div class="principle-title">Reduktion vor Addition</div>
+      <p>
+        In überlasteten Systemen bringt Weglassen oft mehr als Hinzufügen. Die Frage ist nicht, was Sie noch tun könnten – sondern was wegfallen darf.
+      </p>
+    </div>
+    
+    <div class="principle">
+      <div class="principle-title">Regulation vor Optimierung</div>
+      <p>
+        Bevor ein System optimiert werden kann, muss es stabil sein. Das bedeutet: erst die Grundlagen sichern, bevor an Longevity-Details gearbeitet wird.
+      </p>
+    </div>
+    
+    <div class="principle">
+      <div class="principle-title">Schlaf vor allem anderen</div>
+      <p>
+        Ohne regenerativen Schlaf greifen andere Maßnahmen kaum. Der Schlaf ist nicht eine von vielen Variablen – er ist die Basis jeder Longevity-Strategie.
+      </p>
+    </div>
+    
+    <div class="principle">
+      <div class="principle-title">Rhythmus vor Perfektion</div>
+      <p>
+        Konsistenz schlägt Intensität. Ein mittelmäßiges Muster, das hält, ist wertvoller als ein perfekter Plan, der nach einer Woche scheitert.
+      </p>
+    </div>
+    
+    <div class="principle">
+      <div class="principle-title">Verständnis vor Aktion</div>
+      <p>
+        Zu verstehen, warum etwas nicht funktioniert, ist wichtiger als der nächste Versuch. Klarheit reduziert Reibung – und Reibung ist oft das eigentliche Problem auf dem Weg zur Longevity.
+      </p>
+    </div>
+    
+    <div class="quote">
+      „Der erste Schritt ist nicht Veränderung.<br>
+      Der erste Schritt ist, aufzuhören, gegen das eigene System zu arbeiten."
+    </div>
+    
+    <div class="page-footer">
+      <div class="page-footer-left">
+        <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-footer-logo">
+        <span class="page-footer-brand">Caliness Academy</span>
+      </div>
+      <span class="page-footer-title">Grundlagen-Guide</span>
+    </div>
+  </div>
+
+  <!-- Page 8: Closing -->
+  <div class="page closing-section">
+    <div class="page-header">
+      <img src="/images/caliness-logo-white.png" alt="Caliness" class="page-header-logo">
+      <span class="page-header-text">Longevity Coaching</span>
+    </div>
+    
+    <h1 style="text-align: center; margin-bottom: 40px;">Ein Gedanke zum Schluss</h1>
+    
+    <p class="closing-message">
+      Der Unterschied zwischen denen, die echte Longevity erreichen, und denen, die in Zyklen aus Versuch und Scheitern bleiben, ist selten Wissen.
+    </p>
+    
+    <p class="closing-message">
+      Es ist die richtige Reihenfolge.<br>
+      Und die Integration in das echte Leben.
+    </p>
+    
+    <div class="cover-accent-line" style="margin: 45px auto;"></div>
+    
+    <p class="closing-note">
+      Wenn Sie das Gefühl haben, dass ein strukturiertes Gespräch zur Longevity-Orientierung hilfreich sein könnte, steht Ihnen diese Möglichkeit offen.
+    </p>
+    
+    <p class="closing-note" style="margin-top: 18px;">
+      Nicht als Verpflichtung. Nicht als Verkauf.<br>
+      Sondern als Raum für Klarheit.
+    </p>
+    
+    <div class="brand-footer">
+      <img src="/images/caliness-logo-white.png" alt="Caliness" class="brand-footer-logo-img">
+      <div class="brand-footer-logo">Caliness Academy</div>
+      <div class="brand-footer-tagline">Longevity · Systemisch · Nachhaltig</div>
+    </div>
+    
+    <div class="founder-section">
+      <img src="/images/founder-portrait.jpg" alt="Mitgründer" class="founder-portrait">
+      <div class="founder-text">
+        <p class="founder-intro">
+          <span class="founder-name">David Gogulla</span>, Mitgründer der Caliness Academy.<br>
+          Unsere Arbeit basiert auf systemischer Lifestyle-Analyse statt pauschaler Empfehlungen.
+        </p>
+        <div class="founder-role">Longevity & Performance Coaching</div>
+      </div>
+    </div>
+    
+    <div class="disclaimer">
+      Zur allgemeinen Lifestyle-Orientierung. Keine medizinische Beratung.<br>
+      © Caliness Academy. Alle Rechte vorbehalten.
+    </div>
+  </div>
+
+</body>
+</html>

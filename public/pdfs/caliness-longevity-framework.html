@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CALINESS Longevity Framework</title>
+  
+  <!-- Caliness Academy Favicon -->
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon-512.png">
+  <meta name="theme-color" content="#0a0c0e">
+  <meta name="application-name" content="Caliness Academy">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    html, body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0a0c0e;
+      color: #e8e8e8;
+      font-size: 11pt;
+      line-height: 1.7;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    /* Download Button */
+    .download-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10, 12, 14, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      z-index: 1000;
+    }
+
+    .download-btn {
+      background: linear-gradient(135deg, #2dd36f, #1fa855);
+      color: #0a0c0e;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(45, 211, 111, 0.3);
+    }
+
+    .download-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .download-hint {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    @media print {
+      .download-bar {
+        display: none !important;
+      }
+      body {
+        padding-top: 0 !important;
+      }
+      
+      .page {
+        width: 210mm !important;
+        height: 297mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
+        margin: 0 !important;
+        padding: 24mm 24mm 28mm !important;
+        box-shadow: none !important;
+        page-break-after: always !important;
+        background: #0a0c0e !important;
+        overflow: hidden !important;
+      }
+      
+      .page:last-child {
+        page-break-after: auto !important;
+      }
+      
+      /* Ensure System Map page prints correctly */
+      .system-map-page {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(45, 211, 111, 0.03) 0%, transparent 60%), #0a0c0e !important;
+      }
+      
+      .system-svg, .system-visual {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+
+    body {
+      padding-top: 70px;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      min-height: 297mm;
+      max-height: 297mm;
+      padding: 20mm 22mm 30mm;
+      background: #0a0c0e;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    /* Logo */
+    .logo {
+      height: 28px;
+      margin-bottom: 18px;
+    }
+
+    .logo-small {
+      height: 20px;
+    }
+
+    /* Cover Page */
+    .cover-page {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 32mm 24mm;
+    }
+
+    .cover-logo {
+      height: 48px;
+      margin-bottom: 40px;
+    }
+
+    .cover-badge {
+      font-family: 'Outfit', sans-serif;
+      font-size: 8pt;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #2dd36f;
+      margin-bottom: 20px;
+      padding: 6px 16px;
+      border: 1px solid rgba(45, 211, 111, 0.3);
+      border-radius: 4px;
+    }
+
+    .cover-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 32pt;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: -1px;
+      margin-bottom: 14px;
+      line-height: 1.1;
+    }
+
+    .cover-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 11pt;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.6);
+      max-width: 380px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .cover-divider {
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #2dd36f, transparent);
+      margin-bottom: 32px;
+    }
+
+    .cover-internal-notice {
+      font-size: 7pt;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.35);
+      position: absolute;
+      bottom: 24mm;
+    }
+
+    /* Section Headers */
+    .section-number {
+      font-family: 'Outfit', sans-serif;
+      font-size: 8pt;
+      font-weight: 500;
+      color: #2dd36f;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18pt;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+
+    .section-intro {
+      font-size: 9pt;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 16px;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    /* Content Typography */
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 11pt;
+      font-weight: 600;
+      color: #ffffff;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 10px;
+      line-height: 1.55;
+      font-size: 9pt;
+    }
+
+    .highlight-text {
+      color: #2dd36f;
+      font-weight: 500;
+    }
+
+    /* Pillar Cards */
+    .pillar-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .pillar-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .pillar-number {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #2dd36f, #1fa855);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12pt;
+      font-weight: 600;
+      color: #0a0c0e;
+    }
+
+    .pillar-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 11pt;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .pillar-content h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt;
+      font-weight: 600;
+      color: #2dd36f;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+
+    .pillar-content p {
+      font-size: 8pt;
+      margin-bottom: 4px;
+      line-height: 1.45;
+    }
+
+    /* Quote Block */
+    .quote-block {
+      border-left: 3px solid #2dd36f;
+      padding-left: 14px;
+      margin: 14px 0;
+    }
+
+    .quote-block p {
+      font-size: 10pt;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.5;
+    }
+
+    /* List Styling */
+    .styled-list {
+      list-style: none;
+      margin: 16px 0;
+    }
+
+    .styled-list li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 10px;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.55;
+      font-size: 9.5pt;
+    }
+
+    .styled-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 6px;
+      height: 6px;
+      background: #2dd36f;
+      border-radius: 2px;
+    }
+
+    /* Avoids List */
+    .avoids-list {
+      list-style: none;
+      margin: 16px 0;
+    }
+
+    .avoids-list li {
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 12px;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.55;
+      font-size: 9.5pt;
+    }
+
+    .avoids-list li::before {
+      content: "×";
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 14pt;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* System Map Styles - Full Pentagon Visualization */
+    .system-map-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      padding-top: 20mm;
+      background: 
+        radial-gradient(ellipse 70% 50% at 50% 50%, rgba(45, 211, 111, 0.03) 0%, transparent 60%),
+        #0a0c0e;
+    }
+    
+    .system-map-header {
+      margin-bottom: 20px;
+    }
+    
+    .system-map-logo {
+      width: 50px;
+      height: auto;
+      filter: drop-shadow(0 0 16px rgba(45, 211, 111, 0.25));
+    }
+    
+    .system-map-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 25px;
+    }
+    
+    .system-visual {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 0 auto 30px;
+    }
+    
+    .system-svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .system-center-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Outfit', sans-serif;
+      font-size: 9pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #2dd36f;
+    }
+    
+    .node-label {
+      position: absolute;
+      font-family: 'Inter', sans-serif;
+      font-size: 7.5pt;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.4;
+      text-align: center;
+      width: 85px;
+    }
+    
+    /* Pentagon node positions */
+    .node-1 { top: -8px; left: 50%; transform: translateX(-50%); }
+    .node-2 { top: 70px; right: -40px; }
+    .node-3 { bottom: 25px; right: -22px; }
+    .node-4 { bottom: 25px; left: -22px; }
+    .node-5 { top: 70px; left: -40px; }
+    
+    .system-insight {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    
+    .system-insight p {
+      font-family: 'Inter', sans-serif;
+      font-size: 9pt;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.75;
+      margin-bottom: 0;
+    }
+
+    /* System Visual Container for Seite 6 */
+    .system-visual-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 12px 0 16px;
+    }
+    
+    .system-visual-wrapper {
+      position: relative;
+      width: 280px;
+      height: 280px;
+    }
+    
+    .system-svg-map {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .map-center-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Outfit', sans-serif;
+      font-size: 10pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #2dd36f;
+    }
+    
+    .map-node-label {
+      position: absolute;
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.35;
+      text-align: center;
+      white-space: nowrap;
+    }
+    
+    /* Pentagon node positions - outside the shape */
+    .map-node-1 { top: -5px; left: 50%; transform: translateX(-50%); }
+    .map-node-2 { top: 22%; right: -55px; text-align: left; }
+    .map-node-3 { bottom: 5%; right: -35px; text-align: left; }
+    .map-node-4 { bottom: 5%; left: -35px; text-align: right; }
+    .map-node-5 { top: 22%; left: -55px; text-align: right; }
+
+    /* Closing Section */
+    .closing-section {
+      text-align: center;
+      padding-top: 32px;
+    }
+
+    .closing-statement {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13pt;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 440px;
+      margin: 0 auto 32px;
+      line-height: 1.65;
+    }
+
+    .closing-divider {
+      width: 36px;
+      height: 2px;
+      background: #2dd36f;
+      margin: 0 auto 20px;
+    }
+
+    .closing-logo {
+      height: 32px;
+    }
+
+    /* Footer */
+    .page-footer {
+      position: absolute;
+      bottom: 18mm;
+      left: 24mm;
+      right: 24mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-logo {
+      height: 16px;
+      opacity: 0.6;
+    }
+
+    .footer-internal {
+      font-size: 6.5pt;
+      color: rgba(255, 255, 255, 0.25);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Two Column Layout */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .col-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .col-card h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 9pt;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 5px;
+    }
+
+    .col-card p {
+      font-size: 8pt;
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Download Bar -->
+  <div class="download-bar">
+    <button class="download-btn" onclick="window.print()">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+      </svg>
+      Als PDF speichern
+    </button>
+    <span class="download-hint">Drucken → Als PDF speichern</span>
+  </div>
+
+  <!-- Page 1: Cover -->
+  <div class="page cover-page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="cover-logo">
+    <div class="cover-badge">Internes Framework</div>
+    <h1 class="cover-title">Longevity<br>Framework</h1>
+    <p class="cover-subtitle">Ein strukturierter Ansatz für nachhaltige Leistungsfähigkeit und langfristige Gesundheit</p>
+    <div class="cover-divider"></div>
+    <!-- Cover notice removed -->
+  </div>
+
+  <!-- Page 2: Die CALINESS Philosophie -->
+  <div class="page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="logo">
+    <div class="section-number">Abschnitt 01</div>
+    <h2 class="section-title">Die CALINESS Philosophie</h2>
+    <p class="section-intro">Longevity als System verstehen, nicht als Sammlung von Taktiken.</p>
+
+    <h3>Was Longevity bei CALINESS bedeutet</h3>
+    <p>Longevity bedeutet nicht, Jahre um jeden Preis hinzuzufügen. Es geht darum, die Zeit zu verlängern, in der ein Mensch voll leben kann – körperlich leistungsfähig, mental klar und emotional belastbar. Bei CALINESS definieren wir Longevity als nachhaltige Optimierung biologischer Funktionen über Jahrzehnte, nicht Monate.</p>
+
+    <h3>Drei Dimensionen der Zeit</h3>
+    <p><span class="highlight-text">Lebensspanne</span> bezeichnet die Gesamtzahl der gelebten Jahre. Sie ist die Basismetrik, sagt aber nichts über Qualität aus. Ein langes Leben voller chronischer Krankheit, Abhängigkeit oder kognitivem Abbau ist nicht das Ziel.</p>
+    <p><span class="highlight-text">Gesundheitsspanne</span> ist der Zeitraum, in dem ein Mensch frei von schweren Krankheiten und Behinderungen bleibt. Hier fokussieren sich die meisten Longevity-Gespräche – zu Recht. Doch die Gesundheitsspanne allein erfasst nicht das vollständige Bild.</p>
+    <p><span class="highlight-text">Leistungsspanne</span> ist das Fenster, in dem ein Mensch auf hohem Niveau performen kann – körperlich, beruflich und persönlich. Das umfasst Kraft, Ausdauer, kognitive Schärfe und die Fähigkeit, Stress zu bewältigen ohne zusammenzubrechen.</p>
+
+    <div class="quote-block">
+      <p>„Das Ziel ist nicht, ewig zu leben. Das Ziel ist, so lange wie möglich voll zu leben – mit Kraft, Klarheit und Sinn."</p>
+    </div>
+
+    <h3>Warum biologische Nachhaltigkeit zählt</h3>
+    <p>Kurzfristige Interventionen haben oft langfristige Kosten. Aggressive Diäten, Übertraining, Schlafentzug und Stimulanzien-Abhängigkeit mögen sofortige Ergebnisse liefern, beschleunigen aber das biologische Altern. CALINESS fokussiert auf Strategien, die sich über die Zeit positiv verstärken – Reserven aufbauen statt sie zu erschöpfen.</p>
+
+    <div class="page-footer">
+      <img src="/images/caliness-logo-white.png" alt="CALINESS" class="footer-logo">
+      <span class="footer-internal">CALINESS Academy</span>
+    </div>
+  </div>
+
+  <!-- Page 3: Das CALINESS Versprechen -->
+  <div class="page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="logo">
+    <div class="section-number">Abschnitt 02</div>
+    <h2 class="section-title">Das CALINESS Versprechen</h2>
+    <p class="section-intro">Was Klienten erwarten können, wenn sie mit CALINESS arbeiten.</p>
+
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Struktur statt Verwirrung</h4>
+        <p>Der Gesundheits- und Longevity-Bereich ist überflutet mit widersprüchlichen Informationen. Jede Woche bringt eine neue Studie, einen neuen Trend, ein neues „optimales" Protokoll. CALINESS bietet ein klares Framework, das durch das Rauschen schneidet – eine Struktur, die Klienten verstehen, vertrauen und befolgen können.</p>
+      </div>
+      <div class="col-card">
+        <h4>Führung statt Extreme</h4>
+        <p>Extreme sind selten nachhaltig. Ob im Training, der Ernährung oder im Lebensstil – CALINESS führt Klienten zu ausgewogenen, evidenzbasierten Ansätzen, die über Jahre aufrechterhalten werden können, nicht nur Wochen.</p>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top: 16px;">
+      <div class="col-card">
+        <h4>Langfristige Partnerschaft</h4>
+        <p>Gesundheit ist kein Ziel; es ist ein fortlaufender Prozess. CALINESS bietet keine schnellen Lösungen oder einmalige Interventionen. Stattdessen bauen wir langfristige Beziehungen mit Klienten auf und passen die Begleitung an, wenn sich ihre Leben, Körper und Ziele entwickeln.</p>
+      </div>
+      <div class="col-card">
+        <h4>Bildung und Verständnis</h4>
+        <p>Blindes Befolgen ist fragil. Wenn Klienten verstehen, warum etwas funktioniert, können sie intelligent anpassen, wenn sich Umstände ändern. CALINESS priorisiert Bildung und befähigt Klienten, informierte Entscheidungen selbstständig zu treffen.</p>
+      </div>
+    </div>
+
+    <div class="quote-block" style="margin-top: 40px;">
+      <p>„Wir sagen Klienten nicht, was sie tun sollen. Wir helfen ihnen zu verstehen, was wichtig ist – und warum."</p>
+    </div>
+
+    <div class="page-footer">
+      <img src="/images/caliness-logo-white.png" alt="CALINESS" class="footer-logo">
+      <span class="footer-internal">CALINESS Academy</span>
+    </div>
+  </div>
+
+  <!-- Page 4: Die 5 Säulen - Einführung -->
+  <div class="page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="logo">
+    <div class="section-number">Abschnitt 03</div>
+    <h2 class="section-title">Die 5 CALINESS<br>Longevity-Säulen</h2>
+    <p class="section-intro">Diese fünf Säulen bilden das Fundament, wie CALINESS mit jedem Klienten arbeitet. Jede Säule repräsentiert einen Lebensbereich, der langfristige Gesundheit, Leistungsfähigkeit und biologisches Alter direkt beeinflusst.</p>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-number">1</div>
+        <div class="pillar-name">Training & Körperliche Belastung</div>
+      </div>
+      <div class="pillar-content">
+        <h4>Was es bedeutet</h4>
+        <p>Körperliches Training ist der wirkungsvollste Stimulus zur Erhaltung von Muskelmasse, Knochendichte, Stoffwechselgesundheit und neurologischer Funktion. Es umfasst Krafttraining, Herz-Kreislauf-Konditionierung und Mobilitätsarbeit.</p>
+        <h4>Warum es biologisch wichtig ist</h4>
+        <p>Muskel ist ein metabolisches Organ. Kraft und kardiovaskuläre Fitness gehören zu den stärksten Prädiktoren für Gesamtmortalität. Ohne regelmäßige körperliche Belastung baut der Körper nach 40 rapide ab.</p>
+        <h4>Wie CALINESS Klienten unterstützt</h4>
+        <p>Wir helfen Klienten zu verstehen, welche Trainingsarten für ihre Ziele am wichtigsten sind, wie Training über die Woche strukturiert wird und wie Belastung angepasst werden kann, wenn sich Lebensumstände ändern – ohne Abhängigkeit von starren Programmen.</p>
+      </div>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-number">2</div>
+        <div class="pillar-name">Erholung & Regeneration</div>
+      </div>
+      <div class="pillar-content">
+        <h4>Was es bedeutet</h4>
+        <p>Erholung ist nicht passive Ruhe. Sie umfasst aktive Erholungsstrategien, Herunterregulierung des Nervensystems und bewusstes Management von Trainingsstress.</p>
+        <h4>Warum es biologisch wichtig ist</h4>
+        <p>Anpassung geschieht während der Erholung, nicht während des Trainings. Chronische Untererholung führt zu erhöhtem Cortisol, beeinträchtigtem Schlaf, erhöhtem Verletzungsrisiko und langfristigem Leistungsabfall.</p>
+        <h4>Wie CALINESS Klienten unterstützt</h4>
+        <p>Wir helfen Klienten, Zeichen von Untererholung zu erkennen, Erholung in ihren Wochenrhythmus zu integrieren und die Beziehung zwischen Trainingsintensität und Erholungsbedarf zu verstehen.</p>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <img src="/images/caliness-logo-white.png" alt="CALINESS" class="footer-logo">
+      <span class="footer-internal">CALINESS Academy</span>
+    </div>
+  </div>
+
+  <!-- Page 5: Die 5 Säulen - Fortsetzung -->
+  <div class="page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="logo">
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-number">3</div>
+        <div class="pillar-name">Ernährung & Stoffwechselgesundheit</div>
+      </div>
+      <div class="pillar-content">
+        <h4>Was es bedeutet</h4>
+        <p>Ernährung umfasst Lebensmittelqualität, Essmuster, metabolische Flexibilität und die Beziehung zwischen Ernährung und Entzündung. Es geht nicht um Diäten – es geht um nachhaltige Essstrukturen.</p>
+        <h4>Warum es biologisch wichtig ist</h4>
+        <p>Schlechte Ernährung treibt chronische Entzündung, Insulinresistenz und beschleunigtes Altern. Durchdachte Ernährung hingegen unterstützt Energie, kognitive Funktion und zelluläre Reparatur.</p>
+        <h4>Wie CALINESS Klienten unterstützt</h4>
+        <p>Wir fokussieren auf Lebensmittelqualität und Struktur über starre Regeln. Wir helfen Klienten, ihre metabolischen Signale zu verstehen, soziale Esssituationen zu navigieren und nachhaltige Gewohnheiten aufzubauen – ohne Obsession oder Restriktion.</p>
+      </div>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-number">4</div>
+        <div class="pillar-name">Nervensystem & Stressregulation</div>
+      </div>
+      <div class="pillar-content">
+        <h4>Was es bedeutet</h4>
+        <p>Stressregulation ist die Fähigkeit, zwischen Aktivierung und Erholung zu wechseln. Sie umfasst mentale Resilienz, emotionale Kapazität und die physiologische Fähigkeit, nach Stress herunterzuregulieren.</p>
+        <h4>Warum es biologisch wichtig ist</h4>
+        <p>Chronischer Stress beschleunigt das Altern durch erhöhtes Cortisol, beeinträchtigte Immunfunktion und gestörten Schlaf. Das Nervensystem ist der Hauptregulator von Erholung und Anpassung.</p>
+        <h4>Wie CALINESS Klienten unterstützt</h4>
+        <p>Wir helfen Klienten, ihre Stressmuster zu identifizieren, Bewusstsein für Nervensystemzustände aufzubauen und praktische Strategien zur Regulation zu entwickeln – ohne durch komplexe Protokolle zusätzlichen Stress zu erzeugen.</p>
+      </div>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-number">5</div>
+        <div class="pillar-name">Schlaf, Lifestyle & Umfeld</div>
+      </div>
+      <div class="pillar-content">
+        <h4>Was es bedeutet</h4>
+        <p>Schlaf ist das Fundament von Erholung und kognitiver Funktion. Lifestyle umfasst tägliche Rhythmen, Lichtexposition und Umweltfaktoren, die die Biologie beeinflussen.</p>
+        <h4>Warum es biologisch wichtig ist</h4>
+        <p>Schlafentzug beeinträchtigt jedes biologische System – Immunfunktion, Hormonregulation, kognitive Leistung und emotionale Stabilität. Umweltfaktoren verstärken diese Effekte.</p>
+        <h4>Wie CALINESS Klienten unterstützt</h4>
+        <p>Wir helfen Klienten, ihre Schlafarchitektur zu verstehen, ihr Umfeld für Erholung zu optimieren und tägliche Rhythmen aufzubauen, die langfristige Gesundheit unterstützen – ohne starre Zeitpläne.</p>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <img src="/images/caliness-logo-white.png" alt="CALINESS" class="footer-logo">
+      <span class="footer-internal">CALINESS Academy</span>
+    </div>
+  </div>
+
+  <!-- Page 6: Wie die Säulen zusammenwirken -->
+  <div class="page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="logo">
+    <div class="section-number">Abschnitt 04</div>
+    <h2 class="section-title">Wie die 5 Säulen<br>zusammenwirken</h2>
+    <p class="section-intro">Keine Säule existiert isoliert. Der CALINESS Ansatz erkennt ihre tiefe Vernetzung.</p>
+
+    <!-- System Map Grafik -->
+    <div class="system-visual-container">
+      <div class="system-visual-wrapper">
+        <!-- SVG Pentagon -->
+        <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="system-svg-map">
+          <!-- Outer subtle ring -->
+          <circle cx="200" cy="200" r="140" stroke="rgba(45, 211, 111, 0.08)" stroke-width="1" fill="none"/>
+          
+          <!-- Pentagon outline -->
+          <polygon 
+            points="200,60 330,155 280,310 120,310 70,155" 
+            fill="none" 
+            stroke="rgba(45, 211, 111, 0.2)" 
+            stroke-width="1"
+          />
+          <!-- Inner star connections -->
+          <line x1="200" y1="60" x2="120" y2="310" stroke="rgba(45, 211, 111, 0.08)" stroke-width="1"/>
+          <line x1="200" y1="60" x2="280" y2="310" stroke="rgba(45, 211, 111, 0.08)" stroke-width="1"/>
+          <line x1="330" y1="155" x2="120" y2="310" stroke="rgba(45, 211, 111, 0.08)" stroke-width="1"/>
+          <line x1="70" y1="155" x2="280" y2="310" stroke="rgba(45, 211, 111, 0.08)" stroke-width="1"/>
+          <line x1="330" y1="155" x2="70" y2="155" stroke="rgba(45, 211, 111, 0.08)" stroke-width="1"/>
+          
+          <!-- Center circle -->
+          <circle cx="200" cy="200" r="45" fill="rgba(45, 211, 111, 0.08)" stroke="rgba(45, 211, 111, 0.25)" stroke-width="1"/>
+          
+          <!-- Node dots at pentagon corners -->
+          <circle cx="200" cy="60" r="6" fill="#2dd36f"/>
+          <circle cx="330" cy="155" r="6" fill="#2dd36f"/>
+          <circle cx="280" cy="310" r="6" fill="#2dd36f"/>
+          <circle cx="120" cy="310" r="6" fill="#2dd36f"/>
+          <circle cx="70" cy="155" r="6" fill="#2dd36f"/>
+        </svg>
+        
+        <!-- Center label -->
+        <div class="map-center-label">Longevity</div>
+        
+        <!-- Node labels positioned outside the pentagon -->
+        <div class="map-node-label map-node-1">Training &<br>Belastung</div>
+        <div class="map-node-label map-node-2">Erholung &<br>Regeneration</div>
+        <div class="map-node-label map-node-3">Ernährung &<br>Stoffwechsel</div>
+        <div class="map-node-label map-node-4">Nervensystem &<br>Stress</div>
+        <div class="map-node-label map-node-5">Schlaf &<br>Lifestyle</div>
+      </div>
+    </div>
+
+    <h3>Das Vernetzungsprinzip</h3>
+    <p>Training ohne ausreichende Erholung führt zum Zusammenbruch. Erholung ohne richtigen Schlaf ist unvollständig. Schlafqualität hängt von Stressregulation ab. Stressregulation wird von Ernährung und Training beeinflusst.</p>
+
+    <h3>Die Gefahr der Über-Optimierung</h3>
+    <p>Obsessiver Fokus auf eine Säule bei Vernachlässigung der anderen erzeugt Ungleichgewicht. Die Person, die exzessiv trainiert aber schlecht schläft, wird irgendwann zusammenbrechen.</p>
+
+    <div class="quote-block">
+      <p>„Das Ziel ist nicht Perfektion in einem einzelnen Bereich. Das Ziel ist nachhaltige Balance über alle fünf."</p>
+    </div>
+
+    <h3>Kontinuierliche Systemkalibrierung</h3>
+    <p>Leben ist nicht statisch. CALINESS hilft Klienten kontinuierlich, ihr System neu zu kalibrieren – Prioritäten anzupassen basierend auf aktuellen Umständen statt einem festen Template zu folgen.</p>
+
+    <div class="page-footer">
+      <img src="/images/caliness-logo-white.png" alt="CALINESS" class="footer-logo">
+      <span class="footer-internal">CALINESS Academy</span>
+    </div>
+  </div>
+
+  <!-- Page 7: Die Klienten-Reise -->
+  <div class="page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="logo">
+    <div class="section-number">Abschnitt 05</div>
+    <h2 class="section-title">Die CALINESS<br>Klienten-Reise</h2>
+    <p class="section-intro">Ein allgemeiner Überblick, wie wir mit Klienten arbeiten – fokussiert auf Verständnis, Struktur und langfristige Entwicklung.</p>
+
+    <h3>Den individuellen Kontext verstehen</h3>
+    <p>Jeder Klient beginnt anders. Verschiedene Geschichten, verschiedene Ziele, verschiedene Einschränkungen. Bevor irgendeine Begleitung sinnvoll sein kann, müssen wir das vollständige Bild verstehen – nicht nur Symptome, sondern Muster. Nicht nur Ziele, sondern Motivationen.</p>
+
+    <h3>Prioritäten über die 5 Säulen identifizieren</h3>
+    <p>Mit klarem Verständnis des Kontexts identifizieren wir, welche Säulen zuerst Aufmerksamkeit brauchen. Nicht alles kann gleichzeitig angegangen werden. Priorisierung ist essentiell. Wir helfen Klienten zu sehen, wo die größten Hebelpunkte liegen – oft an Stellen, die sie nicht bedacht hatten.</p>
+
+    <h3>Struktur statt starrer Regeln schaffen</h3>
+    <p>Starre Regeln brechen unter realem Lebensdruck. Struktur passt sich an. Wir helfen Klienten, Frameworks aufzubauen, die sie während stressiger Phasen, auf Reisen, unter Druck und bei Veränderungen aufrechterhalten können – ohne Schuldgefühle oder Alles-oder-Nichts-Denken.</p>
+
+    <h3>Fortlaufende Begleitung und Anpassung</h3>
+    <p>Die initiale Struktur ist nur der Anfang. Während Klienten Änderungen umsetzen, beobachten wir, lernen und passen an. Was in der Theorie funktioniert, braucht möglicherweise Verfeinerung in der Praxis. Dieser iterative Prozess ist, wo echter Fortschritt passiert.</p>
+
+    <h3>Langfristiges Verständnis und Autonomie aufbauen</h3>
+    <p>Das ultimative Ziel ist nicht Abhängigkeit von CALINESS. Es ist die Entwicklung tiefen persönlichen Verständnisses – die Fähigkeit, Gesundheitsentscheidungen selbstständig zu navigieren, mit Zuversicht und Klarheit. Wir sind erfolgreich, wenn Klienten uns für grundlegende Entscheidungen nicht mehr brauchen.</p>
+
+    <div class="page-footer">
+      <img src="/images/caliness-logo-white.png" alt="CALINESS" class="footer-logo">
+      <span class="footer-internal">CALINESS Academy</span>
+    </div>
+  </div>
+
+  <!-- Page 8: Ernährung & Supplementierung -->
+  <div class="page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="logo">
+    <div class="section-number">Abschnitt 06</div>
+    <h2 class="section-title">Ernährung & Supplementierung</h2>
+    <p class="section-intro">Signal vom Rauschen trennen in einem der verwirrendsten Gesundheitsbereiche.</p>
+
+    <h3>Lebensmittelqualität und Struktur über Labels</h3>
+    <p>Die Ernährungsindustrie profitiert von Komplexität – endlose Diäten, Makros, Timing-Protokolle und „Superfoods." CALINESS schneidet hindurch. Wir fokussieren auf Lebensmittelqualität (Nährstoffdichte, minimale Verarbeitung) und Essstruktur (Konsistenz, angemessenes Timing) statt auf starre Diät-Labels.</p>
+
+    <h3>Supplements als unterstützende Werkzeuge</h3>
+    <p>Supplements können eine Rolle spielen – aber nur als Ergänzung zu einem soliden Fundament. Kein Supplement kompensiert schlechten Schlaf, chronischen Stress oder unzureichende Ernährung. Wir helfen Klienten zu verstehen, welche Supplements für ihren spezifischen Kontext nützlich sein könnten und welche marketing-getriebene Ablenkungen sind.</p>
+
+    <div class="quote-block">
+      <p>„Kein Supplement kann Schlaf, Erholung oder echte Nahrung ersetzen. Baue zuerst das Fundament."</p>
+    </div>
+
+    <h3>Wobei wir Klienten helfen</h3>
+    <ul class="styled-list">
+      <li>Verbreitete Ernährungsmythen, die Zeit und Energie verschwenden</li>
+      <li>Über-Supplementierung und unnötige Komplexität</li>
+      <li>Einheits-Ratschläge, die individuellen Kontext ignorieren</li>
+      <li>Angst-basiertes Marketing rund um Essen und Gesundheit</li>
+      <li>Der Unterschied zwischen Evidenz und Anekdote</li>
+    </ul>
+
+    <h3>Unsere Position</h3>
+    <p>Wir sind nicht anti-Supplement. Wir sind anti-Verwirrung. Wenn das Fundament solide ist – echte Nahrung, konsistente Essmuster, ausreichende Erholung – dann kann gezielte Supplementierung bedeutsame Vorteile bieten. Aber das Fundament muss zuerst kommen.</p>
+
+    <div class="page-footer">
+      <img src="/images/caliness-logo-white.png" alt="CALINESS" class="footer-logo">
+      <span class="footer-internal">CALINESS Academy</span>
+    </div>
+  </div>
+
+  <!-- Page 9: Was CALINESS vermeidet -->
+  <div class="page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="logo">
+    <div class="section-number">Abschnitt 07</div>
+    <h2 class="section-title">Was CALINESS<br>bewusst vermeidet</h2>
+    <p class="section-intro">Klarheit darüber, was wir nicht tun, ist genauso wichtig wie Klarheit darüber, was wir tun.</p>
+
+    <ul class="avoids-list">
+      <li><strong>Extreme Trainingsansätze</strong> — Hochintensive Protokolle ohne Erholungsstruktur, „Mehr ist besser"-Mentalität, Training durch Verletzung oder Erschöpfung hindurch</li>
+      <li><strong>Starre Ernährungsdogmen</strong> — Strikte Eliminationsdiäten ohne medizinische Notwendigkeit, Essensangst, moralische Urteile über Essentscheidungen</li>
+      <li><strong>Supplement-Abhängigkeit</strong> — Stacks aufbauen, die Klienten nicht aufrechterhalten oder verstehen können, Supplements über Grundlagen priorisieren</li>
+      <li><strong>Kurzfristige Optimierung auf Kosten langfristiger Gesundheit</strong> — Strategien, die schnelle Ergebnisse produzieren aber das Altern beschleunigen, Reserven erschöpfen oder Burnout erzeugen</li>
+      <li><strong>Einheitsprotokolle</strong> — Generische Programme, die individuellen Kontext, Geschichte und Einschränkungen ignorieren</li>
+      <li><strong>Angst-basierte Motivation</strong> — Gesundheitsangst oder Worst-Case-Szenarien nutzen, um Compliance zu erzwingen</li>
+      <li><strong>Komplexität um der Komplexität willen</strong> — Interventionen hinzufügen, wenn Einfachheit besser dienen würde</li>
+    </ul>
+
+    <div class="quote-block" style="margin-top: 40px;">
+      <p>„Was wir vermeiden, definiert uns genauso wie das, was wir annehmen. Einfachheit, Nachhaltigkeit und Respekt für das Individuum sind nicht verhandelbar."</p>
+    </div>
+
+    <div class="page-footer">
+      <img src="/images/caliness-logo-white.png" alt="CALINESS" class="footer-logo">
+      <span class="footer-internal">CALINESS Academy</span>
+    </div>
+  </div>
+
+  <!-- Page 10: Abschluss -->
+  <div class="page">
+    <img src="/images/caliness-logo-white.png" alt="CALINESS" class="logo">
+    <div class="closing-section" style="padding-top: 60px;">
+      <div class="section-number" style="margin-bottom: 40px;">Abschluss</div>
+      
+      <p class="closing-statement">
+        CALINESS existiert, um ein langfristiger Partner für nachhaltige Gesundheit, Leistungsfähigkeit und Longevity zu sein. Wir bieten keine schnellen Lösungen oder magische Antworten. Wir bieten Struktur, Klarheit und Begleitung – aufgebaut auf einem systembasierten, menschenzentrierten Ansatz, der die Komplexität individueller Leben respektiert.
+      </p>
+
+      <p class="closing-statement">
+        Unsere Arbeit wird nicht in Wochen gemessen, sondern in Jahren. Nicht in dramatischen Transformationen, sondern in stillem, nachhaltigem Fortschritt. Nicht in Abhängigkeit, sondern in der Entwicklung autonomen Verständnisses.
+      </p>
+
+      <p class="closing-statement" style="color: rgba(255, 255, 255, 0.6); font-size: 13pt;">
+        Das ist das CALINESS Longevity Framework.
+      </p>
+
+      <div class="closing-divider" style="margin-top: 60px;"></div>
+      <img src="/images/caliness-logo-white.png" alt="CALINESS" class="closing-logo">
+    </div>
+
+    <div class="page-footer">
+      <img src="/images/caliness-logo-white.png" alt="CALINESS" class="footer-logo">
+      <span class="footer-internal">CALINESS Academy</span>
+    </div>
+  </div>
+
+</body>
+</html>
