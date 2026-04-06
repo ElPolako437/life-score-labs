@@ -195,7 +195,7 @@ export default function AppCoach() {
 
   // ─── Locally computed panel data (zero API calls) ───────────────────────────
   const systemStatus = useMemo(
-    () => getSystemStatus(pillarScores, todayCheckIn),
+    () => getSystemStatus(pillarScores as unknown as Record<string, number>, todayCheckIn),
     [pillarScores, todayCheckIn],
   );
   const tagsFokus = useMemo(
