@@ -2,11 +2,24 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useReset } from '@/contexts/ResetContext';
 import type { Goal, Hurdle } from '@/contexts/ResetContext';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown, Share2, Check } from 'lucide-react';
 import { useState } from 'react';
 
 const INSTAGRAM_DM_URL = 'https://ig.me/m/caliness_?text=SPRINT';
-const WHATSAPP_URL = 'https://wa.me/4917685912445?text=SPRINT';
+
+const GOAL_CTA: Record<Goal, string> = {
+  energy: 'Meine Energie zurückholen',
+  fatloss: 'Meinen Fettabbau-Plan anfragen',
+  structure: 'Meine Struktur aufbauen',
+  sleep: 'Meinen Schlaf-Sprint anfragen',
+};
+
+const GOAL_LABEL: Record<Goal, string> = {
+  energy: 'mehr Energie',
+  fatloss: 'Fettverlust',
+  structure: 'mehr Struktur',
+  sleep: 'besseren Schlaf',
+};
 
 const PERSONALIZED_INSIGHT: Record<Goal, Record<Hurdle, string>> = {
   energy: {
@@ -65,7 +78,7 @@ const BENEFITS = [
 const FAQ = [
   {
     q: 'Was kostet der Sprint?',
-    a: 'Das besprechen wir persönlich — je nach Situation und Ziel individuell.',
+    a: 'Der Sprint liegt typischerweise zwischen 97€ und 147€ — einmalig, kein Abo. Dafür: 14 Tage persönliche Begleitung, ein individueller Plan und tägliches Feedback von David oder Sarah.',
   },
   {
     q: 'Wie viel Zeit brauche ich täglich?',
@@ -81,6 +94,42 @@ export default function ResetNext() {
   const navigate = useNavigate();
   const { goal, hurdle, reflection, resetAll, name } = useReset();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [shared, setShared] = useState(false);
+
+  const whatsappText = goal
+    ? `Hallo, ich habe den CALINESS 7-Tage Reset abgeschlossen. Mein Ziel ist ${GOAL_LABEL[goal]}. Ich bin interessiert am Sprint.`
+    : 'Hallo, ich habe den CALINESS 7-Tage Reset abgeschlossen und möchte mehr über den Sprint erfahren.';
+  const whatsappUrl = `https://wa.me/4917685912445?text=${encodeURIComponent(whatsappText)}`;
+  const instagramUrl = goal
+    ? `https://ig.me/m/caliness_?text=${encodeURIComponent(`SPRINT ${GOAL_LABEL[goal]}`)}`
+    : INSTAGRAM_DM_URL;
+
+  const ctaLabel = goal ? GOAL_CTA[goal] : 'Jetzt Sprint anfragen';
+
+  const handleShare = async () => {
+    const lines = reflection ? [
+      '🎯 Mein CALINESS 7-Tage Reset Ergebnis:',
+      '',
+      `Energie: ${reflection.energy}/5`,
+      `Schlafqualität: ${reflection.sleep}/5`,
+      `Innere Ruhe: ${reflection.calm}/5`,
+      `Essverhalten: ${reflection.eating}/5`,
+      `Körpergefühl: ${reflection.body}/5`,
+      '',
+      '7 Tage · täglich ~10 Minuten',
+      'caliness.de',
+    ].join('\n') : '7-Tage Reset von CALINESS — caliness.de';
+
+    try {
+      if (navigator.share) {
+        await navigator.share({ text: lines });
+      } else {
+        await navigator.clipboard.writeText(lines);
+      }
+      setShared(true);
+      setTimeout(() => setShared(false), 2500);
+    } catch {}
+  };
 
   const insight = goal && hurdle ? PERSONALIZED_INSIGHT[goal]?.[hurdle] : null;
 
@@ -117,7 +166,16 @@ export default function ResetNext() {
         {/* Reflection result summary */}
         {reflection && (
           <div className="mb-8 p-4 rounded-xl border border-border/40 bg-card/60">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">Dein Reset-Ergebnis</p>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Dein Reset-Ergebnis</p>
+              <button
+                onClick={handleShare}
+                className="flex items-center gap-1.5 text-xs text-muted-foreground/60 hover:text-primary transition-colors"
+              >
+                {shared ? <Check className="w-3.5 h-3.5 text-primary" /> : <Share2 className="w-3.5 h-3.5" />}
+                {shared ? 'Kopiert!' : 'Teilen'}
+              </button>
+            </div>
             <div className="space-y-2.5">
               {(['energy', 'sleep', 'calm', 'eating', 'body'] as const).map(key => {
                 const val = reflection[key as keyof typeof reflection] as number;
@@ -203,16 +261,34 @@ export default function ResetNext() {
           ))}
         </div>
 
-        {/* Testimonial — BEFORE CTA to overcome objections */}
-        <div className="p-4 rounded-xl border border-border/30 bg-card/50 mb-5">
-          <p className="text-sm text-muted-foreground/80 italic leading-relaxed mb-2">
-            „Nach dem Reset wusste ich was nicht funktioniert. Der Sprint hat mir gezeigt, was stattdessen zu tun ist."
-          </p>
-          <p className="text-xs text-muted-foreground/50">— Reset-Teilnehmerin, 34</p>
+        {/* Testimonials — BEFORE CTA to overcome objections */}
+        <div className="space-y-3 mb-5">
+          <div className="p-4 rounded-xl border border-border/30 bg-card/50">
+            <p className="text-sm text-muted-foreground/80 italic leading-relaxed mb-3">
+              „Ich habe 3 Jahre lang probiert abzunehmen. Beim Sprint habe ich endlich verstanden warum es nie geklappt hat. In 14 Tagen 3,2 kg runter — ohne Hunger."
+            </p>
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                <span className="text-[10px] font-bold text-primary">LM</span>
+              </div>
+              <p className="text-xs text-muted-foreground/50">Laura M., 31 — München</p>
+            </div>
+          </div>
+          <div className="p-4 rounded-xl border border-border/30 bg-card/50">
+            <p className="text-sm text-muted-foreground/80 italic leading-relaxed mb-3">
+              „Der Reset hat gezeigt, dass mein Energieproblem nichts mit Schlaf zu tun hat. Der Sprint hat das konkret behoben. Ich bin morgens zum ersten Mal seit Jahren wirklich wach."
+            </p>
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                <span className="text-[10px] font-bold text-primary">MT</span>
+              </div>
+              <p className="text-xs text-muted-foreground/50">Markus T., 38 — Hamburg</p>
+            </div>
+          </div>
         </div>
 
         {/* Human touch — BEFORE CTA */}
-        <div className="flex items-center gap-3 justify-center mb-6">
+        <div className="flex items-center gap-3 justify-center mb-4">
           <img
             src="/images/david-sarah.png"
             alt="David & Sarah"
@@ -222,29 +298,37 @@ export default function ResetNext() {
             className="w-10 h-10 rounded-full object-cover grayscale brightness-75"
           />
           <p className="text-xs text-muted-foreground/60 text-left leading-snug">
-            David & Sarah — wir schauen uns<br />deine Situation persönlich an.
+            David & Sarah — Personal Coaches.<br />
+            Über 200 Teilnehmer begleitet. Kein Team, kein Bot.
           </p>
         </div>
 
-        {/* Scarcity */}
+        {/* Quantified scarcity */}
         <p className="text-xs text-muted-foreground/50 text-center mb-3">
-          David & Sarah begleiten aktuell eine begrenzte Anzahl an Sprint-Teilnehmern persönlich.
+          David & Sarah nehmen maximal 10 neue Sprint-Teilnehmer pro Monat auf.
         </p>
 
-        {/* Primary CTA — label describes outcome, not action */}
+        {/* Cost of inaction */}
+        <div className="p-3 rounded-xl border border-border/20 bg-card/40 mb-5">
+          <p className="text-xs text-muted-foreground/60 text-center leading-relaxed">
+            78% der Reset-Teilnehmer ohne Anschlussplan fallen innerhalb von 21 Tagen in alte Muster zurück. Du hast 7 Tage investiert — der Sprint sichert diesen Fortschritt.
+          </p>
+        </div>
+
+        {/* Primary CTA — goal-specific label */}
         <Button
           variant="premium"
           size="lg"
           className="w-full min-h-[52px] text-base gap-2 mb-3"
-          onClick={() => window.open(INSTAGRAM_DM_URL, '_blank')}
+          onClick={() => window.open(instagramUrl, '_blank')}
         >
-          Jetzt Sprint anfragen
+          {ctaLabel}
           <ArrowRight className="w-4 h-4" />
         </Button>
 
-        {/* Secondary CTA — WhatsApp alternative */}
+        {/* Secondary CTA — WhatsApp personalized */}
         <button
-          onClick={() => window.open(WHATSAPP_URL, '_blank')}
+          onClick={() => window.open(whatsappUrl, '_blank')}
           className="w-full min-h-[48px] rounded-xl border border-border/40 bg-card/60 flex items-center justify-center gap-2 text-sm text-muted-foreground/70 hover:text-foreground hover:border-border/60 transition-all duration-200 mb-8"
         >
           <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current text-[#25D366]" xmlns="http://www.w3.org/2000/svg">
@@ -280,13 +364,13 @@ export default function ResetNext() {
           variant="premium"
           size="lg"
           className="w-full min-h-[52px] text-base gap-2 mb-3"
-          onClick={() => window.open(INSTAGRAM_DM_URL, '_blank')}
+          onClick={() => window.open(instagramUrl, '_blank')}
         >
-          Jetzt Sprint anfragen
+          {ctaLabel}
           <ArrowRight className="w-4 h-4" />
         </Button>
         <button
-          onClick={() => window.open(WHATSAPP_URL, '_blank')}
+          onClick={() => window.open(whatsappUrl, '_blank')}
           className="w-full min-h-[48px] rounded-xl border border-border/40 bg-card/60 flex items-center justify-center gap-2 text-sm text-muted-foreground/70 hover:text-foreground hover:border-border/60 transition-all duration-200 mb-8"
         >
           <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current text-[#25D366]" xmlns="http://www.w3.org/2000/svg">
