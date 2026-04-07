@@ -10,7 +10,7 @@ const DIMENSIONS = [
   { key: 'energy', label: 'Energie' },
   { key: 'sleep', label: 'Schlafqualität' },
   { key: 'calm', label: 'Innere Ruhe' },
-  { key: 'eating', label: 'Steuerbarkeit beim Essen' },
+  { key: 'eating', label: 'Essverhalten' },
   { key: 'body', label: 'Körpergefühl' },
 ] as const;
 
@@ -115,7 +115,7 @@ export default function ResetReflection() {
           variant="premium"
           size="lg"
           className="w-full min-h-[48px]"
-          disabled={!easiest || !hardest}
+          disabled={!hardest}
           onClick={handleSubmit}
         >
           Meine Sprint-Empfehlung ansehen →

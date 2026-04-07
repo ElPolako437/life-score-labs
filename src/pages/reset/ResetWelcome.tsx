@@ -41,11 +41,11 @@ export default function ResetWelcome() {
         </div>
 
         <div className="space-y-2">
-          <h1 className="font-outfit font-bold text-3xl tracking-tight text-foreground">
-            7-Tage Reset
+          <h1 className="font-outfit font-bold text-3xl tracking-tight text-foreground leading-tight">
+            Du bist erschöpft —<br />aber nicht aus dem Grund,<br />den du denkst.
           </h1>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Mehr Ruhe im Körper. Mehr Klarheit im Fettverlust.
+          <p className="text-xs text-muted-foreground/50 tracking-wide pt-1">
+            7-Tage Reset · täglich ~10 Minuten · über 500 Teilnehmer
           </p>
         </div>
 
