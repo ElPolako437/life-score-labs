@@ -4,6 +4,7 @@ import { useReset } from '@/contexts/ResetContext';
 import type { Goal, Hurdle } from '@/contexts/ResetContext';
 import { ArrowRight, ChevronDown, Share2, Check } from 'lucide-react';
 import { useState } from 'react';
+import { track } from '@/lib/analytics';
 
 const INSTAGRAM_DM_URL = 'https://ig.me/m/caliness_?text=SPRINT';
 
@@ -106,6 +107,11 @@ export default function ResetNext() {
 
   const ctaLabel = goal ? GOAL_CTA[goal] : 'Jetzt Sprint anfragen';
 
+  const handleCta = (channel: 'instagram' | 'whatsapp') => {
+    track('sprint_cta_clicked', { channel, goal: goal ?? null });
+    window.open(channel === 'instagram' ? instagramUrl : whatsappUrl, '_blank');
+  };
+
   const handleShare = async () => {
     const lines = reflection ? [
       '🎯 Mein CALINESS 7-Tage Reset Ergebnis:',
@@ -126,6 +132,7 @@ export default function ResetNext() {
       } else {
         await navigator.clipboard.writeText(lines);
       }
+      track('result_shared');
       setShared(true);
       setTimeout(() => setShared(false), 2500);
     } catch {}
@@ -320,7 +327,7 @@ export default function ResetNext() {
           variant="premium"
           size="lg"
           className="w-full min-h-[52px] text-base gap-2 mb-3"
-          onClick={() => window.open(instagramUrl, '_blank')}
+          onClick={() => handleCta('instagram')}
         >
           {ctaLabel}
           <ArrowRight className="w-4 h-4" />
@@ -364,7 +371,7 @@ export default function ResetNext() {
           variant="premium"
           size="lg"
           className="w-full min-h-[52px] text-base gap-2 mb-3"
-          onClick={() => window.open(instagramUrl, '_blank')}
+          onClick={() => handleCta('instagram')}
         >
           {ctaLabel}
           <ArrowRight className="w-4 h-4" />

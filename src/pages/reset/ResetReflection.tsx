@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { useReset, type ReflectionData } from '@/contexts/ResetContext';
 import { REFLECTION_TASK_OPTIONS } from '@/lib/dayContent';
+import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
 const DIMENSIONS = [
@@ -33,6 +34,7 @@ export default function ResetReflection() {
       hardest,
     };
     setReflection(data);
+    track('reflection_submitted', { ...values, hardest, easiest });
     navigate('/next');
   };
 

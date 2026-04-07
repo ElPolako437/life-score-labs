@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useReset, type Rating } from '@/contexts/ResetContext';
 import { SOFT_CONVERSION, RETENTION_HOOKS } from '@/lib/dayContent';
+import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 import { Check, ArrowRight } from 'lucide-react';
 
@@ -41,6 +42,7 @@ export default function ResetCheckIn() {
   const handleSubmit = () => {
     if (!selectedRating) return;
     completeDay(dayNum, selectedRating, note);
+    track('day_completed', { day: dayNum, rating: selectedRating });
     setCompleted(true);
   };
 

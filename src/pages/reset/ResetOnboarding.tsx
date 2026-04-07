@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReset, type Goal, type Hurdle } from '@/contexts/ResetContext';
 import { cn } from '@/lib/utils';
+import { track } from '@/lib/analytics';
 
 const GOALS: { value: Goal; label: string }[] = [
   { value: 'energy', label: 'Mehr Energie im Alltag' },
@@ -34,6 +35,7 @@ export default function ResetOnboarding() {
   const handleHurdleSelect = (hurdle: Hurdle) => {
     setSelectedHurdle(hurdle);
     setHurdle(hurdle);
+    track('onboarding_complete', { goal: selectedGoal, hurdle });
     setTimeout(() => navigate('/focus'), 160);
   };
 

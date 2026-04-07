@@ -3,15 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useReset } from '@/contexts/ResetContext';
+import { track, captureLead } from '@/lib/analytics';
 
 export default function ResetWelcome() {
   const navigate = useNavigate();
   const { name, setName, currentDay, goal } = useReset();
   const [localName, setLocalName] = useState(name || '');
+  const [localEmail, setLocalEmail] = useState('');
   const hasProgress = goal !== null;
 
   const handleStart = () => {
     if (localName.trim()) setName(localName.trim());
+    if (localEmail.trim()) captureLead(localEmail, localName);
+    track(hasProgress ? 'reset_resumed' : 'reset_started', { hasName: !!localName.trim(), hasEmail: !!localEmail.trim() });
     if (hasProgress) {
       // Go directly to active day if it's not completed yet
       const activeDay = Math.min(currentDay, 7);
@@ -44,9 +48,6 @@ export default function ResetWelcome() {
           <h1 className="font-outfit font-bold text-3xl tracking-tight text-foreground leading-tight">
             Du bist erschöpft —<br />aber nicht aus dem Grund,<br />den du denkst.
           </h1>
-          <p className="text-xs text-muted-foreground/50 tracking-wide pt-1">
-            7-Tage Reset · täglich ~10 Minuten · über 500 Teilnehmer
-          </p>
         </div>
 
         <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-xs">
@@ -54,17 +55,27 @@ export default function ResetWelcome() {
         </p>
 
         <p className="text-xs text-muted-foreground/50 tracking-wide">
-          7 Tage · täglich ~10 Minuten · über 500 Teilnehmer
+          7-Tage Reset · täglich ~10 Minuten · über 500 Teilnehmer
         </p>
 
         {!hasProgress && (
-          <Input
-            placeholder="Dein Vorname (optional)"
-            value={localName}
-            onChange={e => setLocalName(e.target.value.slice(0, 30))}
-            maxLength={30}
-            className="bg-card border-border/60 text-foreground placeholder:text-muted-foreground/40 h-12 rounded-xl text-center"
-          />
+          <div className="w-full space-y-3">
+            <Input
+              placeholder="Dein Vorname (optional)"
+              value={localName}
+              onChange={e => setLocalName(e.target.value.slice(0, 30))}
+              maxLength={30}
+              className="bg-card border-border/60 text-foreground placeholder:text-muted-foreground/40 h-12 rounded-xl text-center"
+            />
+            <Input
+              type="email"
+              placeholder="Deine E-Mail (optional)"
+              value={localEmail}
+              onChange={e => setLocalEmail(e.target.value.slice(0, 100))}
+              maxLength={100}
+              className="bg-card border-border/60 text-foreground placeholder:text-muted-foreground/40 h-12 rounded-xl text-center"
+            />
+          </div>
         )}
 
         <Button
