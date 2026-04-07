@@ -24,6 +24,7 @@ export interface ReflectionData {
 
 interface ResetState {
   email: string | null;
+  name: string | null;
   goal: Goal | null;
   hurdle: Hurdle | null;
   currentDay: number;
@@ -34,6 +35,7 @@ interface ResetState {
 
 interface ResetContextValue extends ResetState {
   setEmail: (email: string) => void;
+  setName: (name: string) => void;
   setGoal: (goal: Goal) => void;
   setHurdle: (hurdle: Hurdle) => void;
   toggleTask: (day: number, taskIndex: number) => void;
@@ -65,6 +67,7 @@ function loadState(): ResetState {
   } catch {}
   return {
     email: null,
+    name: null,
     goal: null,
     hurdle: null,
     currentDay: 1,
@@ -89,6 +92,10 @@ export function ResetProvider({ children }: { children: ReactNode }) {
 
   const setEmail = useCallback((email: string) => {
     setState(s => ({ ...s, email }));
+  }, []);
+
+  const setName = useCallback((name: string) => {
+    setState(s => ({ ...s, name }));
   }, []);
 
   const setGoal = useCallback((goal: Goal) => {
@@ -138,6 +145,7 @@ export function ResetProvider({ children }: { children: ReactNode }) {
   const resetAll = useCallback(() => {
     const fresh: ResetState = {
       email: null,
+      name: null,
       goal: null,
       hurdle: null,
       currentDay: 1,
@@ -163,6 +171,7 @@ export function ResetProvider({ children }: { children: ReactNode }) {
       value={{
         ...state,
         setEmail,
+        setName,
         setGoal,
         setHurdle,
         toggleTask,

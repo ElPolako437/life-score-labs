@@ -1,37 +1,25 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
-import { DAY_CONTENT } from '@/lib/dayContent';
+import { DAY_CONTENT, type GoalKey } from '@/lib/dayContent';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
 
 export default function ResetDay() {
   const { id } = useParams();
   const dayNum = Number(id);
   const navigate = useNavigate();
-  const { currentDay, getDayData, toggleTask, completedTaskCount, homescreenHintShown, markHomescreenHintShown } = useReset();
-  const [showHomeHint, setShowHomeHint] = useState(false);
+  const { currentDay, getDayData, toggleTask, completedTaskCount, goal } = useReset();
 
   const content = DAY_CONTENT[dayNum - 1];
+  const goalBonus = goal ? content?.goalBonus?.[goal as GoalKey] : null;
   const dayData = getDayData(dayNum);
   const completedCount = completedTaskCount(dayNum);
   const totalTasks = content?.tasks.length || 0;
   const minRequired = Math.min(3, totalTasks);
   const canComplete = completedCount >= minRequired;
-
-  // Homescreen hint after day 1 completion
-  useEffect(() => {
-    if (dayNum === 1 && dayData.completed && !homescreenHintShown) {
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      if (isMobile) {
-        setShowHomeHint(true);
-        markHomescreenHintShown();
-      }
-    }
-  }, [dayNum, dayData.completed, homescreenHintShown, markHomescreenHintShown]);
 
   if (!content || dayNum < 1 || dayNum > 7) {
     navigate('/week');
@@ -103,17 +91,40 @@ export default function ResetDay() {
           ))}
         </div>
 
-        {/* Why important */}
-        <Accordion type="single" collapsible className="mb-8">
-          <AccordionItem value="why" className="border-border/40">
-            <AccordionTrigger className="text-sm text-muted-foreground hover:text-foreground py-3">
-              Warum das heute wichtig ist
-            </AccordionTrigger>
-            <AccordionContent className="text-sm text-muted-foreground/80 leading-relaxed pb-4">
-              {content.whyImportant}
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        {/* Goal-spezifischer Fokus */}
+        {goalBonus && (
+          <div className="mb-4 p-4 rounded-xl border border-border/40 bg-card/60">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-1.5">Dein Fokus heute</p>
+            <p className="text-sm text-foreground/80 leading-relaxed">{goalBonus}</p>
+          </div>
+        )}
+
+        {/* Sofort-Tipp */}
+        <div className="mb-6 p-4 rounded-xl border border-primary/40 bg-primary/5">
+          <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Sofort-Tipp</p>
+          <p className="text-sm text-foreground/90 leading-relaxed">{content.sofortTipp}</p>
+        </div>
+
+        {/* Insight — title always visible, body expandable */}
+        {(() => {
+          const colonIdx = content.insight.indexOf(':');
+          const insightTitle = colonIdx > -1 ? content.insight.slice(0, colonIdx) : content.insight;
+          const insightBody = colonIdx > -1 ? content.insight.slice(colonIdx + 1).trim() : '';
+          return (
+            <Accordion type="single" collapsible className="mb-8">
+              <AccordionItem value="why" className="border-border/40">
+                <AccordionTrigger className="text-sm text-foreground font-medium hover:text-foreground py-3 text-left">
+                  {insightTitle}
+                </AccordionTrigger>
+                {insightBody && (
+                  <AccordionContent className="text-sm text-muted-foreground/80 leading-relaxed pb-4">
+                    {insightBody}
+                  </AccordionContent>
+                )}
+              </AccordionItem>
+            </Accordion>
+          );
+        })()}
 
         {/* CTA */}
         <Button
@@ -132,20 +143,6 @@ export default function ResetDay() {
           </p>
         )}
 
-        {/* Homescreen hint */}
-        {showHomeHint && (
-          <div className="mt-6 p-4 rounded-xl border border-border/40 bg-card text-center animate-fade-in">
-            <p className="text-sm text-muted-foreground mb-2">
-              Füge die App zu deinem Homescreen hinzu für den vollen Fokus.
-            </p>
-            <button
-              onClick={() => setShowHomeHint(false)}
-              className="text-xs text-primary"
-            >
-              Verstanden
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

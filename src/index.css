@@ -4,7 +4,7 @@
 
 /* Caliness Premium Brand Design System - Luxury Health Brand */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+/* Fonts are self-hosted via @fontsource — imported in main.tsx, no Google requests */
 
 @layer base {
   :root {

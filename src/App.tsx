@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ResetProvider } from "./contexts/ResetContext";
+import { captureInstallPrompt } from "./lib/installPrompt";
 import ResetWelcome from "./pages/reset/ResetWelcome";
 import ResetOnboarding from "./pages/reset/ResetOnboarding";
 import ResetFocus from "./pages/reset/ResetFocus";
@@ -15,7 +17,10 @@ import Datenschutz from "./pages/Datenschutz";
 import Impressum from "./pages/Impressum";
 import NotFound from "./pages/NotFound";
 
-const App = () => (
+const App = () => {
+  useEffect(() => { captureInstallPrompt(); }, []);
+
+  return (
   <ResetProvider>
     <TooltipProvider>
       <Toaster />
@@ -37,6 +42,7 @@ const App = () => (
       </BrowserRouter>
     </TooltipProvider>
   </ResetProvider>
-);
+  );
+};
 
 export default App;

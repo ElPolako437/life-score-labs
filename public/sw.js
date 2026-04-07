@@ -1,17 +1,77 @@
 /**
  * CALINESS Service Worker
- * Handles background push notification display.
+ * Cache-first offline support + push notification handling.
  */
 
+const CACHE_NAME = 'caliness-reset-v1';
+
+// On install: cache the app shell (root HTML)
 self.addEventListener('install', function (event) {
   self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(function (cache) {
+      return cache.addAll(['/']);
+    })
+  );
 });
 
+// On activate: clean up old caches
 self.addEventListener('activate', function (event) {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then(function (keys) {
+      return Promise.all(
+        keys
+          .filter(function (key) { return key !== CACHE_NAME; })
+          .map(function (key) { return caches.delete(key); })
+      );
+    }).then(function () {
+      return self.clients.claim();
+    })
+  );
 });
 
-// Listen for messages from the main app
+// Fetch strategy:
+// - Navigation requests (HTML): network-first, fall back to cached root → enables offline SPA routing
+// - Static assets (JS/CSS/images with hashes): cache-first (immutable files)
+// - Everything else: network-first
+self.addEventListener('fetch', function (event) {
+  var request = event.request;
+
+  // Skip non-GET and cross-origin requests
+  if (request.method !== 'GET') return;
+  if (!request.url.startsWith(self.location.origin)) return;
+
+  // Navigation: serve cached root as fallback (SPA offline support)
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request).catch(function () {
+        return caches.match('/');
+      })
+    );
+    return;
+  }
+
+  // Static assets with content hash in URL: cache-first
+  if (request.url.match(/\.(js|css|woff2?|png|jpg|svg|ico)(\?.*)?$/)) {
+    event.respondWith(
+      caches.match(request).then(function (cached) {
+        if (cached) return cached;
+        return fetch(request).then(function (response) {
+          if (response.ok) {
+            var clone = response.clone();
+            caches.open(CACHE_NAME).then(function (cache) {
+              cache.put(request, clone);
+            });
+          }
+          return response;
+        });
+      })
+    );
+    return;
+  }
+});
+
+// Push notification display
 self.addEventListener('message', function (event) {
   if (event.data && event.data.type === 'SHOW_NOTIFICATION') {
     var payload = event.data.payload;
@@ -27,30 +87,23 @@ self.addEventListener('message', function (event) {
   }
 });
 
-// Handle notification click
+// Notification click → open app
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
-
-  var url = '/app/home';
+  var url = '/week';
   if (event.notification.data && event.notification.data.url) {
     url = event.notification.data.url;
   }
-
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (clients) {
-      // Focus existing window if available
       for (var i = 0; i < clients.length; i++) {
-        var client = clients[i];
-        if (client.url.includes('/app') && 'focus' in client) {
-          client.focus();
-          client.navigate(url);
+        if ('focus' in clients[i]) {
+          clients[i].focus();
+          clients[i].navigate(url);
           return;
         }
       }
-      // Open new window
-      if (self.clients.openWindow) {
-        return self.clients.openWindow(url);
-      }
+      if (self.clients.openWindow) return self.clients.openWindow(url);
     })
   );
 });

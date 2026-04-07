@@ -1,15 +1,28 @@
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useReset } from '@/contexts/ResetContext';
 import { getFocusText } from '@/lib/focusTexts';
+import InstallPromptSheet from '@/components/InstallPromptSheet';
+import { isMobile, isStandalone } from '@/lib/installPrompt';
 
 export default function ResetFocus() {
-  const navigate = useNavigate();
-  const { goal, hurdle } = useReset();
+  const navigate = useNavigate(); // used for "Los geht's" CTA
+  const { goal, hurdle, homescreenHintShown, markHomescreenHintShown } = useReset();
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
+
+  useEffect(() => {
+    if (!homescreenHintShown && isMobile() && !isStandalone()) {
+      const timer = setTimeout(() => {
+        setShowInstallPrompt(true);
+        markHomescreenHintShown();
+      }, 1800);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   if (!goal || !hurdle) {
-    navigate('/onboarding');
-    return null;
+    return <Navigate to="/onboarding" replace />;
   }
 
   const focusText = getFocusText(goal, hurdle);
@@ -31,7 +44,7 @@ export default function ResetFocus() {
         <div className="w-full space-y-3 mb-8">
           <div className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border/40">
             <span className="text-primary text-lg">✦</span>
-            <span className="text-sm text-muted-foreground">Jeden Tag 5 einfache Aufgaben</span>
+            <span className="text-sm text-muted-foreground">Täglich 3–4 konkrete Aufgaben</span>
           </div>
           <div className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border/40">
             <span className="text-primary text-lg">✦</span>
@@ -48,6 +61,10 @@ export default function ResetFocus() {
           Los geht's — Tag 1
         </Button>
       </div>
+
+      {showInstallPrompt && (
+        <InstallPromptSheet onDismiss={() => setShowInstallPrompt(false)} />
+      )}
     </div>
   );
 }

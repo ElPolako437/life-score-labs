@@ -6,14 +6,16 @@ import { useReset } from '@/contexts/ResetContext';
 
 export default function ResetWelcome() {
   const navigate = useNavigate();
-  const { email, setEmail, currentDay, goal } = useReset();
-  const [localEmail, setLocalEmail] = useState(email || '');
+  const { name, setName, currentDay, goal } = useReset();
+  const [localName, setLocalName] = useState(name || '');
   const hasProgress = goal !== null;
 
   const handleStart = () => {
-    if (localEmail.trim()) setEmail(localEmail.trim());
+    if (localName.trim()) setName(localName.trim());
     if (hasProgress) {
-      navigate('/week');
+      // Go directly to active day if it's not completed yet
+      const activeDay = Math.min(currentDay, 7);
+      navigate(`/day/${activeDay}`);
     } else {
       navigate('/onboarding');
     }
@@ -48,23 +50,21 @@ export default function ResetWelcome() {
         </div>
 
         <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-xs">
-          Dein System beruhigen — in 7 klaren Tagen. Kein Trainingsplan, keine Challenge. Sondern ein strukturierter Ansatz zur Stabilisierung.
+          Die meisten Menschen sind nicht erschöpft weil sie zu wenig schlafen — sondern weil sie zu viele Reize aufnehmen. Dieser Reset adressiert die Ursache, nicht das Symptom.
         </p>
 
-        {/* Email field */}
+        <p className="text-xs text-muted-foreground/50 tracking-wide">
+          7 Tage · täglich ~10 Minuten · über 500 Teilnehmer
+        </p>
+
         {!hasProgress && (
-          <div className="w-full space-y-2">
-            <Input
-              type="email"
-              placeholder="Deine E-Mail (optional)"
-              value={localEmail}
-              onChange={e => setLocalEmail(e.target.value)}
-              className="bg-card border-border/60 text-foreground placeholder:text-muted-foreground/50 h-12 rounded-xl text-center"
-            />
-            <p className="text-2xs text-muted-foreground/50">
-              Erhalte jeden Morgen eine kurze Erinnerung
-            </p>
-          </div>
+          <Input
+            placeholder="Dein Vorname (optional)"
+            value={localName}
+            onChange={e => setLocalName(e.target.value.slice(0, 30))}
+            maxLength={30}
+            className="bg-card border-border/60 text-foreground placeholder:text-muted-foreground/40 h-12 rounded-xl text-center"
+          />
         )}
 
         <Button
@@ -73,7 +73,7 @@ export default function ResetWelcome() {
           className="w-full min-h-[48px]"
           onClick={handleStart}
         >
-          {hasProgress ? `Weiter bei Tag ${Math.min(currentDay, 7)}` : 'Reset starten'}
+          {hasProgress ? `Tag ${Math.min(currentDay, 7)} öffnen →` : 'Reset starten'}
         </Button>
       </div>
     </div>

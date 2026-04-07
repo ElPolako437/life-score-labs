@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { useReset, type Goal, type Hurdle } from '@/contexts/ResetContext';
 import { cn } from '@/lib/utils';
 
@@ -28,20 +27,14 @@ export default function ResetOnboarding() {
 
   const handleGoalSelect = (goal: Goal) => {
     setSelectedGoal(goal);
+    setGoal(goal);
+    setTimeout(() => setStep(1), 160);
   };
 
   const handleHurdleSelect = (hurdle: Hurdle) => {
     setSelectedHurdle(hurdle);
-  };
-
-  const handleNext = () => {
-    if (step === 0 && selectedGoal) {
-      setGoal(selectedGoal);
-      setStep(1);
-    } else if (step === 1 && selectedHurdle) {
-      setHurdle(selectedHurdle);
-      navigate('/focus');
-    }
+    setHurdle(hurdle);
+    setTimeout(() => navigate('/focus'), 160);
   };
 
   const progress = ((step + 1) / 2) * 100;
@@ -105,17 +98,9 @@ export default function ResetOnboarding() {
           </>
         )}
 
-        <div className="pt-6 pb-4">
-          <Button
-            variant="premium"
-            size="lg"
-            className="w-full min-h-[48px]"
-            disabled={step === 0 ? !selectedGoal : !selectedHurdle}
-            onClick={handleNext}
-          >
-            Weiter
-          </Button>
-        </div>
+        <p className="text-xs text-muted-foreground/40 text-center pt-6 pb-4">
+          Tippe eine Option an — es geht automatisch weiter
+        </p>
       </div>
     </div>
   );

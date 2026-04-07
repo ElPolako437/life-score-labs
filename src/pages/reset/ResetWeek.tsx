@@ -1,13 +1,34 @@
 import { useNavigate } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
 import { DAY_CONTENT } from '@/lib/dayContent';
-import { Check } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+
+const LOCKED_TEASERS: Record<number, string> = {
+  2: '🔒 Morgen: Warum Snacking dein größter Feind ist',
+  3: '🔒 Warum ein Spaziergang mehr bringt als HIIT',
+  4: '🔒 Dein Körper regeneriert nicht im Schlaf',
+  5: '🔒 Dein Abend-Problem ist ein Nachmittags-Problem',
+  6: '🔒 Decision Fatigue und Fettverlust',
+  7: '🔒 Warum ein Reset nicht reicht',
+};
 
 export default function ResetWeek() {
   const navigate = useNavigate();
-  const { currentDay, getDayData } = useReset();
+  const { currentDay, getDayData, reflection } = useReset();
+  const allDone = currentDay > 7;
+
+  // Count consecutive completed days from day 1
+  const streak = (() => {
+    let count = 0;
+    for (let i = 1; i < currentDay; i++) {
+      if (getDayData(i).completed) count++;
+      else break;
+    }
+    return count;
+  })();
 
   return (
     <div className="min-h-screen bg-background flex flex-col px-6 py-8">
@@ -18,11 +39,37 @@ export default function ResetWeek() {
           <span className="text-xs font-semibold text-muted-foreground tracking-widest uppercase">7-Tage Reset</span>
         </div>
 
-        <h1 className="font-outfit text-2xl font-bold text-foreground mb-1">
-          Tag {Math.min(currentDay, 7)} von 7
-        </h1>
+        <div className="flex items-center justify-between mb-1">
+          <h1 className="font-outfit text-2xl font-bold text-foreground">
+            Tag {Math.min(currentDay, 7)} von 7
+          </h1>
+          {streak > 0 && (
+            <span className="text-sm font-semibold text-primary">
+              🔥 {streak} {streak === 1 ? 'Tag' : 'Tage'} in Folge
+            </span>
+          )}
+        </div>
 
         <Progress value={(Math.min(currentDay, 7) / 7) * 100} variant="neon" className="mb-8 h-2" />
+
+        {/* All-done CTA */}
+        {allDone && (
+          <div className="mb-6 p-4 rounded-xl border border-primary/30 bg-primary/5 animate-fade-in">
+            <p className="text-sm font-semibold text-foreground mb-1">Du hast alle 7 Tage abgeschlossen.</p>
+            <p className="text-xs text-muted-foreground/70 mb-4">
+              {reflection ? 'Sieh dir dein persönliches Sprint-Angebot an.' : 'Zeit für die Reflexion — und dein Ergebnis.'}
+            </p>
+            <Button
+              variant="premium"
+              size="sm"
+              className="w-full gap-2"
+              onClick={() => navigate(reflection ? '/next' : '/reflection')}
+            >
+              {reflection ? 'Zum Sprint-Angebot' : 'Reset auswerten'}
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Button>
+          </div>
+        )}
 
         {/* Day cards */}
         <div className="space-y-3">
@@ -70,11 +117,16 @@ export default function ResetWeek() {
                     Tag {dayNum} — {day.title}
                   </p>
                   {isActive && (
-                    <p className="text-xs text-primary mt-0.5">Jetzt starten →</p>
+                    <p className="text-xs text-primary mt-0.5">Jetzt starten · ~10 Min →</p>
                   )}
                   {isCompleted && data.rating && (
                     <p className="text-xs text-muted-foreground/60 mt-0.5">
                       {data.rating === 'good' ? 'Lief gut' : data.rating === 'difficult' ? 'War schwierig' : 'Nicht geschafft'}
+                    </p>
+                  )}
+                  {isFuture && LOCKED_TEASERS[dayNum] && (
+                    <p className="text-xs text-muted-foreground/40 mt-0.5 leading-snug">
+                      {LOCKED_TEASERS[dayNum]}
                     </p>
                   )}
                 </div>
