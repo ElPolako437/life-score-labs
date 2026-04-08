@@ -170,6 +170,42 @@ export const REFLECTION_TASK_OPTIONS = [
   { key: 'preparation', label: 'Vorbereitung & Planung' },
 ];
 
+// Goal-personalized locked teasers for Week screen
+export const GOAL_LOCKED_TEASERS: Record<GoalKey, Record<number, string>> = {
+  energy: {
+    2: '🔒 Morgen: Wie 2 klare Mahlzeiten dein Energieniveau stabilisieren',
+    3: '🔒 Morgen: Warum ein Spaziergang dein Nachmittags-Tief beendet',
+    4: '🔒 Morgen: Der eine Schlaf-Hebel, der alles andere verändert',
+    5: '🔒 Morgen: Warum dein Energieabfall nicht am Morgen entschieden wird',
+    6: '🔒 Morgen: Wie du täglich Entscheidungs-Energie sparst',
+    7: '🔒 Morgen: Was dein Körper dir diese Woche gezeigt hat',
+  },
+  fatloss: {
+    2: '🔒 Morgen: Warum Snacking Fettabbau komplett blockiert',
+    3: '🔒 Morgen: 10 Min spazieren nach dem Essen — effektiver als jedes Supplement',
+    4: '🔒 Morgen: Schlechter Schlaf erhöht deinen Hunger um bis zu 24%',
+    5: '🔒 Morgen: Abend-Heißhunger ist kein Hunger — es ist Biologie',
+    6: '🔒 Morgen: Warum weniger Entscheidungen zu mehr Fettabbau führen',
+    7: '🔒 Morgen: Dein persönliches Fettabbau-Profil nach 7 Tagen',
+  },
+  structure: {
+    2: '🔒 Morgen: Zwei Mahlzeiten als Anker für deinen ganzen Tag',
+    3: '🔒 Morgen: Bewegung als tägliches Ritual — nicht als Training',
+    4: '🔒 Morgen: Der Schlaf-Anker als wichtigster Struktur-Hebel',
+    5: '🔒 Morgen: Warum dein Abend über den nächsten Tag entscheidet',
+    6: '🔒 Morgen: Deine 3 nicht-verhandelbaren Tages-Ankerpunkte',
+    7: '🔒 Morgen: Was diese Woche über dein System verrät',
+  },
+  sleep: {
+    2: '🔒 Morgen: Wie Mahlzeiten-Timing deinen Schlaf direkt beeinflusst',
+    3: '🔒 Morgen: Der Abend-Spaziergang als natürliches Schlaf-Signal',
+    4: '🔒 Morgen: Die wichtigste Nacht — dein Schlaf-Anker wird gesetzt',
+    5: '🔒 Morgen: Warum dein Abend deine Schlafqualität macht — nicht das Bett',
+    6: '🔒 Morgen: Ein Experiment, das deinen Schlaf sofort verändert',
+    7: '🔒 Morgen: Dein Schlaf-Profil nach 7 Tagen',
+  },
+};
+
 // Retention hooks for days 1–2: tease next day's insight to pull users back
 export const RETENTION_HOOKS: Record<number, string> = {
   1: 'Morgen: Warum Snacking kein Hunger-Problem ist — und wie zwei Mahlzeiten mehr verändern als jede Diät.',

@@ -52,6 +52,7 @@ export default function ResetDay() {
     } else {
       completeDay(dayNum, 'good');
       track('day_completed', { day: dayNum });
+      localStorage.setItem('caliness_just_completed', String(dayNum));
       setCelebrating(true);
       setTimeout(() => navigate(`/checkin/${dayNum}`), 700);
     }

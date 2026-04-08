@@ -352,9 +352,9 @@ export default function ResetNext() {
           </p>
         </div>
 
-        {/* Quantified scarcity */}
+        {/* Quantified scarcity with date */}
         <p className="text-xs text-muted-foreground/50 text-center mb-3">
-          David & Sarah nehmen maximal 10 neue Sprint-Teilnehmer pro Monat auf.
+          Nächste Aufnahme: <span className="text-foreground/70 font-medium">15. Mai</span> — David & Sarah nehmen maximal 10 neue Teilnehmer pro Monat auf.
         </p>
 
         {/* Cost of inaction */}
@@ -373,12 +373,13 @@ export default function ResetNext() {
         <Button
           variant="premium"
           size="lg"
-          className="w-full min-h-[52px] text-base gap-2 mb-3"
+          className="w-full min-h-[52px] text-base gap-2 mb-2"
           onClick={() => handleCta('instagram')}
         >
           {ctaLabel}
           <ArrowRight className="w-4 h-4" />
         </Button>
+        <p className="text-xs text-muted-foreground/40 text-center mb-3">Einmalig · 149€ · kein Abo · keine Bindung</p>
 
         {/* Secondary CTA — WhatsApp personalized */}
         <button
@@ -413,16 +414,17 @@ export default function ResetNext() {
           ))}
         </div>
 
-        {/* Second CTA after FAQ */}
+        {/* Second CTA after FAQ — different copy for warm/decided user */}
         <Button
           variant="premium"
           size="lg"
-          className="w-full min-h-[52px] text-base gap-2 mb-3"
+          className="w-full min-h-[52px] text-base gap-2 mb-2"
           onClick={() => handleCta('instagram')}
         >
-          {ctaLabel}
+          Ich bin dabei — Sprint starten
           <ArrowRight className="w-4 h-4" />
         </Button>
+        <p className="text-xs text-muted-foreground/40 text-center mb-3">Einmalig · 149€ · kein Abo · keine Bindung</p>
         <button
           onClick={() => window.open(whatsappUrl, '_blank')}
           className="w-full min-h-[48px] rounded-xl border border-border/40 bg-card/60 flex items-center justify-center gap-2 text-sm text-muted-foreground/70 hover:text-foreground hover:border-border/60 transition-all duration-200 mb-8"

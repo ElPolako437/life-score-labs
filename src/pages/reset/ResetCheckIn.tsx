@@ -69,13 +69,13 @@ export default function ResetCheckIn() {
           </div>
         )}
 
-        {/* WhatsApp reminder opt-in — day 1 only */}
-        {dayNum === 1 && (
+        {/* WhatsApp reminder opt-in — days 1–6 */}
+        {dayNum < 7 && (
           <div className="p-4 rounded-xl border border-border/40 bg-card/60 mb-6 animate-fade-in text-left">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-1.5">Nicht vergessen</p>
-            <p className="text-sm text-foreground/80 mb-3">Soll ich dich morgen früh an Tag 2 erinnern?</p>
+            <p className="text-sm text-foreground/80 mb-3">Soll ich dich morgen an Tag {dayNum + 1} erinnern?</p>
             <button
-              onClick={() => window.open(`https://wa.me/4917685912445?text=${encodeURIComponent('REMINDER TAG 2')}`, '_blank')}
+              onClick={() => window.open(`https://wa.me/4917685912445?text=${encodeURIComponent(`REMINDER TAG ${dayNum + 1}`)}`, '_blank')}
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border transition-all duration-200"
               style={{ background: 'hsl(142 76% 46% / 0.08)', borderColor: 'hsl(142 76% 46% / 0.3)' }}
             >

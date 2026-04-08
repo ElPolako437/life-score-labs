@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
-import { DAY_CONTENT } from '@/lib/dayContent';
+import { DAY_CONTENT, GOAL_LOCKED_TEASERS, type GoalKey } from '@/lib/dayContent';
 import { Check, ArrowRight, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
@@ -37,9 +37,10 @@ const LOCKED_TEASERS: Record<number, string> = {
 
 export default function ResetWeek() {
   const navigate = useNavigate();
-  const { currentDay, getDayData, reflection } = useReset();
+  const { currentDay, getDayData, reflection, goal } = useReset();
   const allDone = currentDay > 7;
   const [streakAtRisk, setStreakAtRisk] = useState(false);
+  const [justCompletedDay, setJustCompletedDay] = useState<number | null>(null);
 
   // Count consecutive completed days from day 1
   const streak = (() => {
@@ -57,6 +58,13 @@ export default function ResetWeek() {
       setStreakAtRisk(true);
     }
     localStorage.setItem(LAST_VISIT_KEY, String(Date.now()));
+
+    const justDone = localStorage.getItem('caliness_just_completed');
+    if (justDone) {
+      setJustCompletedDay(Number(justDone));
+      localStorage.removeItem('caliness_just_completed');
+      setTimeout(() => setJustCompletedDay(null), 3500);
+    }
   }, []);
 
   return (
@@ -80,6 +88,14 @@ export default function ResetWeek() {
         </div>
 
         <Progress value={(Math.min(currentDay, 7) / 7) * 100} variant="neon" className="mb-8 h-2" />
+
+        {/* Return celebration banner */}
+        {justCompletedDay && (
+          <div className="mb-4 p-3 rounded-xl border border-primary/30 bg-primary/5 flex items-center gap-3 animate-fade-in">
+            <span className="text-lg">🔥</span>
+            <p className="text-sm font-semibold text-primary">Tag {justCompletedDay} abgeschlossen — weiter so!</p>
+          </div>
+        )}
 
         {/* Streak at risk banner */}
         {streakAtRisk && (
@@ -164,13 +180,18 @@ export default function ResetWeek() {
                       {data.rating === 'good' ? 'Lief gut' : data.rating === 'difficult' ? 'War schwierig' : 'Nicht geschafft'}
                     </p>
                   )}
-                  {isFuture && (
-                    <p className="text-xs text-muted-foreground/40 mt-0.5 leading-snug">
-                      {dayNum === currentDay
-                        ? `${getUnlockLabel(dayNum, currentDay)} — ${LOCKED_TEASERS[dayNum]?.replace('🔒 ', '') ?? ''}`
-                        : LOCKED_TEASERS[dayNum] ?? ''}
-                    </p>
-                  )}
+                  {isFuture && (() => {
+                    const teaser = goal && GOAL_LOCKED_TEASERS[goal as GoalKey]?.[dayNum]
+                      ? GOAL_LOCKED_TEASERS[goal as GoalKey][dayNum]
+                      : LOCKED_TEASERS[dayNum] ?? '';
+                    const isNext = dayNum === currentDay + 1;
+                    const unlockLabel = isNext ? getUnlockLabel(dayNum, currentDay) : null;
+                    return (
+                      <p className="text-xs text-muted-foreground/40 mt-0.5 leading-snug">
+                        {unlockLabel ? `${unlockLabel} — ${teaser.replace('🔒 ', '')}` : teaser}
+                      </p>
+                    );
+                  })()}
                 </div>
               </button>
             );
