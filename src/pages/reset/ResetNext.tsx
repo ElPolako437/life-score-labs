@@ -296,17 +296,27 @@ export default function ResetNext() {
 
         {/* Human touch — BEFORE CTA */}
         <div className="flex items-center gap-3 justify-center mb-4">
-          <img
-            src="/images/david-sarah.png"
-            alt="David & Sarah"
-            loading="lazy"
-            width={40}
-            height={40}
-            className="w-10 h-10 rounded-full object-cover grayscale brightness-75"
-          />
+          <div className="flex -space-x-3">
+            <img
+              src="/images/david.jpg"
+              alt="David"
+              loading="lazy"
+              width={44}
+              height={44}
+              className="w-11 h-11 rounded-full object-cover grayscale brightness-75 ring-2 ring-background"
+            />
+            <img
+              src="/images/sarah.jpg"
+              alt="Sarah"
+              loading="lazy"
+              width={44}
+              height={44}
+              className="w-11 h-11 rounded-full object-cover grayscale brightness-75 ring-2 ring-background"
+            />
+          </div>
           <p className="text-xs text-muted-foreground/60 text-left leading-snug">
-            David & Sarah — Personal Coaches.<br />
-            Über 200 Teilnehmer begleitet. Kein Team, kein Bot.
+            David & Sarah — wir schauen uns<br />
+            deine Situation persönlich an.
           </p>
         </div>
 
