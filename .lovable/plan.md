@@ -1,25 +1,19 @@
 
 
-## Plan: Real Coach Photos + Build Fixes
+## Plan: Favicon und PWA-Icon aktualisieren
 
-### 1. Add real profile photos to the project
-- Copy `Peachy_Saved_Photo.jpg` → `public/images/david.jpg` (David)
-- Copy `Bildschirmfoto_2026-04-05_um_18.01.44.png` → `public/images/sarah.jpg` (Sarah)
+Das hochgeladene Logo (weiß auf transparent) wird als neues App-Icon verwendet. Da der Hintergrund der App dunkel ist (`#0a0c0e`), wird das weiße Logo auf diesem dunklen Hintergrund platziert — so sieht es auf dem Homescreen professionell aus.
 
-### 2. Update the human-touch section in `ResetNext.tsx` (lines 297-311)
-Replace the single placeholder image with two separate, real profile photos side by side:
-- Two round images (David + Sarah), slightly overlapping for visual cohesion
-- Keep grayscale + slight brightness reduction for premium look
-- Update the text to feel more personal and trust-building
+### Schritte
 
-### 3. Fix build error in `src/lib/analytics.ts`
-The `reset_events` and `reset_leads` tables don't exist in the database schema. Change the analytics functions to use `localStorage` instead of Supabase, since the Reset app is designed to work without login/backend.
+1. **Logo-Datei kopieren** — `user-uploads://logo_2_white_transparent_backgroud_851.png` → `public/favicon-512.png` (überschreibt das bestehende)
 
-### 4. Fix edge function build error
-The `admin-users` function has a Deno import resolution issue. This is unrelated to the Reset app but blocks the build. Will check if a simple import path fix resolves it.
+2. **Altes favicon.ico entfernen** — falls vorhanden, löschen damit Browser nicht das alte laden
 
-### Technical details
-- Profile images: `object-cover` with `rounded-full`, ~44px each, overlapping via negative margin
-- Analytics: Replace Supabase `.insert()` calls with `console.log` or remove entirely since these tables don't exist
-- No design system changes
+3. **PWA Manifest prüfen** — `site.webmanifest` referenziert bereits `/favicon-512.png` mit `512x512` und `purpose: "any maskable"` — passt bereits
+
+4. **index.html** — referenziert bereits `/favicon-512.png` für alle Icon-Größen — keine Änderung nötig
+
+### Hinweis
+Das Logo ist weiß auf transparent. Auf dem Homescreen (iOS/Android) wird der `background_color: "#0a0c0e"` aus dem Manifest genutzt, sodass das weiße Logo auf dunklem Grund erscheint. Falls das Ergebnis auf iOS nicht optimal aussieht (Apple ignoriert teilweise den Manifest-Hintergrund), kann ein zusätzliches `apple-touch-icon` mit eingebettetem dunklem Hintergrund generiert werden.
 
