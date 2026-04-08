@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
 import { DAY_CONTENT, type GoalKey } from '@/lib/dayContent';
@@ -6,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function ResetDay() {
@@ -13,6 +15,17 @@ export default function ResetDay() {
   const dayNum = Number(id);
   const navigate = useNavigate();
   const { currentDay, getDayData, toggleTask, completedTaskCount, completeDay, goal } = useReset();
+  const [celebrating, setCelebrating] = useState(false);
+  const [ctaPulse, setCtaPulse] = useState(false);
+  const prevCount = useRef(completedCount);
+
+  useEffect(() => {
+    if (prevCount.current < minRequired && completedCount >= minRequired && !dayData.completed) {
+      setCtaPulse(true);
+      setTimeout(() => setCtaPulse(false), 900);
+    }
+    prevCount.current = completedCount;
+  }, [completedCount]);
 
   const content = DAY_CONTENT[dayNum - 1];
   const goalBonus = goal ? content?.goalBonus?.[goal as GoalKey] : null;
@@ -38,11 +51,13 @@ export default function ResetDay() {
     } else {
       completeDay(dayNum, 'good');
       track('day_completed', { day: dayNum });
-      navigate(`/checkin/${dayNum}`);
+      setCelebrating(true);
+      setTimeout(() => navigate(`/checkin/${dayNum}`), 700);
     }
   };
 
   return (
+    <>
     <div className="min-h-screen bg-background flex flex-col px-6 py-8">
       <div className="max-w-sm mx-auto w-full animate-fade-in">
         {/* Back to week */}
@@ -133,7 +148,11 @@ export default function ResetDay() {
         <Button
           variant="premium"
           size="lg"
-          className="w-full min-h-[48px]"
+          className={cn(
+            'w-full min-h-[48px] transition-all duration-300',
+            ctaPulse && 'ring-2 ring-primary ring-offset-2 ring-offset-background scale-[1.02]',
+            ctaPulse && '[box-shadow:0_0_24px_hsl(142_76%_46%/0.45)]'
+          )}
           disabled={!canComplete && !dayData.completed}
           onClick={handleComplete}
         >
@@ -148,5 +167,20 @@ export default function ResetDay() {
 
       </div>
     </div>
+
+    {celebrating && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 animate-fade-in">
+        <div className="flex flex-col items-center gap-4 animate-scale-in">
+          <div
+            className="w-24 h-24 rounded-full flex items-center justify-center"
+            style={{ background: 'radial-gradient(circle, hsl(142 76% 46% / 0.25) 0%, hsl(142 76% 46% / 0.05) 70%)', boxShadow: '0 0 40px hsl(142 76% 46% / 0.3)' }}
+          >
+            <Check className="w-12 h-12 text-primary" strokeWidth={2.5} />
+          </div>
+          <p className="font-outfit text-2xl font-bold text-foreground">Tag {dayNum} geschafft.</p>
+        </div>
+      </div>
+    )}
+    </>
   );
 }

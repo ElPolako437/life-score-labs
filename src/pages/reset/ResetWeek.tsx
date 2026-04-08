@@ -1,10 +1,30 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
 import { DAY_CONTENT } from '@/lib/dayContent';
-import { Check, ArrowRight } from 'lucide-react';
+import { Check, ArrowRight, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
+
+const LAST_VISIT_KEY = 'caliness_week_last_visit';
+
+function getHoursSinceLastVisit(): number {
+  const last = Number(localStorage.getItem(LAST_VISIT_KEY) || '0');
+  if (!last) return 0;
+  return (Date.now() - last) / (1000 * 60 * 60);
+}
+
+function getUnlockLabel(dayNum: number, currentDay: number): string | null {
+  if (dayNum !== currentDay) return null; // only for the immediately next day
+  const last = Number(localStorage.getItem(LAST_VISIT_KEY) || '0');
+  if (!last) return 'Öffnet morgen';
+  const hoursSince = (Date.now() - last) / (1000 * 60 * 60);
+  const hoursLeft = Math.max(0, Math.ceil(24 - hoursSince));
+  if (hoursLeft <= 1) return 'Öffnet gleich';
+  if (hoursLeft < 24) return `Öffnet in ~${hoursLeft}h`;
+  return 'Öffnet morgen';
+}
 
 const LOCKED_TEASERS: Record<number, string> = {
   2: '🔒 Morgen: Warum Snacking dein größter Feind ist',
@@ -19,6 +39,7 @@ export default function ResetWeek() {
   const navigate = useNavigate();
   const { currentDay, getDayData, reflection } = useReset();
   const allDone = currentDay > 7;
+  const [streakAtRisk, setStreakAtRisk] = useState(false);
 
   // Count consecutive completed days from day 1
   const streak = (() => {
@@ -29,6 +50,14 @@ export default function ResetWeek() {
     }
     return count;
   })();
+
+  useEffect(() => {
+    const hours = getHoursSinceLastVisit();
+    if (streak > 0 && hours > 20 && currentDay <= 7) {
+      setStreakAtRisk(true);
+    }
+    localStorage.setItem(LAST_VISIT_KEY, String(Date.now()));
+  }, []);
 
   return (
     <div className="min-h-screen bg-background flex flex-col px-6 py-8">
@@ -51,6 +80,17 @@ export default function ResetWeek() {
         </div>
 
         <Progress value={(Math.min(currentDay, 7) / 7) * 100} variant="neon" className="mb-8 h-2" />
+
+        {/* Streak at risk banner */}
+        {streakAtRisk && (
+          <div className="mb-6 p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 flex items-start gap-3 animate-fade-in">
+            <AlertTriangle className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-amber-400">Dein Streak steht auf dem Spiel.</p>
+              <p className="text-xs text-muted-foreground/70 mt-0.5">Schließe heute Tag {Math.min(currentDay, 7)} ab, um deinen 🔥{streak}-Tage-Streak zu halten.</p>
+            </div>
+          </div>
+        )}
 
         {/* All-done CTA */}
         {allDone && (
@@ -124,9 +164,11 @@ export default function ResetWeek() {
                       {data.rating === 'good' ? 'Lief gut' : data.rating === 'difficult' ? 'War schwierig' : 'Nicht geschafft'}
                     </p>
                   )}
-                  {isFuture && LOCKED_TEASERS[dayNum] && (
+                  {isFuture && (
                     <p className="text-xs text-muted-foreground/40 mt-0.5 leading-snug">
-                      {LOCKED_TEASERS[dayNum]}
+                      {dayNum === currentDay
+                        ? `${getUnlockLabel(dayNum, currentDay)} — ${LOCKED_TEASERS[dayNum]?.replace('🔒 ', '') ?? ''}`
+                        : LOCKED_TEASERS[dayNum] ?? ''}
                     </p>
                   )}
                 </div>

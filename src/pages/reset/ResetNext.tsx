@@ -97,8 +97,29 @@ export default function ResetNext() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [shared, setShared] = useState(false);
 
+  const weakestKey = (() => {
+    if (!reflection) return null;
+    const dims = [
+      { key: 'energy', val: reflection.energy },
+      { key: 'sleep', val: reflection.sleep },
+      { key: 'calm', val: reflection.calm },
+      { key: 'eating', val: reflection.eating },
+      { key: 'body', val: reflection.body },
+    ];
+    const allGood = dims.every(d => d.val >= 3);
+    if (allGood) return 'all_good';
+    return dims.reduce((a, b) => (a.val <= b.val ? a : b)).key;
+  })();
+
+  const weakestDimLabel = weakestKey && weakestKey !== 'all_good'
+    ? DIMENSION_LABELS[weakestKey]
+    : null;
+  const weakestDimScore = weakestKey && weakestKey !== 'all_good' && reflection
+    ? (reflection as Record<string, number>)[weakestKey]
+    : null;
+
   const whatsappText = goal
-    ? `Hallo, ich habe den CALINESS 7-Tage Reset abgeschlossen. Mein Ziel ist ${GOAL_LABEL[goal]}. Ich bin interessiert am Sprint.`
+    ? `Hallo, ich habe den CALINESS 7-Tage Reset abgeschlossen. Ziel: ${GOAL_LABEL[goal]}.${weakestDimLabel && weakestDimScore != null ? ` Schwächste Dimension: ${weakestDimLabel} (${weakestDimScore}/5).` : ''} Ich bin interessiert am Sprint.`
     : 'Hallo, ich habe den CALINESS 7-Tage Reset abgeschlossen und möchte mehr über den Sprint erfahren.';
   const whatsappUrl = `https://wa.me/4917685912445?text=${encodeURIComponent(whatsappText)}`;
   const instagramUrl = goal
@@ -139,20 +160,6 @@ export default function ResetNext() {
   };
 
   const insight = goal && hurdle ? PERSONALIZED_INSIGHT[goal]?.[hurdle] : null;
-
-  const weakestKey = (() => {
-    if (!reflection) return null;
-    const dims = [
-      { key: 'energy', val: reflection.energy },
-      { key: 'sleep', val: reflection.sleep },
-      { key: 'calm', val: reflection.calm },
-      { key: 'eating', val: reflection.eating },
-      { key: 'body', val: reflection.body },
-    ];
-    const allGood = dims.every(d => d.val >= 3);
-    if (allGood) return 'all_good';
-    return dims.reduce((a, b) => (a.val <= b.val ? a : b)).key;
-  })();
 
   const weakestText = weakestKey ? WEAKEST_TEXT[weakestKey] : null;
 
@@ -356,6 +363,11 @@ export default function ResetNext() {
             78% der Reset-Teilnehmer ohne Anschlussplan fallen innerhalb von 21 Tagen in alte Muster zurück. Du hast 7 Tage investiert — der Sprint sichert diesen Fortschritt.
           </p>
         </div>
+
+        {/* Warm traffic framing — acknowledges the IG relationship */}
+        <p className="text-xs text-muted-foreground/50 text-center mb-4">
+          Du bist über Instagram zu uns gekommen — schreib uns einfach <span className="text-primary font-medium">„SPRINT"</span> zurück.
+        </p>
 
         {/* Primary CTA — goal-specific label */}
         <Button
