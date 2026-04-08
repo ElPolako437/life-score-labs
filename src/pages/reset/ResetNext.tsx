@@ -115,7 +115,7 @@ export default function ResetNext() {
     ? DIMENSION_LABELS[weakestKey]
     : null;
   const weakestDimScore = weakestKey && weakestKey !== 'all_good' && reflection
-    ? (reflection as Record<string, number>)[weakestKey]
+    ? (reflection as unknown as Record<string, number>)[weakestKey]
     : null;
 
   const whatsappText = goal

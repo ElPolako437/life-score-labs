@@ -17,6 +17,14 @@ export default function ResetDay() {
   const { currentDay, getDayData, toggleTask, completedTaskCount, completeDay, goal } = useReset();
   const [celebrating, setCelebrating] = useState(false);
   const [ctaPulse, setCtaPulse] = useState(false);
+
+  const content = DAY_CONTENT[dayNum - 1];
+  const goalBonus = goal ? content?.goalBonus?.[goal as GoalKey] : null;
+  const dayData = getDayData(dayNum);
+  const completedCount = completedTaskCount(dayNum);
+  const totalTasks = content?.tasks.length || 0;
+  const minRequired = Math.min(3, totalTasks);
+
   const prevCount = useRef(completedCount);
 
   useEffect(() => {
@@ -26,13 +34,6 @@ export default function ResetDay() {
     }
     prevCount.current = completedCount;
   }, [completedCount]);
-
-  const content = DAY_CONTENT[dayNum - 1];
-  const goalBonus = goal ? content?.goalBonus?.[goal as GoalKey] : null;
-  const dayData = getDayData(dayNum);
-  const completedCount = completedTaskCount(dayNum);
-  const totalTasks = content?.tasks.length || 0;
-  const minRequired = Math.min(3, totalTasks);
   const canComplete = completedCount >= minRequired;
 
   if (!content || dayNum < 1 || dayNum > 7) {
