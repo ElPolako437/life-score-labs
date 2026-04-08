@@ -156,6 +156,22 @@ export default function ResetNext() {
 
   const weakestText = weakestKey ? WEAKEST_TEXT[weakestKey] : null;
 
+  // Tracking card — only shown when eating or body ≤ 3
+  const trackingCardText = (() => {
+    if (!reflection) return null;
+    const eatingWeak = reflection.eating <= 3;
+    const bodyWeak = reflection.body <= 3;
+    if (eatingWeak && bodyWeak) return 'Essverhalten und Körpergefühl sind noch instabil — das hängt fast immer zusammen. Was dir fehlt, ist kein strengerer Plan, sondern Klarheit darüber, was DEIN Körper braucht. Im Sprint bekommst du genau das: persönliches Tracking, individuelle Einordnung, ohne Kalorienzählen.';
+    if (eatingWeak) return 'Du spürst, dass dein Essverhalten noch nicht stabil ist. Aber du weißt noch nicht, warum. Liegt es am Timing? An der Zusammensetzung? Am Stress? Im Sprint bekommst du ein persönliches Ernährungs-Tracking, das dir zeigt, was genau bei dir nicht stimmt — ohne Kalorienzählen, ohne App-Overload.';
+    if (bodyWeak) return 'Dein Körper hat sich trotz guter Routinen noch nicht verändert. Das liegt selten an fehlender Disziplin — sondern an fehlender Feinabstimmung. Im Sprint analysieren wir gemeinsam, was dein Körper konkret braucht: mit individuellem Tracking, persönlicher Einordnung und einem Plan, der zu deinem Alltag passt.';
+    return null;
+  })();
+
+  // 4th benefit — conditional on reflection scores
+  const fourthBenefit = reflection && (reflection.eating <= 3 || reflection.body <= 3)
+    ? 'Persönliches Ernährungs-Tracking — ohne Kalorienzählen'
+    : 'Individuelle Feinabstimmung deiner Routinen';
+
   const handleReset = () => {
     resetAll();
     navigate('/');
@@ -231,6 +247,15 @@ export default function ResetNext() {
           </p>
         )}
 
+        {/* Tracking-Argument — nur bei schwachem Essverhalten oder Körpergefühl */}
+        {trackingCardText && (
+          <div className="border-l-2 border-primary/70 pl-4 mb-6">
+            <p className="text-sm text-foreground/80 leading-relaxed">
+              {trackingCardText}
+            </p>
+          </div>
+        )}
+
         <p className="text-sm text-muted-foreground leading-relaxed mb-2 font-medium">
           Du hast jetzt Klarheit. Was dir fehlt, ist ein Plan.
         </p>
@@ -255,7 +280,7 @@ export default function ResetNext() {
 
         {/* Benefits */}
         <div className="space-y-3 mb-8 mt-4">
-          {BENEFITS.map((b, i) => (
+          {[...BENEFITS, fourthBenefit].map((b, i) => (
             <div
               key={i}
               className="flex items-center gap-3 p-3 rounded-xl border border-border/40 bg-card/60"

@@ -191,7 +191,7 @@ export const SOFT_CONVERSION: Record<number, SoftConversionEntry> = {
     cta: true,
   },
   5: {
-    text: 'Wenn der Abend dein Schwachpunkt ist, bist du nicht allein. 73% der Reset-Teilnehmer kämpfen hier am meisten. Der Unterschied: Sie haben jemanden, der ihnen zeigt, was genau sie ändern müssen.',
+    text: 'Wenn der Abend dein Schwachpunkt ist, bist du nicht allein. Die meisten Reset-Teilnehmer kämpfen hier am meisten. Oft liegt es nicht am Willen — sondern daran, dass die Ernährung tagsüber nicht gestimmt hat. Im Sprint findest du heraus, was DEIN Körper wann braucht, damit der Abend nicht mehr kippt.',
     cta: true,
   },
   6: {
