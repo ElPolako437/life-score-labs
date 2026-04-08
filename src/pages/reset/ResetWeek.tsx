@@ -41,7 +41,7 @@ const LOCKED_TEASERS: Record<number, string> = {
 
 export default function ResetWeek() {
   const navigate = useNavigate();
-  const { currentDay, getDayData, reflection, goal } = useReset();
+  const { currentDay, getDayData, reflection, goal, name } = useReset();
   const allDone = currentDay > 7;
   const [streakAtRisk, setStreakAtRisk] = useState(false);
   const [justCompletedDay, setJustCompletedDay] = useState<number | null>(null);
@@ -92,12 +92,13 @@ export default function ResetWeek() {
 
         <div className="flex items-center justify-between mb-1">
           <h1 className="font-outfit text-2xl font-bold text-foreground">
-            Tag {Math.min(currentDay, 7)} von 7
+            {name ? `${name}, Tag ${Math.min(currentDay, 7)}` : `Tag ${Math.min(currentDay, 7)} von 7`}
           </h1>
           {streak > 0 && (
-            <span className="text-sm font-semibold text-primary">
-              🔥 {streak} {streak === 1 ? 'Tag' : 'Tage'} in Folge
-            </span>
+            <div className="flex flex-col items-end">
+              <span className="text-xl font-bold text-primary leading-none">🔥 {streak}</span>
+              <span className="text-[10px] text-muted-foreground/50 leading-none mt-0.5">{streak === 1 ? 'Tag' : 'Tage'} Streak</span>
+            </div>
           )}
         </div>
 

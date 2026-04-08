@@ -124,7 +124,7 @@ export default function ResetCheckIn() {
           className="w-full min-h-[48px]"
           onClick={handleContinue}
         >
-          {dayNum === 7 ? 'Reset auswerten →' : `Tag ${dayNum + 1} morgen →`}
+          {dayNum === 7 ? '7 Tage. Jetzt dein Ergebnis →' : `Tag ${dayNum + 1} morgen →`}
         </Button>
 
         {/* WA reminder days 3–6: subtle link below CTA */}

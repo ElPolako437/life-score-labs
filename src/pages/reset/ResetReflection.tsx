@@ -18,7 +18,7 @@ const DIMENSIONS = [
 
 export default function ResetReflection() {
   const navigate = useNavigate();
-  const { setReflection } = useReset();
+  const { setReflection, name } = useReset();
 
   const [values, setValues] = useState<Record<string, number>>({
     energy: 1, sleep: 1, calm: 1, eating: 1, body: 1,
@@ -42,10 +42,10 @@ export default function ResetReflection() {
     <div className="min-h-screen bg-background flex flex-col px-6 py-8">
       <div className="max-w-sm mx-auto w-full animate-fade-in">
         <h2 className="font-outfit text-2xl font-bold text-foreground mb-2">
-          Reflexion
+          {name ? `${name}, 7 Tage.` : '7 Tage.'}
         </h2>
         <p className="text-sm text-muted-foreground mb-8">
-          7 Tage sind geschafft. Wie hat sich dein Körper verändert?
+          Das haben die wenigsten durchgezogen. Jetzt schaust du ehrlich hin — wie hat sich dein Körper verändert?
         </p>
 
         {/* Sliders */}

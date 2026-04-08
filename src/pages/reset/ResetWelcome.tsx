@@ -51,11 +51,31 @@ export default function ResetWelcome() {
         </div>
 
         <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-xs">
-          Die meisten Menschen sind nicht erschöpft weil sie zu wenig schlafen — sondern weil sie zu viele Reize aufnehmen. Dieser Reset adressiert die Ursache, nicht das Symptom.
+          Wenn du das hier liest, hast du es wahrscheinlich schon mit früher schlafen, weniger Essen oder mehr Disziplin versucht. Nichts hat dauerhaft geholfen. Hier ist der Grund — und was tatsächlich funktioniert.
         </p>
 
-        <p className="text-xs text-muted-foreground/50 tracking-wide">
-          7-Tage Reset · täglich ~10 Minuten · über 500 Teilnehmer
+        {/* Trust signal — David & Sarah */}
+        <div className="flex items-center gap-3">
+          <div className="flex -space-x-2 flex-shrink-0">
+            <img
+              src="/images/david.jpg"
+              alt="David"
+              className="w-8 h-8 rounded-full object-cover grayscale brightness-75 ring-2 ring-background"
+            />
+            <img
+              src="/images/sarah.jpg"
+              alt="Sarah"
+              className="w-8 h-8 rounded-full object-cover grayscale brightness-75 ring-2 ring-background"
+            />
+          </div>
+          <p className="text-xs text-muted-foreground/50 text-left leading-snug">
+            Von David &amp; Sarah — Caliness Academy<br />
+            <span className="text-muted-foreground/30">über 200 Teilnehmer persönlich begleitet</span>
+          </p>
+        </div>
+
+        <p className="text-xs text-muted-foreground/30 tracking-wide">
+          7-Tage Reset · täglich ~10 Minuten · kostenlos
         </p>
 
         {!hasProgress && (
@@ -84,7 +104,7 @@ export default function ResetWelcome() {
           className="w-full min-h-[48px]"
           onClick={handleStart}
         >
-          {hasProgress ? `Tag ${Math.min(currentDay, 7)} öffnen →` : 'Reset starten'}
+          {hasProgress ? `Tag ${Math.min(currentDay, 7)} öffnen →` : 'Ich will das verstehen →'}
         </Button>
       </div>
     </div>
