@@ -79,7 +79,7 @@ const BENEFITS = [
 const FAQ = [
   {
     q: 'Was kostet der Sprint?',
-    a: 'Der Sprint liegt typischerweise zwischen 97€ und 147€ — einmalig, kein Abo. Dafür: 14 Tage persönliche Begleitung, ein individueller Plan und tägliches Feedback von David oder Sarah.',
+    a: 'Der Sprint startet ab 149€ — einmalig, kein Abo. Dafür bekommst du einen ganzheitlichen, individuellen Plan und 2 Wochen persönliche Begleitung durch David oder Sarah.',
   },
   {
     q: 'Wie viel Zeit brauche ich täglich?',
