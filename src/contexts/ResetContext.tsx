@@ -188,8 +188,17 @@ export function ResetProvider({ children }: { children: ReactNode }) {
   );
 }
 
+const FALLBACK: ResetContextValue = {
+  email: null, name: null, goal: null, hurdle: null, currentDay: 1,
+  days: {}, reflection: null, homescreenHintShown: false,
+  setEmail: () => {}, setName: () => {}, setGoal: () => {}, setHurdle: () => {},
+  toggleTask: () => {}, completeDay: () => {}, setReflection: () => {},
+  markHomescreenHintShown: () => {}, resetAll: () => {},
+  getDayData: (day: number) => getDefaultDay(day),
+  completedTaskCount: () => 0,
+};
+
 export function useReset() {
   const ctx = useContext(ResetContext);
-  if (!ctx) throw new Error('useReset must be used within ResetProvider');
-  return ctx;
+  return ctx ?? FALLBACK;
 }
