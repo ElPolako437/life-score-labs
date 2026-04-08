@@ -55,7 +55,7 @@ const PERSONALIZED_INSIGHT: Record<Goal, Record<Hurdle, string>> = {
 
 const WEAKEST_TEXT: Record<string, string> = {
   energy: 'Dein Reset zeigt: Die Struktur steht — aber deine Energie ist noch instabil. Das liegt selten an Schlaf oder Ernährung allein. Es braucht eine individuelle Einordnung.',
-  sleep: 'Rhythmus aufzubauen war ein guter Start — aber Schlafqualität hängt von mehr ab als einer festen Uhrzeit. Im Caliness Sprint schauen wir uns an, was genau bei dir die Regeneration blockiert.',
+  sleep: 'Rhythmus aufzubauen war ein guter Start — aber Schlafqualität hängt von mehr ab als einer festen Uhrzeit. Im Caliness-Sprint schauen wir uns an, was genau bei dir die Regeneration blockiert.',
   calm: 'Wenn die Ruhe noch fehlt, obwohl du alles richtig machst — dann liegt es meist an Mustern, die tiefer sitzen als Routinen.',
   eating: 'Essen ist oft der letzte Bereich, der sich stabilisiert — weil er am stärksten von Stress, Schlaf und Emotionen beeinflusst wird.',
   body: 'Wenn sich dein Körper trotz guter Routinen nicht anders anfühlt, fehlt oft die individuelle Feinjustierung.',
@@ -78,8 +78,8 @@ const BENEFITS = [
 
 const FAQ = [
   {
-    q: 'Was kostet der Caliness Sprint?',
-    a: 'Der Caliness Sprint startet ab 149€ — einmalig, kein Abo. Dafür bekommst du einen ganzheitlichen, individuellen Plan und 2 Wochen persönliche Begleitung durch David oder Sarah.',
+    q: 'Was kostet der Caliness-Sprint?',
+    a: 'Der Caliness-Sprint startet ab 149€ — einmalig, kein Abo. Dafür bekommst du einen ganzheitlichen, individuellen Plan und 2 Wochen persönliche Begleitung durch David oder Sarah.',
   },
   {
     q: 'Wie viel Zeit brauche ich täglich?',
@@ -119,14 +119,14 @@ export default function ResetNext() {
     : null;
 
   const whatsappText = goal
-    ? `Hallo, ich habe den CALINESS 7-Tage Reset abgeschlossen. Ziel: ${GOAL_LABEL[goal]}.${weakestDimLabel && weakestDimScore != null ? ` Schwächste Dimension: ${weakestDimLabel} (${weakestDimScore}/5).` : ''} Ich bin interessiert am Caliness Sprint.`
-    : 'Hallo, ich habe den CALINESS 7-Tage Reset abgeschlossen und möchte mehr über den Caliness Sprint erfahren.';
+    ? `Hallo, ich habe den CALINESS 7-Tage Reset abgeschlossen. Ziel: ${GOAL_LABEL[goal]}.${weakestDimLabel && weakestDimScore != null ? ` Schwächste Dimension: ${weakestDimLabel} (${weakestDimScore}/5).` : ''} Ich bin interessiert am Caliness-Sprint.`
+    : 'Hallo, ich habe den CALINESS 7-Tage Reset abgeschlossen und möchte mehr über den Caliness-Sprint erfahren.';
   const whatsappUrl = `https://wa.me/4917685912445?text=${encodeURIComponent(whatsappText)}`;
   const instagramUrl = goal
     ? `https://ig.me/m/caliness_?text=${encodeURIComponent(`CALINESS SPRINT ${GOAL_LABEL[goal]}`)}`
     : INSTAGRAM_DM_URL;
 
-  const ctaLabel = goal ? GOAL_CTA[goal] : 'Jetzt Caliness Sprint anfragen';
+  const ctaLabel = goal ? GOAL_CTA[goal] : 'Jetzt Caliness-Sprint anfragen';
 
   const handleCta = (channel: 'instagram' | 'whatsapp') => {
     track('sprint_cta_clicked', { channel, goal: goal ?? null });
@@ -168,9 +168,9 @@ export default function ResetNext() {
     if (!reflection) return null;
     const eatingWeak = reflection.eating <= 3;
     const bodyWeak = reflection.body <= 3;
-    if (eatingWeak && bodyWeak) return 'Essverhalten und Körpergefühl sind noch instabil — das hängt fast immer zusammen. Was dir fehlt, ist kein strengerer Plan, sondern Klarheit darüber, was DEIN Körper braucht. Im Caliness Sprint bekommst du genau das: persönliches Tracking, individuelle Einordnung, ohne Kalorienzählen.';
-    if (eatingWeak) return 'Du spürst, dass dein Essverhalten noch nicht stabil ist. Aber du weißt noch nicht, warum. Liegt es am Timing? An der Zusammensetzung? Am Stress? Im Caliness Sprint bekommst du ein persönliches Ernährungs-Tracking, das dir zeigt, was genau bei dir nicht stimmt — ohne Kalorienzählen, ohne App-Overload.';
-    if (bodyWeak) return 'Dein Körper hat sich trotz guter Routinen noch nicht verändert. Das liegt selten an fehlender Disziplin — sondern an fehlender Feinabstimmung. Im Caliness Sprint analysieren wir gemeinsam, was dein Körper konkret braucht: mit individuellem Tracking, persönlicher Einordnung und einem Plan, der zu deinem Alltag passt.';
+    if (eatingWeak && bodyWeak) return 'Essverhalten und Körpergefühl sind noch instabil — das hängt fast immer zusammen. Was dir fehlt, ist kein strengerer Plan, sondern Klarheit darüber, was DEIN Körper braucht. Im Caliness-Sprint bekommst du genau das: persönliches Tracking, individuelle Einordnung, ohne Kalorienzählen.';
+    if (eatingWeak) return 'Du spürst, dass dein Essverhalten noch nicht stabil ist. Aber du weißt noch nicht, warum. Liegt es am Timing? An der Zusammensetzung? Am Stress? Im Caliness-Sprint bekommst du ein persönliches Ernährungs-Tracking, das dir zeigt, was genau bei dir nicht stimmt — ohne Kalorienzählen, ohne App-Overload.';
+    if (bodyWeak) return 'Dein Körper hat sich trotz guter Routinen noch nicht verändert. Das liegt selten an fehlender Disziplin — sondern an fehlender Feinabstimmung. Im Caliness-Sprint analysieren wir gemeinsam, was dein Körper konkret braucht: mit individuellem Tracking, persönlicher Einordnung und einem Plan, der zu deinem Alltag passt.';
     return null;
   })();
 
@@ -237,7 +237,7 @@ export default function ResetNext() {
         <h1 className="font-outfit text-2xl font-bold text-foreground mb-4 leading-tight">
           {name ? `${name}, der Reset war der Einstieg.` : 'Der Reset war der Einstieg.'}
           <br />
-          <span className="text-primary">Der Caliness Sprint ist dein Plan.</span>
+          <span className="text-primary">Der Caliness-Sprint ist dein Plan.</span>
         </h1>
 
         {/* Weakest-area personalized text */}
@@ -269,7 +269,7 @@ export default function ResetNext() {
 
         {/* Sprint Preview — taste of the premium */}
         <div className="mb-8 mt-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">So sieht der Caliness Sprint aus</p>
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">So sieht der Caliness-Sprint aus</p>
           <div className="space-y-2">
             {[
               { step: '01', text: 'Wir analysieren dein Reset-Ergebnis gemeinsam — deine Stärken, deine Schwachstelle, dein Körpertyp.' },
@@ -304,7 +304,7 @@ export default function ResetNext() {
         <div className="space-y-3 mb-5">
           <div className="p-4 rounded-xl border border-border/30 bg-card/50">
             <p className="text-sm text-muted-foreground/80 italic leading-relaxed mb-3">
-              „Ich habe 3 Jahre lang probiert abzunehmen. Beim Caliness Sprint habe ich endlich verstanden warum es nie geklappt hat. In 14 Tagen 3,2 kg runter — ohne Hunger."
+              „Ich habe 3 Jahre lang probiert abzunehmen. Beim Caliness-Sprint habe ich endlich verstanden warum es nie geklappt hat. In 14 Tagen 3,2 kg runter — ohne Hunger."
             </p>
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
@@ -315,7 +315,7 @@ export default function ResetNext() {
           </div>
           <div className="p-4 rounded-xl border border-border/30 bg-card/50">
             <p className="text-sm text-muted-foreground/80 italic leading-relaxed mb-3">
-              „Der Reset hat gezeigt, dass mein Energieproblem nichts mit Schlaf zu tun hat. Der Caliness Sprint hat das konkret behoben. Ich bin morgens zum ersten Mal seit Jahren wirklich wach."
+              „Der Reset hat gezeigt, dass mein Energieproblem nichts mit Schlaf zu tun hat. Der Caliness-Sprint hat das konkret behoben. Ich bin morgens zum ersten Mal seit Jahren wirklich wach."
             </p>
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
@@ -363,7 +363,7 @@ export default function ResetNext() {
         {/* Cost of inaction */}
         <div className="p-3 rounded-xl border border-border/20 bg-card/40 mb-5">
           <p className="text-xs text-muted-foreground/60 text-center leading-relaxed">
-            78% der Reset-Teilnehmer ohne Anschlussplan fallen innerhalb von 21 Tagen in alte Muster zurück. Du hast 7 Tage investiert — der Caliness Sprint sichert diesen Fortschritt.
+            78% der Reset-Teilnehmer ohne Anschlussplan fallen innerhalb von 21 Tagen in alte Muster zurück. Du hast 7 Tage investiert — der Caliness-Sprint sichert diesen Fortschritt.
           </p>
         </div>
 
@@ -426,7 +426,7 @@ export default function ResetNext() {
           className="w-full min-h-[52px] text-base gap-2 mb-2"
           onClick={() => handleCta('instagram')}
         >
-          Ich bin dabei — Caliness Sprint starten
+          Ich bin dabei — Caliness-Sprint starten
           <ArrowRight className="w-4 h-4" />
         </Button>
         <p className="text-xs text-muted-foreground/40 text-center mb-3">Einmalig · 149€ · kein Abo · keine Bindung</p>

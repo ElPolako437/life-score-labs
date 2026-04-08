@@ -112,7 +112,7 @@ export default function ResetCheckIn() {
                 onClick={() => window.open(instagramUrl, '_blank')}
                 className="mt-3 flex items-center gap-1.5 text-xs text-primary/80 hover:text-primary transition-colors"
               >
-                Caliness Sprint kennenlernen <ArrowRight className="w-3 h-3" />
+                Caliness-Sprint kennenlernen <ArrowRight className="w-3 h-3" />
               </button>
             )}
           </div>
