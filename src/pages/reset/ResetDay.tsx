@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
 import { DAY_CONTENT, type GoalKey } from '@/lib/dayContent';
+import { track } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
@@ -11,7 +12,7 @@ export default function ResetDay() {
   const { id } = useParams();
   const dayNum = Number(id);
   const navigate = useNavigate();
-  const { currentDay, getDayData, toggleTask, completedTaskCount, goal } = useReset();
+  const { currentDay, getDayData, toggleTask, completedTaskCount, completeDay, goal } = useReset();
 
   const content = DAY_CONTENT[dayNum - 1];
   const goalBonus = goal ? content?.goalBonus?.[goal as GoalKey] : null;
@@ -35,6 +36,8 @@ export default function ResetDay() {
     if (dayData.completed) {
       navigate('/week');
     } else {
+      completeDay(dayNum, 'good');
+      track('day_completed', { day: dayNum });
       navigate(`/checkin/${dayNum}`);
     }
   };
