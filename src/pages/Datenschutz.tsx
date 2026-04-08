@@ -41,9 +41,10 @@ const Datenschutz = () => {
         <div className="space-y-4">
 
           <Section icon={Mail} title="1. Verantwortlicher">
-            <p><strong className="text-foreground">CALINESS</strong><br />
+            <p><strong className="text-foreground">Caliness Academy</strong><br />
             David Gogulla<br />
-            [Adresse einfügen]<br />
+            Rudolf Harbig Weg 57<br />
+            48149 Münster<br />
             E-Mail: <a href="mailto:hi@caliness.de" className="text-primary hover:underline">hi@caliness.de</a>
             </p>
           </Section>

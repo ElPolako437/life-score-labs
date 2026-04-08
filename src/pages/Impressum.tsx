@@ -32,40 +32,40 @@ const Impressum = () => (
           <section>
             <h2 className="text-lg font-semibold text-foreground mb-3">Angaben zum Unternehmen</h2>
             <p>
-              [Vollständiger Name des Unternehmens / der Person]<br />
-              [Rechtsform, z.B. Einzelunternehmen / GmbH / UG]<br />
-              [Straße und Hausnummer]<br />
-              [PLZ und Ort]<br />
+              Caliness Academy<br />
+              David Gogulla<br />
+              Einzelunternehmen<br />
+              Rudolf Harbig Weg 57<br />
+              48149 Münster<br />
               Deutschland
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-foreground mb-3">Vertreten durch</h2>
-            <p>[Vor- und Nachname des Vertretungsberechtigten]</p>
+            <p>David Gogulla</p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-foreground mb-3">Kontakt</h2>
             <p>
-              Telefon: [Telefonnummer]<br />
-              E-Mail: [E-Mail-Adresse]
+              Telefon: +49 176 85912445<br />
+              E-Mail: hi@caliness.de
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-foreground mb-3">Umsatzsteuer-ID</h2>
             <p>
-              Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:<br />
-              [USt-IdNr. oder „Nicht vorhanden / Kleinunternehmerregelung"]
+              Gemäß § 19 UStG wird keine Umsatzsteuer berechnet (Kleinunternehmerregelung).
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-foreground mb-3">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
             <p>
-              [Vor- und Nachname]<br />
-              [Anschrift]
+              David Gogulla<br />
+              Rudolf Harbig Weg 57, 48149 Münster
             </p>
           </section>
 
@@ -94,11 +94,6 @@ const Impressum = () => (
             </p>
           </section>
 
-          <div className="p-4 rounded-xl bg-muted/30 border border-border/50 text-xs text-muted-foreground mt-8">
-            <strong className="text-foreground">Hinweis:</strong> Felder in [eckigen Klammern] müssen vor Veröffentlichung
-            durch die tatsächlichen Angaben des Betreibers ersetzt werden. Bei Unsicherheiten empfehlen wir die
-            Prüfung durch einen spezialisierten Rechtsanwalt.
-          </div>
         </div>
 
         <div className="text-center mt-12">
