@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
 import { DAY_CONTENT, GOAL_LOCKED_TEASERS, type GoalKey } from '@/lib/dayContent';
 import { Check, ArrowRight, AlertTriangle } from 'lucide-react';
+import InstallPromptSheet from '@/components/InstallPromptSheet';
+import { isMobile, isStandalone } from '@/lib/installPrompt';
+
+const INSTALL_D3_KEY = 'caliness_install_d3_shown';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
@@ -41,6 +45,7 @@ export default function ResetWeek() {
   const allDone = currentDay > 7;
   const [streakAtRisk, setStreakAtRisk] = useState(false);
   const [justCompletedDay, setJustCompletedDay] = useState<number | null>(null);
+  const [showInstall, setShowInstall] = useState(false);
 
   // Count consecutive completed days from day 1
   const streak = (() => {
@@ -64,6 +69,15 @@ export default function ResetWeek() {
       setJustCompletedDay(Number(justDone));
       localStorage.removeItem('caliness_just_completed');
       setTimeout(() => setJustCompletedDay(null), 3500);
+    }
+
+    // Trigger 2: show install prompt again on Day 3+ if not yet standalone
+    if (streak >= 2 && isMobile() && !isStandalone() && !localStorage.getItem(INSTALL_D3_KEY)) {
+      const timer = setTimeout(() => {
+        setShowInstall(true);
+        localStorage.setItem(INSTALL_D3_KEY, '1');
+      }, 2500);
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -198,6 +212,10 @@ export default function ResetWeek() {
           })}
         </div>
       </div>
+
+      {showInstall && (
+        <InstallPromptSheet onDismiss={() => setShowInstall(false)} />
+      )}
     </div>
   );
 }

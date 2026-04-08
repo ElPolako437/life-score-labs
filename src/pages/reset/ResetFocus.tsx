@@ -1,25 +1,11 @@
-import { useState, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useReset } from '@/contexts/ResetContext';
 import { getFocusText } from '@/lib/focusTexts';
-import InstallPromptSheet from '@/components/InstallPromptSheet';
-import { isMobile, isStandalone } from '@/lib/installPrompt';
 
 export default function ResetFocus() {
-  const navigate = useNavigate(); // used for "Los geht's" CTA
-  const { goal, hurdle, homescreenHintShown, markHomescreenHintShown } = useReset();
-  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
-
-  useEffect(() => {
-    if (!homescreenHintShown && isMobile() && !isStandalone()) {
-      const timer = setTimeout(() => {
-        setShowInstallPrompt(true);
-        markHomescreenHintShown();
-      }, 1800);
-      return () => clearTimeout(timer);
-    }
-  }, []);
+  const navigate = useNavigate();
+  const { goal, hurdle } = useReset();
 
   if (!goal || !hurdle) {
     return <Navigate to="/onboarding" replace />;
@@ -62,9 +48,6 @@ export default function ResetFocus() {
         </Button>
       </div>
 
-      {showInstallPrompt && (
-        <InstallPromptSheet onDismiss={() => setShowInstallPrompt(false)} />
-      )}
     </div>
   );
 }

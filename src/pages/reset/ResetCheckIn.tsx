@@ -1,7 +1,10 @@
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { SOFT_CONVERSION, RETENTION_HOOKS } from '@/lib/dayContent';
 import { useReset } from '@/contexts/ResetContext';
+import InstallPromptSheet from '@/components/InstallPromptSheet';
+import { isMobile, isStandalone } from '@/lib/installPrompt';
 import { Check, ArrowRight } from 'lucide-react';
 
 const GOAL_LABEL: Record<string, string> = {
@@ -25,7 +28,18 @@ export default function ResetCheckIn() {
   const { id } = useParams();
   const dayNum = Number(id);
   const navigate = useNavigate();
-  const { goal } = useReset();
+  const { goal, homescreenHintShown, markHomescreenHintShown } = useReset();
+  const [showInstall, setShowInstall] = useState(false);
+
+  useEffect(() => {
+    if (dayNum === 1 && !homescreenHintShown && isMobile() && !isStandalone()) {
+      const timer = setTimeout(() => {
+        setShowInstall(true);
+        markHomescreenHintShown();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const instagramUrl = goal
     ? `https://ig.me/m/caliness_?text=${encodeURIComponent(`SPRINT ${GOAL_LABEL[goal]}`)}`
@@ -113,6 +127,10 @@ export default function ResetCheckIn() {
           {dayNum === 7 ? 'Reset auswerten →' : `Tag ${dayNum + 1} morgen →`}
         </Button>
       </div>
+
+      {showInstall && (
+        <InstallPromptSheet onDismiss={() => setShowInstall(false)} />
+      )}
     </div>
   );
 }

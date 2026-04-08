@@ -57,7 +57,7 @@ export default function InstallPromptSheet({ onDismiss }: Props) {
         </div>
 
         <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-          Öffne die App morgen direkt vom Homescreen — ohne Browser, ohne Ablenkung. So kommst du täglich zurück.
+          Dein Streak wartet morgen früh — füge die App zum Homescreen hinzu und öffne sie in 1 Tap. Kein Browser, kein Ablenkungsrisiko.
         </p>
 
         {ios ? (
