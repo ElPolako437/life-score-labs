@@ -127,7 +127,7 @@ export default function ResetWeek() {
           <div className="mb-6 p-4 rounded-xl border border-primary/30 bg-primary/5 animate-fade-in">
             <p className="text-sm font-semibold text-foreground mb-1">Du hast alle 7 Tage abgeschlossen.</p>
             <p className="text-xs text-muted-foreground/70 mb-4">
-              {reflection ? 'Sieh dir dein persönliches Sprint-Angebot an.' : 'Zeit für die Reflexion — und dein Ergebnis.'}
+              {reflection ? 'Sieh dir dein persönliches Caliness Sprint-Angebot an.' : 'Zeit für die Reflexion — und dein Ergebnis.'}
             </p>
             <Button
               variant="premium"
@@ -135,7 +135,7 @@ export default function ResetWeek() {
               className="w-full gap-2"
               onClick={() => navigate(reflection ? '/next' : '/reflection')}
             >
-              {reflection ? 'Zum Sprint-Angebot' : 'Reset auswerten'}
+              {reflection ? 'Zum Caliness Sprint-Angebot' : 'Reset auswerten'}
               <ArrowRight className="w-3.5 h-3.5" />
             </Button>
           </div>
