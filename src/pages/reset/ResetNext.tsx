@@ -118,9 +118,7 @@ const FAQ = [
 
 export default function ResetNext() {
   const navigate = useNavigate();
-  const { goal, hurdle, reflection, baseline, resetAll, name, getDayData } = useReset();
-  const hasStreakBonus = [1,2,3,4,5,6,7].every(d => getDayData(d).completed);
-  const sprintPrice = hasStreakBonus ? '129€' : '149€';
+  const { goal, hurdle, reflection, baseline, resetAll, name } = useReset();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [shared, setShared] = useState(false);
 
@@ -428,17 +426,6 @@ export default function ResetNext() {
           </p>
         </div>
 
-        {/* Streak bonus banner */}
-        {hasStreakBonus && (
-          <div className="p-3 rounded-xl border border-primary/30 bg-primary/8 mb-4 flex items-center gap-3 animate-fade-in">
-            <span className="text-lg shrink-0">🏆</span>
-            <div>
-              <p className="text-xs font-semibold text-primary">7/7 Streak — du bekommst 20€ Rabatt</p>
-              <p className="text-xs text-muted-foreground/60 mt-0.5">Dein Sprint-Preis: <span className="line-through text-muted-foreground/40">149€</span> <span className="text-primary font-bold">129€</span></p>
-            </div>
-          </div>
-        )}
-
         {/* Primary CTA — WhatsApp (more reliable deep link) */}
         <button
           onClick={() => handleCta('whatsapp')}
@@ -450,8 +437,8 @@ export default function ResetNext() {
           </svg>
           {ctaLabel} — per WhatsApp
         </button>
-        <p className="text-xs text-muted-foreground/40 text-center mb-1">Einmalig · {sprintPrice} · kein Abo · keine Bindung</p>
-        <p className="text-xs text-muted-foreground/30 text-center mb-4">= {hasStreakBonus ? '9,21€' : '10,64€'} pro Tag · weniger als ein Gym-Monat</p>
+        <p className="text-xs text-muted-foreground/40 text-center mb-1">Einmalig · 149€ · kein Abo · keine Bindung</p>
+        <p className="text-xs text-muted-foreground/30 text-center mb-4">= 10,64€ pro Tag · weniger als ein Gym-Monat</p>
 
         {/* Secondary CTA — Instagram DM */}
         <button
@@ -497,8 +484,8 @@ export default function ResetNext() {
           </svg>
           Ich bin dabei — Caliness-Sprint starten
         </button>
-        <p className="text-xs text-muted-foreground/40 text-center mb-1">Einmalig · {sprintPrice} · kein Abo · keine Bindung</p>
-        <p className="text-xs text-muted-foreground/30 text-center mb-3">= {hasStreakBonus ? '9,21€' : '10,64€'} pro Tag · weniger als ein Gym-Monat</p>
+        <p className="text-xs text-muted-foreground/40 text-center mb-1">Einmalig · 149€ · kein Abo · keine Bindung</p>
+        <p className="text-xs text-muted-foreground/30 text-center mb-3">= 10,64€ pro Tag · weniger als ein Gym-Monat</p>
 
         {/* Guarantee badge */}
         <div className="flex items-center justify-center gap-2 mb-8">

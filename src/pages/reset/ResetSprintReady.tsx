@@ -16,10 +16,8 @@ const DIMS = ['energy', 'sleep', 'calm', 'eating', 'body'] as const;
 
 export default function ResetSprintReady() {
   const navigate = useNavigate();
-  const { name, reflection, baseline, getDayData } = useReset();
+  const { name, reflection, baseline } = useReset();
   const [shared, setShared] = useState(false);
-
-  const hasStreakBonus = [1,2,3,4,5,6,7].every(d => getDayData(d).completed);
 
   const handleShare = async () => {
     const lines = reflection ? [
@@ -80,17 +78,6 @@ export default function ResetSprintReady() {
         <p className="text-sm text-muted-foreground/80 leading-relaxed mb-6">
           Das machen weniger als 20% aller, die anfangen. Was du jetzt weißt, haben die meisten noch nie ausprobiert.
         </p>
-
-        {/* 7/7 Streak Reward */}
-        {hasStreakBonus && (
-          <div className="p-3 rounded-xl border border-primary/30 bg-primary/8 mb-6 flex items-center gap-3 text-left animate-scale-in">
-            <span className="text-xl shrink-0">🏆</span>
-            <div>
-              <p className="text-xs font-bold text-primary">7/7 — kein einziger Tag ausgelassen.</p>
-              <p className="text-xs text-muted-foreground/60 mt-0.5">Dafür bekommst du 20€ Rabatt auf den Caliness-Sprint: <span className="text-primary font-semibold">129€ statt 149€</span></p>
-            </div>
-          </div>
-        )}
 
         {/* Vorher / Nachher summary — only if baseline exists */}
         {reflection && baseline && improvedDims.length > 0 && (
