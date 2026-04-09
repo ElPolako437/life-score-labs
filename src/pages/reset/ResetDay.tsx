@@ -6,7 +6,6 @@ import { track } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -125,26 +124,11 @@ export default function ResetDay() {
           <p className="text-sm text-foreground/90 leading-relaxed">{content.sofortTipp}</p>
         </div>
 
-        {/* Insight — title always visible, body expandable */}
-        {(() => {
-          const colonIdx = content.insight.indexOf(':');
-          const insightTitle = colonIdx > -1 ? content.insight.slice(0, colonIdx) : content.insight;
-          const insightBody = colonIdx > -1 ? content.insight.slice(colonIdx + 1).trim() : '';
-          return (
-            <Accordion type="single" collapsible className="mb-8">
-              <AccordionItem value="why" className="border-border/40">
-                <AccordionTrigger className="text-sm text-foreground font-medium hover:text-foreground py-3 text-left">
-                  {insightTitle}
-                </AccordionTrigger>
-                {insightBody && (
-                  <AccordionContent className="text-sm text-muted-foreground/80 leading-relaxed pb-4">
-                    {insightBody}
-                  </AccordionContent>
-                )}
-              </AccordionItem>
-            </Accordion>
-          );
-        })()}
+        {/* Insight — always fully visible */}
+        <div className="mb-8 p-4 rounded-xl border border-border/30 bg-card/50">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Warum das funktioniert</p>
+          <p className="text-sm text-foreground/85 leading-relaxed">{content.insight}</p>
+        </div>
 
         {/* CTA */}
         <Button

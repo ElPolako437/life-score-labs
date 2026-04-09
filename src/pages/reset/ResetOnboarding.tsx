@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useReset, type Goal, type Hurdle } from '@/contexts/ResetContext';
 import { cn } from '@/lib/utils';
 import { track } from '@/lib/analytics';
+import { Slider } from '@/components/ui/slider';
 
 const GOALS: { value: Goal; label: string }[] = [
   { value: 'energy', label: 'Mehr Energie im Alltag' },
@@ -19,12 +20,23 @@ const HURDLES: { value: Hurdle; label: string }[] = [
   { value: 'evening', label: 'Abends kippt es' },
 ];
 
+const BASELINE_DIMS = [
+  { key: 'energy', label: 'Energie' },
+  { key: 'sleep', label: 'Schlaf' },
+  { key: 'calm', label: 'Innere Ruhe' },
+  { key: 'eating', label: 'Essverhalten' },
+  { key: 'body', label: 'Körpergefühl' },
+] as const;
+
 export default function ResetOnboarding() {
   const navigate = useNavigate();
-  const { setGoal, setHurdle } = useReset();
+  const { setGoal, setHurdle, setBaseline } = useReset();
   const [step, setStep] = useState(0);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [selectedHurdle, setSelectedHurdle] = useState<Hurdle | null>(null);
+  const [baselineValues, setBaselineValues] = useState<Record<string, number>>({
+    energy: 2, sleep: 2, calm: 2, eating: 2, body: 2,
+  });
 
   const handleGoalSelect = (goal: Goal) => {
     setSelectedGoal(goal);
@@ -36,10 +48,16 @@ export default function ResetOnboarding() {
     setSelectedHurdle(hurdle);
     setHurdle(hurdle);
     track('onboarding_complete', { goal: selectedGoal, hurdle });
-    setTimeout(() => navigate('/focus'), 160);
+    setTimeout(() => setStep(2), 160);
   };
 
-  const progress = ((step + 1) / 2) * 100;
+  const handleBaselineSubmit = () => {
+    setBaseline(baselineValues as any);
+    track('baseline_captured', baselineValues);
+    navigate('/focus');
+  };
+
+  const progress = ((step + 1) / 3) * 100;
 
   return (
     <div className="min-h-screen bg-background flex flex-col px-6 py-8">
@@ -52,7 +70,7 @@ export default function ResetOnboarding() {
       </div>
 
       <div className="flex-1 flex flex-col animate-fade-in max-w-sm mx-auto w-full">
-        {step === 0 ? (
+        {step === 0 && (
           <>
             <h2 className="font-outfit text-2xl font-bold text-foreground mb-2">
               Was willst du gerade am meisten verändern?
@@ -75,7 +93,9 @@ export default function ResetOnboarding() {
               ))}
             </div>
           </>
-        ) : (
+        )}
+
+        {step === 1 && (
           <>
             <h2 className="font-outfit text-2xl font-bold text-foreground mb-2">
               Was hält dich aktuell am meisten zurück?
@@ -100,9 +120,50 @@ export default function ResetOnboarding() {
           </>
         )}
 
-        <p className="text-xs text-muted-foreground/40 text-center pt-6 pb-4">
-          Tippe eine Option an — es geht automatisch weiter
-        </p>
+        {step === 2 && (
+          <>
+            <h2 className="font-outfit text-2xl font-bold text-foreground mb-2">
+              Wo stehst du heute?
+            </h2>
+            <p className="text-muted-foreground text-sm mb-6">
+              Dein Ausgangswert — nach 7 Tagen vergleichen wir.
+            </p>
+            <div className="space-y-5 mb-8">
+              {BASELINE_DIMS.map(d => (
+                <div key={d.key}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-foreground font-medium">{d.label}</span>
+                    <span className="text-sm text-primary font-bold">{baselineValues[d.key]}/5</span>
+                  </div>
+                  <Slider
+                    min={1}
+                    max={5}
+                    step={1}
+                    value={[baselineValues[d.key]]}
+                    onValueChange={([v]) => setBaselineValues(prev => ({ ...prev, [d.key]: v }))}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between mb-8">
+              <span className="text-[11px] text-muted-foreground/40">Sehr schlecht</span>
+              <span className="text-[11px] text-muted-foreground/40">Sehr gut</span>
+            </div>
+            <button
+              onClick={handleBaselineSubmit}
+              className="w-full min-h-[48px] rounded-xl bg-primary text-primary-foreground font-semibold text-sm transition-all hover:opacity-90 active:scale-[0.98]"
+              style={{ boxShadow: '0 0 20px hsl(142 76% 46% / 0.3)' }}
+            >
+              Reset starten →
+            </button>
+          </>
+        )}
+
+        {step < 2 && (
+          <p className="text-xs text-muted-foreground/40 text-center pt-6 pb-4">
+            Tippe eine Option an — es geht automatisch weiter
+          </p>
+        )}
       </div>
     </div>
   );

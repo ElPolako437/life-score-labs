@@ -12,6 +12,14 @@ export interface DayData {
   completed: boolean;
 }
 
+export interface BaselineData {
+  energy: number;
+  sleep: number;
+  calm: number;
+  eating: number;
+  body: number;
+}
+
 export interface ReflectionData {
   energy: number;
   sleep: number;
@@ -29,6 +37,7 @@ interface ResetState {
   hurdle: Hurdle | null;
   currentDay: number;
   days: Record<string, DayData>;
+  baseline: BaselineData | null;
   reflection: ReflectionData | null;
   homescreenHintShown: boolean;
 }
@@ -38,6 +47,7 @@ interface ResetContextValue extends ResetState {
   setName: (name: string) => void;
   setGoal: (goal: Goal) => void;
   setHurdle: (hurdle: Hurdle) => void;
+  setBaseline: (data: BaselineData) => void;
   toggleTask: (day: number, taskIndex: number) => void;
   completeDay: (day: number, rating: Rating, note?: string) => void;
   setReflection: (data: ReflectionData) => void;
@@ -72,6 +82,7 @@ function loadState(): ResetState {
     hurdle: null,
     currentDay: 1,
     days: {},
+    baseline: null,
     reflection: null,
     homescreenHintShown: false,
   };
@@ -104,6 +115,10 @@ export function ResetProvider({ children }: { children: ReactNode }) {
 
   const setHurdle = useCallback((hurdle: Hurdle) => {
     setState(s => ({ ...s, hurdle }));
+  }, []);
+
+  const setBaseline = useCallback((data: BaselineData) => {
+    setState(s => ({ ...s, baseline: data }));
   }, []);
 
   const toggleTask = useCallback((day: number, taskIndex: number) => {
@@ -150,6 +165,7 @@ export function ResetProvider({ children }: { children: ReactNode }) {
       hurdle: null,
       currentDay: 1,
       days: {},
+      baseline: null,
       reflection: null,
       homescreenHintShown: false,
     };
@@ -174,6 +190,7 @@ export function ResetProvider({ children }: { children: ReactNode }) {
         setName,
         setGoal,
         setHurdle,
+        setBaseline,
         toggleTask,
         completeDay,
         setReflection,
@@ -190,9 +207,9 @@ export function ResetProvider({ children }: { children: ReactNode }) {
 
 const FALLBACK: ResetContextValue = {
   email: null, name: null, goal: null, hurdle: null, currentDay: 1,
-  days: {}, reflection: null, homescreenHintShown: false,
+  days: {}, baseline: null, reflection: null, homescreenHintShown: false,
   setEmail: () => {}, setName: () => {}, setGoal: () => {}, setHurdle: () => {},
-  toggleTask: () => {}, completeDay: () => {}, setReflection: () => {},
+  setBaseline: () => {}, toggleTask: () => {}, completeDay: () => {}, setReflection: () => {},
   markHomescreenHintShown: () => {}, resetAll: () => {},
   getDayData: (day: number) => getDefaultDay(day),
   completedTaskCount: () => 0,

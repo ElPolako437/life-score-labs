@@ -2,9 +2,26 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useReset } from '@/contexts/ResetContext';
 import type { Goal, Hurdle } from '@/contexts/ResetContext';
-import { ArrowRight, ChevronDown, Share2, Check } from 'lucide-react';
+import { ArrowRight, ChevronDown, Share2, Check, TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 import { track } from '@/lib/analytics';
+
+const MONTHS_DE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+
+function getNextSprintDate(): string {
+  const now = new Date();
+  const day = now.getDate();
+  const month = now.getMonth();
+  const year = now.getFullYear();
+  // Always show a date ~2-3 weeks out, snapped to 1st or 15th
+  if (day < 15) {
+    return `15. ${MONTHS_DE[month]}`;
+  } else {
+    const nextMonth = month === 11 ? 0 : month + 1;
+    const nextYear = month === 11 ? year + 1 : year;
+    return `1. ${MONTHS_DE[nextMonth]}${nextYear !== year ? ` ${nextYear}` : ''}`;
+  }
+}
 
 const INSTAGRAM_DM_URL = 'https://ig.me/m/caliness_?text=CALINESS+SPRINT';
 
@@ -93,7 +110,7 @@ const FAQ = [
 
 export default function ResetNext() {
   const navigate = useNavigate();
-  const { goal, hurdle, reflection, resetAll, name } = useReset();
+  const { goal, hurdle, reflection, baseline, resetAll, name } = useReset();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [shared, setShared] = useState(false);
 
@@ -193,11 +210,19 @@ export default function ResetNext() {
           className="w-10 h-10 object-contain opacity-40 mx-auto mb-8"
         />
 
-        {/* Reflection result summary */}
+        {/* Reflection result summary with optional Vorher/Nachher */}
         {reflection && (
           <div className="mb-8 p-4 rounded-xl border border-border/40 bg-card/60">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Dein Reset-Ergebnis</p>
+              <div className="flex items-center gap-2">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Dein Reset-Ergebnis</p>
+                {baseline && (
+                  <div className="flex items-center gap-1 text-[10px] text-primary/70">
+                    <TrendingUp className="w-3 h-3" />
+                    <span>Vorher / Nachher</span>
+                  </div>
+                )}
+              </div>
               <button
                 onClick={handleShare}
                 className="flex items-center gap-1.5 text-xs text-muted-foreground/60 hover:text-primary transition-colors"
@@ -206,24 +231,46 @@ export default function ResetNext() {
                 {shared ? 'Kopiert!' : 'Teilen'}
               </button>
             </div>
-            <div className="space-y-2.5">
+            <div className="space-y-3">
               {(['energy', 'sleep', 'calm', 'eating', 'body'] as const).map(key => {
                 const val = reflection[key as keyof typeof reflection] as number;
+                const baseVal = baseline ? (baseline as Record<string, number>)[key] : null;
+                const diff = baseVal != null ? val - baseVal : null;
                 const isStrong = val >= 4;
                 const isWeak = val <= 2;
                 return (
                   <div key={key}>
                     <div className="flex justify-between items-center mb-1">
-                      <span className={`text-xs ${isStrong ? 'text-primary font-semibold' : isWeak ? 'text-foreground/50' : 'text-muted-foreground'}`}>
-                        {DIMENSION_LABELS[key]}
-                      </span>
-                      <span className={`text-xs font-bold ${isStrong ? 'text-primary' : isWeak ? 'text-foreground/40' : 'text-muted-foreground'}`}>
-                        {val}/5
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className={`text-xs ${isStrong ? 'text-primary font-semibold' : isWeak ? 'text-foreground/50' : 'text-muted-foreground'}`}>
+                          {DIMENSION_LABELS[key]}
+                        </span>
+                        {diff != null && diff !== 0 && (
+                          <span className={`text-[10px] font-bold px-1 py-0.5 rounded ${diff > 0 ? 'text-primary bg-primary/10' : 'text-red-400/70 bg-red-400/10'}`}>
+                            {diff > 0 ? `+${diff}` : diff}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {baseVal != null && (
+                          <span className="text-[10px] text-muted-foreground/35">{baseVal}/5 →</span>
+                        )}
+                        <span className={`text-xs font-bold ${isStrong ? 'text-primary' : isWeak ? 'text-foreground/40' : 'text-muted-foreground'}`}>
+                          {val}/5
+                        </span>
+                      </div>
                     </div>
-                    <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
+                    <div className="relative h-1.5 bg-secondary rounded-full overflow-hidden">
+                      {/* Baseline bar (ghosted) */}
+                      {baseVal != null && (
+                        <div
+                          className="absolute h-full rounded-full bg-foreground/15"
+                          style={{ width: `${(baseVal / 5) * 100}%` }}
+                        />
+                      )}
+                      {/* Current bar */}
                       <div
-                        className={`h-full rounded-full transition-all duration-500 ${isStrong ? 'bg-primary' : isWeak ? 'bg-foreground/20' : 'bg-foreground/40'}`}
+                        className={`absolute h-full rounded-full transition-all duration-700 ${isStrong ? 'bg-primary' : isWeak ? 'bg-foreground/25' : 'bg-foreground/50'}`}
                         style={{ width: `${(val / 5) * 100}%` }}
                       />
                     </div>
@@ -352,12 +399,9 @@ export default function ResetNext() {
           </p>
         </div>
 
-        {/* Quantified scarcity with date + 48h urgency */}
-        <p className="text-xs text-muted-foreground/50 text-center mb-1">
-          Nächste Aufnahme: <span className="text-foreground/70 font-medium">15. Mai</span> — maximal 10 Plätze pro Monat.
-        </p>
-        <p className="text-xs text-primary/60 text-center font-medium mb-3">
-          Dein Platz ist für 48h für dich reserviert.
+        {/* Quantified scarcity with dynamic date */}
+        <p className="text-xs text-muted-foreground/50 text-center mb-3">
+          Nächste Aufnahme: <span className="text-foreground/70 font-medium">{getNextSprintDate()}</span> — maximal 10 Plätze pro Monat.
         </p>
 
         {/* Cost of inaction */}

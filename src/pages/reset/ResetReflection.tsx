@@ -18,10 +18,10 @@ const DIMENSIONS = [
 
 export default function ResetReflection() {
   const navigate = useNavigate();
-  const { setReflection, name } = useReset();
+  const { setReflection, name, baseline } = useReset();
 
   const [values, setValues] = useState<Record<string, number>>({
-    energy: 1, sleep: 1, calm: 1, eating: 1, body: 1,
+    energy: 3, sleep: 3, calm: 3, eating: 3, body: 3,
   });
   const [easiest, setEasiest] = useState<string | null>(null);
   const [hardest, setHardest] = useState<string | null>(null);
@@ -50,21 +50,43 @@ export default function ResetReflection() {
 
         {/* Sliders */}
         <div className="space-y-6 mb-4">
-          {DIMENSIONS.map(d => (
-            <div key={d.key}>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-foreground font-medium">{d.label}</span>
-                <span className="text-sm text-primary font-bold">{values[d.key]}/5</span>
+          {DIMENSIONS.map(d => {
+            const baseVal = baseline ? (baseline as Record<string, number>)[d.key] : null;
+            const currentVal = values[d.key];
+            const diff = baseVal != null ? currentVal - baseVal : null;
+            return (
+              <div key={d.key}>
+                <div className="flex justify-between items-center mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-foreground font-medium">{d.label}</span>
+                    {diff != null && diff !== 0 && (
+                      <span className={cn(
+                        'text-[11px] font-semibold px-1.5 py-0.5 rounded-full',
+                        diff > 0
+                          ? 'text-primary bg-primary/10'
+                          : 'text-red-400/80 bg-red-400/10'
+                      )}>
+                        {diff > 0 ? `+${diff}` : diff}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {baseVal != null && (
+                      <span className="text-[11px] text-muted-foreground/40">Start: {baseVal}/5</span>
+                    )}
+                    <span className="text-sm text-primary font-bold">{currentVal}/5</span>
+                  </div>
+                </div>
+                <Slider
+                  min={1}
+                  max={5}
+                  step={1}
+                  value={[values[d.key]]}
+                  onValueChange={([v]) => setValues(prev => ({ ...prev, [d.key]: v }))}
+                />
               </div>
-              <Slider
-                min={1}
-                max={5}
-                step={1}
-                value={[values[d.key]]}
-                onValueChange={([v]) => setValues(prev => ({ ...prev, [d.key]: v }))}
-              />
-            </div>
-          ))}
+            );
+          })}
         </div>
         <div className="flex justify-between mb-10">
           <span className="text-2xs text-muted-foreground/40">Hat sich kaum verändert</span>
