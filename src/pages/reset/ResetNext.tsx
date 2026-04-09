@@ -96,7 +96,7 @@ const BENEFITS = [
 const FAQ = [
   {
     q: 'Was kostet der Caliness-Sprint?',
-    a: 'Der Caliness-Sprint kostet 149€ — einmalig, kein Abo. Dafür bekommst du einen individuellen Plan und 2 Wochen persönliche Begleitung durch David oder Sarah.',
+    a: 'Der Caliness-Sprint startet ab 149€ — einmalig, kein Abo. Dafür bekommst du einen individuellen Plan und 2 Wochen persönliche Begleitung durch David oder Sarah.',
   },
   {
     q: 'Was wenn der Sprint nichts bringt?',
@@ -437,7 +437,7 @@ export default function ResetNext() {
           </svg>
           {ctaLabel} — per WhatsApp
         </button>
-        <p className="text-xs text-muted-foreground/40 text-center mb-1">Einmalig · 149€ · kein Abo · keine Bindung</p>
+        <p className="text-xs text-muted-foreground/40 text-center mb-1">Einmalig · ab 149€ · kein Abo · keine Bindung</p>
 
         {/* Secondary CTA — Instagram DM */}
         <button
@@ -483,7 +483,7 @@ export default function ResetNext() {
           </svg>
           Ich bin dabei — Caliness-Sprint starten
         </button>
-        <p className="text-xs text-muted-foreground/40 text-center mb-1">Einmalig · 149€ · kein Abo · keine Bindung</p>
+        <p className="text-xs text-muted-foreground/40 text-center mb-1">Einmalig · ab 149€ · kein Abo · keine Bindung</p>
 
         {/* Guarantee badge */}
         <div className="flex items-center justify-center gap-2 mb-8">
