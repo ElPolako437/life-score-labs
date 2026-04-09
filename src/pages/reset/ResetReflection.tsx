@@ -35,7 +35,7 @@ export default function ResetReflection() {
     };
     setReflection(data);
     track('reflection_submitted', { ...values, hardest, easiest });
-    navigate('/next');
+    navigate('/sprint-ready');
   };
 
   return (

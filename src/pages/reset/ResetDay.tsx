@@ -45,6 +45,40 @@ export default function ResetDay() {
     return null;
   }
 
+  // Time-gate: only lock uncompleted days after a previous day was just finished
+  const prevDayData = dayNum > 1 ? getDayData(dayNum - 1) : null;
+  const prevCompletedAt = prevDayData?.completedAt ?? null;
+  const hoursSincePrev = prevCompletedAt ? (Date.now() - prevCompletedAt) / (1000 * 60 * 60) : null;
+  const hoursUntilUnlock = hoursSincePrev != null ? Math.max(0, Math.ceil(20 - hoursSincePrev)) : null;
+  const isTimeLocked = !dayData.completed && dayNum > 1 && hoursUntilUnlock != null && hoursUntilUnlock > 0;
+
+  if (isTimeLocked) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 text-center">
+        <div className="max-w-sm mx-auto w-full animate-fade-in">
+          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+            <span className="text-2xl">🔒</span>
+          </div>
+          <h2 className="font-outfit text-xl font-bold text-foreground mb-2">Tag {dayNum} öffnet bald.</h2>
+          <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+            {hoursUntilUnlock <= 1
+              ? 'Noch weniger als eine Stunde — komm gleich wieder.'
+              : `In ca. ${hoursUntilUnlock} Stunden ist Tag ${dayNum} bereit für dich.`}
+          </p>
+          <p className="text-xs text-muted-foreground/40 mb-8">
+            Der Reset funktioniert, weil dein Körper Zeit braucht, um zu adaptieren. Ein Tag, ein Schritt.
+          </p>
+          <button
+            onClick={() => navigate('/week')}
+            className="text-sm text-primary/70 hover:text-primary transition-colors"
+          >
+            ← Zurück zur Übersicht
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const handleComplete = () => {
     if (dayData.completed) {
       navigate('/week');

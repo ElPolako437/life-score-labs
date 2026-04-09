@@ -134,7 +134,7 @@ export default function ResetWeek() {
               variant="premium"
               size="sm"
               className="w-full gap-2"
-              onClick={() => navigate(reflection ? '/next' : '/reflection')}
+              onClick={() => navigate(reflection ? '/sprint-ready' : '/reflection')}
             >
               {reflection ? 'Zum Caliness-Sprint-Angebot' : 'Reset auswerten'}
               <ArrowRight className="w-3.5 h-3.5" />

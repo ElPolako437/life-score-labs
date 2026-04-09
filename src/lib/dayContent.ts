@@ -206,10 +206,14 @@ export const GOAL_LOCKED_TEASERS: Record<GoalKey, Record<number, string>> = {
   },
 };
 
-// Retention hooks for days 1–2: tease next day's insight to pull users back
+// Retention hooks for days 1–6: tease next day's insight to pull users back
 export const RETENTION_HOOKS: Record<number, string> = {
   1: 'Morgen: Warum Snacking kein Hunger-Problem ist — und wie zwei Mahlzeiten mehr verändern als jede Diät.',
   2: 'Morgen: Wie 15 Minuten nach dem Essen deinen Blutzucker um bis zu 30% senken können. Effektiver als jedes Supplement.',
+  3: 'Morgen: Warum dein Körper nicht im Schlaf regeneriert — sondern im Rhythmus. Und was das für deinen Alltag bedeutet.',
+  4: 'Morgen: Das Abend-Problem ist kein Abend-Problem. Der Grund, warum der Abend kippt, liegt meist 6 Stunden früher.',
+  5: 'Morgen: Warum weniger Entscheidungen direkt weniger Hunger bedeuten — und wie du das für dich nutzt.',
+  6: 'Morgen: Dein letzter Tag. Was bleibt, wenn der Reset endet — und wie du entscheidest, was als nächstes kommt.',
 };
 
 export interface SoftConversionEntry {

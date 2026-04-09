@@ -12,6 +12,7 @@ import ResetWeek from "./pages/reset/ResetWeek";
 import ResetDay from "./pages/reset/ResetDay";
 import ResetCheckIn from "./pages/reset/ResetCheckIn";
 import ResetReflection from "./pages/reset/ResetReflection";
+import ResetSprintReady from "./pages/reset/ResetSprintReady";
 import ResetNext from "./pages/reset/ResetNext";
 import Datenschutz from "./pages/Datenschutz";
 import Impressum from "./pages/Impressum";
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/day/:id" element={<ResetDay />} />
           <Route path="/checkin/:id" element={<ResetCheckIn />} />
           <Route path="/reflection" element={<ResetReflection />} />
+          <Route path="/sprint-ready" element={<ResetSprintReady />} />
           <Route path="/next" element={<ResetNext />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/datenschutz" element={<Datenschutz />} />

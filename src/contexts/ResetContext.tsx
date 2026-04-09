@@ -10,6 +10,7 @@ export interface DayData {
   rating: Rating | null;
   note: string | null;
   completed: boolean;
+  completedAt: number | null;
 }
 
 export interface BaselineData {
@@ -65,6 +66,7 @@ function getDefaultDay(dayNum: number): DayData {
     rating: null,
     note: null,
     completed: false,
+    completedAt: null,
   };
 }
 
@@ -143,7 +145,7 @@ export function ResetProvider({ children }: { children: ReactNode }) {
         currentDay: Math.max(s.currentDay, day + 1),
         days: {
           ...s.days,
-          [dayKey]: { ...existing, rating, note: note || null, completed: true },
+          [dayKey]: { ...existing, rating, note: note || null, completed: true, completedAt: Date.now() },
         },
       };
     });
