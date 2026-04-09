@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Share2, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 
 const DIMENSION_LABELS: Record<string, string> = {
   energy: 'Energie',
@@ -15,7 +16,31 @@ const DIMS = ['energy', 'sleep', 'calm', 'eating', 'body'] as const;
 
 export default function ResetSprintReady() {
   const navigate = useNavigate();
-  const { name, reflection, baseline } = useReset();
+  const { name, reflection, baseline, getDayData } = useReset();
+  const [shared, setShared] = useState(false);
+
+  const hasStreakBonus = [1,2,3,4,5,6,7].every(d => getDayData(d).completed);
+
+  const handleShare = async () => {
+    const lines = reflection ? [
+      '🎯 Mein CALINESS 7-Tage Reset Ergebnis:',
+      '',
+      `Energie: ${reflection.energy}/5`,
+      `Schlafqualität: ${reflection.sleep}/5`,
+      `Innere Ruhe: ${reflection.calm}/5`,
+      `Essverhalten: ${reflection.eating}/5`,
+      `Körpergefühl: ${reflection.body}/5`,
+      '',
+      '7 Tage · täglich ~10 Minuten · kostenlos',
+      'caliness.de',
+    ].join('\n') : '7-Tage Reset von CALINESS — caliness.de';
+    try {
+      if (navigator.share) { await navigator.share({ text: lines }); }
+      else { await navigator.clipboard.writeText(lines); }
+      setShared(true);
+      setTimeout(() => setShared(false), 2500);
+    } catch {}
+  };
 
   // Compute total improvement if baseline exists
   const totalImprovement = (() => {
@@ -52,9 +77,20 @@ export default function ResetSprintReady() {
           <span className="text-primary">Du hast es durchgezogen.</span>
         </h1>
 
-        <p className="text-sm text-muted-foreground/80 leading-relaxed mb-8">
+        <p className="text-sm text-muted-foreground/80 leading-relaxed mb-6">
           Das machen weniger als 20% aller, die anfangen. Was du jetzt weißt, haben die meisten noch nie ausprobiert.
         </p>
+
+        {/* 7/7 Streak Reward */}
+        {hasStreakBonus && (
+          <div className="p-3 rounded-xl border border-primary/30 bg-primary/8 mb-6 flex items-center gap-3 text-left animate-scale-in">
+            <span className="text-xl shrink-0">🏆</span>
+            <div>
+              <p className="text-xs font-bold text-primary">7/7 — kein einziger Tag ausgelassen.</p>
+              <p className="text-xs text-muted-foreground/60 mt-0.5">Dafür bekommst du 20€ Rabatt auf den Caliness-Sprint: <span className="text-primary font-semibold">129€ statt 149€</span></p>
+            </div>
+          </div>
+        )}
 
         {/* Vorher / Nachher summary — only if baseline exists */}
         {reflection && baseline && improvedDims.length > 0 && (
@@ -100,16 +136,25 @@ export default function ResetSprintReady() {
         <Button
           variant="premium"
           size="lg"
-          className="w-full min-h-[52px] text-base gap-2"
+          className="w-full min-h-[52px] text-base gap-2 mb-4"
           onClick={() => navigate('/next')}
         >
           Mein persönliches Sprint-Angebot ansehen
           <ArrowRight className="w-4 h-4" />
         </Button>
 
-        <p className="text-xs text-muted-foreground/30 mt-4">
+        <p className="text-xs text-muted-foreground/30 mb-6">
           Kostenlos ansehen — keine Verpflichtung
         </p>
+
+        {/* Share result */}
+        <button
+          onClick={handleShare}
+          className="flex items-center justify-center gap-2 text-xs text-muted-foreground/40 hover:text-muted-foreground/60 transition-colors mx-auto"
+        >
+          {shared ? <Check className="w-3.5 h-3.5 text-primary" /> : <Share2 className="w-3.5 h-3.5" />}
+          {shared ? 'Ergebnis kopiert!' : 'Ergebnis teilen'}
+        </button>
       </div>
     </div>
   );
