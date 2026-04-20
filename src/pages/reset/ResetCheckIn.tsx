@@ -5,7 +5,9 @@ import { SOFT_CONVERSION, RETENTION_HOOKS } from '@/lib/dayContent';
 import { useReset } from '@/contexts/ResetContext';
 import InstallPromptSheet from '@/components/InstallPromptSheet';
 import { isMobile, isStandalone } from '@/lib/installPrompt';
+import { track } from '@/lib/analytics';
 import { Check, ArrowRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const GOAL_LABEL: Record<string, string> = {
   energy: 'mehr Energie',
@@ -28,8 +30,19 @@ export default function ResetCheckIn() {
   const { id } = useParams();
   const dayNum = Number(id);
   const navigate = useNavigate();
-  const { goal, homescreenHintShown, markHomescreenHintShown } = useReset();
+  const {
+    goal,
+    homescreenHintShown,
+    markHomescreenHintShown,
+    midFunnelIntent,
+    setMidFunnelIntent,
+    frictionNote,
+    setFrictionNote,
+  } = useReset();
+
   const [showInstall, setShowInstall] = useState(false);
+  const [localFriction, setLocalFriction] = useState(frictionNote || '');
+  const [frictionSaved, setFrictionSaved] = useState(!!frictionNote);
 
   useEffect(() => {
     if (dayNum === 1 && !homescreenHintShown && isMobile() && !isStandalone()) {
@@ -48,6 +61,18 @@ export default function ResetCheckIn() {
   const conversionEntry = SOFT_CONVERSION[dayNum];
   const retentionHook = RETENTION_HOOKS[dayNum];
 
+  const handleIntent = (intent: 'alone' | 'guided') => {
+    setMidFunnelIntent(intent);
+    track('mid_funnel_intent', { intent, day: dayNum });
+  };
+
+  const handleFrictionSave = () => {
+    if (!localFriction.trim()) return;
+    setFrictionNote(localFriction.trim());
+    setFrictionSaved(true);
+    track('friction_captured', { day: dayNum, length: localFriction.trim().length });
+  };
+
   const handleContinue = () => {
     if (dayNum === 7) {
       navigate('/reflection');
@@ -57,7 +82,7 @@ export default function ResetCheckIn() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 py-10">
       <div className="max-w-sm mx-auto w-full text-center animate-fade-in">
         <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-6 animate-scale-in">
           <Check className="w-8 h-8 text-primary" />
@@ -75,7 +100,7 @@ export default function ResetCheckIn() {
           {dayNum < 7 ? 'Morgen geht es weiter.' : 'Zeit für deine Reflexion.'}
         </p>
 
-        {/* Retention hook (days 1–2) */}
+        {/* Retention hook (days 1–6) */}
         {retentionHook && (
           <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 mb-4 animate-fade-in text-left">
             <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Morgen</p>
@@ -83,7 +108,7 @@ export default function ResetCheckIn() {
           </div>
         )}
 
-        {/* WhatsApp reminder — days 1–2: full card (no competing elements) */}
+        {/* WhatsApp reminder — days 1–2: full card */}
         {dayNum <= 2 && (
           <div className="p-4 rounded-xl border border-border/40 bg-card/60 mb-6 animate-fade-in text-left">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-1.5">Nicht vergessen</p>
@@ -98,6 +123,83 @@ export default function ResetCheckIn() {
               </svg>
               <span className="text-sm font-medium text-[#25D366]">Ja, erinnere mich per WhatsApp</span>
             </button>
+          </div>
+        )}
+
+        {/* TAG 3 — Mid-Funnel Intent Prompt */}
+        {dayNum === 3 && (
+          <div className="p-4 rounded-xl border border-border/40 bg-card/60 mb-6 animate-fade-in text-left">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Ehrliche Frage</p>
+            <p className="text-sm text-foreground/80 mb-4 leading-relaxed">
+              Wie läuft es für dich? Schaffst du das allein oder würdest du dir Begleitung wünschen?
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => handleIntent('alone')}
+                className={cn(
+                  'py-2.5 px-3 rounded-xl border text-xs font-medium transition-all duration-200',
+                  midFunnelIntent === 'alone'
+                    ? 'border-primary bg-primary/10 text-primary'
+                    : 'border-border/50 bg-background text-muted-foreground hover:border-border'
+                )}
+              >
+                Ich schaffe das allein
+              </button>
+              <button
+                onClick={() => handleIntent('guided')}
+                className={cn(
+                  'py-2.5 px-3 rounded-xl border text-xs font-medium transition-all duration-200',
+                  midFunnelIntent === 'guided'
+                    ? 'border-primary bg-primary/10 text-primary'
+                    : 'border-border/50 bg-background text-muted-foreground hover:border-border'
+                )}
+              >
+                Begleitung wäre gut
+              </button>
+            </div>
+            {midFunnelIntent === 'guided' && (
+              <p className="text-xs text-primary/70 mt-3 leading-relaxed animate-fade-in">
+                Genau dafür ist der Caliness-Sprint da — persönliche Begleitung, aufgebaut auf deinem Reset.
+              </p>
+            )}
+            {midFunnelIntent === 'alone' && (
+              <p className="text-xs text-muted-foreground/50 mt-3 leading-relaxed animate-fade-in">
+                Stark. Mach weiter — Tag 4 wird zeigen, ob du recht hast.
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* TAG 4 — Friction Capture */}
+        {dayNum === 4 && (
+          <div className="p-4 rounded-xl border border-border/40 bg-card/60 mb-6 animate-fade-in text-left">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Kurze Frage</p>
+            <p className="text-sm text-foreground/80 mb-3 leading-relaxed">
+              Was fiel dir bisher am schwersten?
+            </p>
+            {!frictionSaved ? (
+              <>
+                <textarea
+                  value={localFriction}
+                  onChange={e => setLocalFriction(e.target.value.slice(0, 300))}
+                  placeholder="Z.B. abends nicht snacken, früh aufstehen, ..."
+                  rows={3}
+                  className="w-full bg-background border border-border/50 rounded-xl px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 resize-none focus:outline-none focus:border-primary/50 transition-colors mb-2"
+                />
+                <button
+                  onClick={handleFrictionSave}
+                  disabled={!localFriction.trim()}
+                  className="text-xs text-primary/70 hover:text-primary transition-colors disabled:opacity-30"
+                >
+                  Speichern →
+                </button>
+              </>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Check className="w-3.5 h-3.5 text-primary" />
+                <p className="text-xs text-primary/70">Gespeichert — wir nehmen das mit in dein Ergebnis.</p>
+              </div>
+            )}
           </div>
         )}
 

@@ -41,6 +41,8 @@ interface ResetState {
   baseline: BaselineData | null;
   reflection: ReflectionData | null;
   homescreenHintShown: boolean;
+  midFunnelIntent: 'alone' | 'guided' | null;
+  frictionNote: string | null;
 }
 
 interface ResetContextValue extends ResetState {
@@ -49,6 +51,8 @@ interface ResetContextValue extends ResetState {
   setGoal: (goal: Goal) => void;
   setHurdle: (hurdle: Hurdle) => void;
   setBaseline: (data: BaselineData) => void;
+  setMidFunnelIntent: (intent: 'alone' | 'guided') => void;
+  setFrictionNote: (note: string) => void;
   toggleTask: (day: number, taskIndex: number) => void;
   completeDay: (day: number, rating: Rating, note?: string) => void;
   setReflection: (data: ReflectionData) => void;
@@ -87,6 +91,8 @@ function loadState(): ResetState {
     baseline: null,
     reflection: null,
     homescreenHintShown: false,
+    midFunnelIntent: null,
+    frictionNote: null,
   };
 }
 
@@ -121,6 +127,14 @@ export function ResetProvider({ children }: { children: ReactNode }) {
 
   const setBaseline = useCallback((data: BaselineData) => {
     setState(s => ({ ...s, baseline: data }));
+  }, []);
+
+  const setMidFunnelIntent = useCallback((intent: 'alone' | 'guided') => {
+    setState(s => ({ ...s, midFunnelIntent: intent }));
+  }, []);
+
+  const setFrictionNote = useCallback((note: string) => {
+    setState(s => ({ ...s, frictionNote: note }));
   }, []);
 
   const toggleTask = useCallback((day: number, taskIndex: number) => {
@@ -170,6 +184,8 @@ export function ResetProvider({ children }: { children: ReactNode }) {
       baseline: null,
       reflection: null,
       homescreenHintShown: false,
+      midFunnelIntent: null,
+      frictionNote: null,
     };
     setState(fresh);
   }, []);
@@ -193,6 +209,8 @@ export function ResetProvider({ children }: { children: ReactNode }) {
         setGoal,
         setHurdle,
         setBaseline,
+        setMidFunnelIntent,
+        setFrictionNote,
         toggleTask,
         completeDay,
         setReflection,
@@ -210,8 +228,10 @@ export function ResetProvider({ children }: { children: ReactNode }) {
 const FALLBACK: ResetContextValue = {
   email: null, name: null, goal: null, hurdle: null, currentDay: 1,
   days: {}, baseline: null, reflection: null, homescreenHintShown: false,
+  midFunnelIntent: null, frictionNote: null,
   setEmail: () => {}, setName: () => {}, setGoal: () => {}, setHurdle: () => {},
-  setBaseline: () => {}, toggleTask: () => {}, completeDay: () => {}, setReflection: () => {},
+  setBaseline: () => {}, setMidFunnelIntent: () => {}, setFrictionNote: () => {},
+  toggleTask: () => {}, completeDay: () => {}, setReflection: () => {},
   markHomescreenHintShown: () => {}, resetAll: () => {},
   getDayData: (day: number) => getDefaultDay(day),
   completedTaskCount: () => 0,

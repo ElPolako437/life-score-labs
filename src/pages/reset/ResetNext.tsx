@@ -118,7 +118,7 @@ const FAQ = [
 
 export default function ResetNext() {
   const navigate = useNavigate();
-  const { goal, hurdle, reflection, baseline, resetAll, name } = useReset();
+  const { goal, hurdle, reflection, baseline, resetAll, name, midFunnelIntent, frictionNote } = useReset();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [shared, setShared] = useState(false);
 
@@ -318,6 +318,33 @@ export default function ResetNext() {
           </div>
         )}
 
+        {/* Mid-funnel intent signal */}
+        {midFunnelIntent === 'guided' && (
+          <div className="p-4 rounded-xl border border-primary/30 bg-primary/5 mb-4 animate-fade-in">
+            <p className="text-sm text-foreground/90 leading-relaxed">
+              An Tag 3 hast du gesagt, dass Begleitung gut wäre. Das war der ehrlichste Moment im gesamten Reset — und genau der Punkt, an dem der Caliness-Sprint ansetzt.
+            </p>
+          </div>
+        )}
+        {midFunnelIntent === 'alone' && (
+          <div className="p-4 rounded-xl border border-border/30 bg-card/50 mb-4 animate-fade-in">
+            <p className="text-sm text-foreground/80 leading-relaxed">
+              Du wolltest es alleine schaffen — und du hast es bis hierhin gebracht. Die Frage ist jetzt: Was passiert in Woche 2, wenn der Reset-Effekt nachlässt und kein externer Rahmen mehr da ist?
+            </p>
+          </div>
+        )}
+
+        {/* Friction note — personalized */}
+        {frictionNote && (
+          <div className="border-l-2 border-primary/50 pl-4 mb-4">
+            <p className="text-xs text-muted-foreground/60 mb-1 uppercase tracking-widest font-semibold">Was du selbst geschrieben hast</p>
+            <p className="text-sm text-foreground/80 italic leading-relaxed">„{frictionNote}"</p>
+            <p className="text-xs text-muted-foreground/50 mt-2 leading-relaxed">
+              Genau das ist der Punkt, den wir im Caliness-Sprint als erstes angehen.
+            </p>
+          </div>
+        )}
+
         <p className="text-sm text-muted-foreground leading-relaxed mb-2 font-medium">
           Du hast jetzt Klarheit. Was dir fehlt, ist ein Plan.
         </p>
@@ -407,10 +434,15 @@ export default function ResetNext() {
           </p>
         </div>
 
-        {/* Quantified scarcity with dynamic date */}
-        <p className="text-xs text-muted-foreground/50 text-center mb-3">
-          Nächste Aufnahme: <span className="text-foreground/70 font-medium">{getNextSprintDate()}</span> — maximal 10 Plätze pro Monat.
-        </p>
+        {/* Scarcity — short-term urgency */}
+        <div className="text-center mb-3">
+          <p className="text-xs text-foreground/70 font-medium">
+            Diese Woche noch <span className="text-primary">3 Plätze</span> frei.
+          </p>
+          <p className="text-xs text-muted-foreground/40 mt-0.5">
+            Nächste Aufnahme: {getNextSprintDate()} — danach wieder Warteliste.
+          </p>
+        </div>
 
         {/* Cost of inaction */}
         <div className="p-3 rounded-xl border border-border/20 bg-card/40 mb-5">
