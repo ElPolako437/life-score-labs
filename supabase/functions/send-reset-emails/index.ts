@@ -14,6 +14,7 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") as s
 // Mail schedule: which days trigger which mail
 const MAIL_SCHEDULE: Record<number, string> = {
   1: "tag-1",
+  3: "tag-3",
   5: "tag-5",
   7: "tag-7",
   9: "tag-9",
@@ -89,10 +90,12 @@ function buildSubject(mailKey: string, vorname: string | null): string {
   const name = vorname ? `, ${vorname}` : "";
   const subjects: Record<string, string> = {
     "tag-1": `Dein Reset beginnt heute${name} — das ist dein erster Schritt`,
+    "tag-3": `Tag 3${name} — wie läuft es bisher?`,
     "tag-5": `Tag 5${name} — du bist auf Kurs`,
     "tag-7": `Tag 7${name} — du hast es durchgezogen`,
     "tag-9": `Wie war dein Reset${name}? Und wie geht es weiter?`,
   };
+
   return subjects[mailKey] ?? `7-Tage Reset – ${mailKey}`;
 }
 
