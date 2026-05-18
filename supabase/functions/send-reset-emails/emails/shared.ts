@@ -1,112 +1,171 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// CALINESS RESET – SHARED EMAIL COMPONENTS
+// CALINESS — PREMIUM EMAIL DESIGN SYSTEM
+// Dark, editorial, conversion-optimized. $100M brand aesthetic.
 // ═══════════════════════════════════════════════════════════════════════════
 
 export const C = {
-  bg: "#080808",
-  accent: "#3DFF6E",
-  white: "#FFFFFF",
-  dim: "rgba(255,255,255,0.60)",
-  muted: "rgba(255,255,255,0.30)",
-  border: "rgba(255,255,255,0.08)",
-  borderAccent: "rgba(61,255,110,0.30)",
-  font: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif",
+  bg:            "#080808",
+  surface:       "#0f0f0f",
+  elevated:      "#151515",
+  accent:        "#3DFF6E",
+  accentGlow:    "rgba(61,255,110,0.12)",
+  accentBorder:  "rgba(61,255,110,0.28)",
+  white:         "#FFFFFF",
+  dim:           "rgba(255,255,255,0.62)",
+  muted:         "rgba(255,255,255,0.32)",
+  faint:         "rgba(255,255,255,0.10)",
+  border:        "rgba(255,255,255,0.07)",
+  font:          "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif",
 };
 
-export function emailHeader(): string {
+// ─── Logo Header ─────────────────────────────────────────────────────────────
+export function emailHeader(tagLabel: string): string {
   return `
   <tr>
-    <td align="center" style="padding:48px 32px 40px;">
-      <img src="https://caliness.academy/logo-white.png" alt="CALINESS" width="110" height="auto"
-        style="display:block;border:0;outline:none;text-decoration:none;max-width:110px;" />
+    <td align="center" style="padding:44px 40px 36px;border-bottom:1px solid ${C.border};">
+      <img
+        src="https://caliness-academy.de/images/caliness-logo-white.png"
+        alt="CALINESS Academy"
+        width="120" height="auto"
+        style="display:block;border:0;outline:none;max-width:120px;opacity:0.92;"
+      />
+      <p style="font-family:${C.font};font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:${C.accent};margin:14px 0 0;">${tagLabel}</p>
     </td>
   </tr>`;
 }
 
-export function eyebrow(text: string): string {
-  return `<p style="font-family:${C.font};font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:${C.accent};margin:0 0 16px;line-height:1;">${text}</p>`;
+// ─── Green accent line ────────────────────────────────────────────────────────
+export function accentLine(): string {
+  return `<table cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px;">
+    <tr>
+      <td width="36" height="2" style="background-color:${C.accent};font-size:0;line-height:0;border-radius:2px;">&nbsp;</td>
+    </tr>
+  </table>`;
 }
 
-export function greenLine(): string {
-  return `<table cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;"><tr><td width="40" height="1" style="background-color:${C.accent};font-size:0;line-height:0;">&nbsp;</td></tr></table>`;
+// ─── Hero headline ────────────────────────────────────────────────────────────
+export function heroHeadline(text: string, size = 40): string {
+  return `<h1 style="font-family:${C.font};font-size:${size}px;font-weight:800;color:${C.white};margin:0 0 22px;line-height:1.12;letter-spacing:-0.8px;">${text}</h1>`;
 }
 
-export function headline(text: string, size = 36): string {
-  return `<h1 style="font-family:${C.font};font-size:${size}px;font-weight:800;color:${C.white};margin:0 0 24px;line-height:1.15;letter-spacing:-0.5px;">${text}</h1>`;
-}
-
+// ─── Sub-headline ─────────────────────────────────────────────────────────────
 export function subHeadline(text: string): string {
-  return `<h2 style="font-family:${C.font};font-size:22px;font-weight:600;color:${C.white};margin:-8px 0 24px;line-height:1.3;letter-spacing:-0.2px;">${text}</h2>`;
+  return `<h2 style="font-family:${C.font};font-size:21px;font-weight:600;color:${C.white};margin:-6px 0 22px;line-height:1.35;letter-spacing:-0.2px;">${text}</h2>`;
 }
 
-export function bodyText(text: string): string {
-  return `<p style="font-family:${C.font};font-size:16px;color:${C.dim};margin:0 0 20px;line-height:1.65;">${text}</p>`;
+// ─── Section label ────────────────────────────────────────────────────────────
+export function sectionLabel(text: string): string {
+  return `<p style="font-family:${C.font};font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:${C.accent};margin:0 0 12px;">${text}</p>`;
 }
 
-export function label(text: string): string {
-  return `<p style="font-family:${C.font};font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${C.white};margin:0 0 14px;">${text}</p>`;
+// ─── Body text ────────────────────────────────────────────────────────────────
+export function bodyText(html: string): string {
+  return `<p style="font-family:${C.font};font-size:16px;color:${C.dim};margin:0 0 20px;line-height:1.72;">${html}</p>`;
 }
 
+// ─── Quote block ─────────────────────────────────────────────────────────────
 export function quoteBlock(text: string): string {
   return `
-  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:28px;">
+  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:4px 0 28px;">
     <tr>
-      <td width="3" style="background-color:${C.accent};border-radius:3px 0 0 3px;font-size:0;">&nbsp;</td>
-      <td style="background-color:rgba(61,255,110,0.04);padding:20px 24px;border-radius:0 8px 8px 0;">
-        <p style="font-family:${C.font};font-size:17px;font-style:italic;color:${C.white};margin:0;line-height:1.6;letter-spacing:-0.1px;">${text}</p>
+      <td width="2" style="background:${C.accent};border-radius:2px;font-size:0;">&nbsp;</td>
+      <td width="16" style="font-size:0;">&nbsp;</td>
+      <td style="background:${C.accentGlow};padding:18px 22px;border-radius:0 10px 10px 0;">
+        <p style="font-family:${C.font};font-size:17px;font-style:italic;color:${C.white};margin:0;line-height:1.65;letter-spacing:-0.1px;">${text}</p>
       </td>
     </tr>
   </table>`;
 }
 
+// ─── Check list ───────────────────────────────────────────────────────────────
 export function checkList(items: string[]): string {
   const rows = items.map(item => `
     <tr>
-      <td width="22" valign="top" style="padding:0 10px 12px 0;font-family:${C.font};font-size:15px;color:${C.accent};line-height:1.65;font-weight:700;">✓</td>
-      <td style="padding:0 0 12px;font-family:${C.font};font-size:15px;color:${C.white};line-height:1.65;">${item}</td>
+      <td width="20" valign="top" style="padding:0 12px 14px 0;font-family:${C.font};font-size:15px;color:${C.accent};font-weight:700;line-height:1.6;">✓</td>
+      <td style="padding:0 0 14px;font-family:${C.font};font-size:15px;color:${C.white};line-height:1.6;">${item}</td>
     </tr>`).join("");
   return `<table cellpadding="0" cellspacing="0" border="0" width="100%">${rows}</table>`;
 }
 
-export function card(content: string, accentBorder = false): string {
-  const border = accentBorder ? C.borderAccent : C.border;
+// ─── Surface card ─────────────────────────────────────────────────────────────
+export function surfaceCard(content: string, accent = false): string {
+  const bg     = accent ? C.accentGlow   : C.surface;
+  const border = accent ? C.accentBorder : C.border;
   return `
-  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:24px;border:1px solid ${border};border-radius:12px;">
+  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:24px;background-color:${bg};border:1px solid ${border};border-radius:12px;">
+    <tr><td style="padding:24px 26px;">${content}</td></tr>
+  </table>`;
+}
+
+// ─── Stat row ─────────────────────────────────────────────────────────────────
+export function statRow(stats: { value: string; label: string }[]): string {
+  const cells = stats.map(s => `
+    <td align="center" style="padding:16px 12px;">
+      <p style="font-family:${C.font};font-size:22px;font-weight:800;color:${C.accent};margin:0 0 4px;letter-spacing:-0.5px;">${s.value}</p>
+      <p style="font-family:${C.font};font-size:11px;color:${C.muted};margin:0;letter-spacing:0.5px;text-transform:uppercase;">${s.label}</p>
+    </td>`).join(`<td width="1" style="background:${C.border};font-size:0;">&nbsp;</td>`);
+
+  return `
+  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:28px;background:${C.surface};border:1px solid ${C.border};border-radius:12px;">
+    <tr>${cells}</tr>
+  </table>`;
+}
+
+// ─── CTA button ───────────────────────────────────────────────────────────────
+export function ctaButton(text: string, url: string, subText?: string): string {
+  return `
+  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:${subText ? "10px" : "28px"};">
     <tr>
-      <td style="padding:24px;">
-        ${content}
+      <td>
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr>
+            <td align="center" style="background-color:${C.accent};border-radius:10px;padding:0;">
+              <a href="${url}" target="_blank" rel="noopener noreferrer"
+                style="display:block;padding:17px 32px;font-family:${C.font};font-size:15px;font-weight:700;color:#080808;text-decoration:none;letter-spacing:-0.1px;">${text}</a>
+            </td>
+          </tr>
+        </table>
+        ${subText ? `<p style="font-family:${C.font};font-size:12px;color:${C.muted};text-align:center;margin:10px 0 18px;">${subText}</p>` : ""}
       </td>
     </tr>
   </table>`;
 }
 
-export function ctaButton(text: string, url: string): string {
+// ─── Text link ────────────────────────────────────────────────────────────────
+export function textLink(text: string, url: string): string {
+  return `<a href="${url}" style="font-family:${C.font};font-size:14px;font-weight:600;color:${C.accent};text-decoration:none;">${text}</a>`;
+}
+
+// ─── Signature ────────────────────────────────────────────────────────────────
+export function signature(name = "David", title = "Caliness Academy"): string {
   return `
-  <table cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:8px;padding-top:24px;border-top:1px solid ${C.border};">
     <tr>
-      <td style="background-color:${C.accent};border-radius:8px;">
-        <a href="${url}" target="_blank" rel="noopener noreferrer"
-          style="display:inline-block;padding:16px 32px;font-family:${C.font};font-size:15px;font-weight:700;color:#080808;text-decoration:none;letter-spacing:-0.1px;">${text}</a>
+      <td>
+        <p style="font-family:${C.font};font-size:15px;color:${C.white};font-weight:600;margin:0 0 2px;">${name}</p>
+        <p style="font-family:${C.font};font-size:13px;color:${C.muted};margin:0;">${title}</p>
       </td>
     </tr>
   </table>`;
 }
 
-export function psText(html: string): string {
-  return `<p style="font-family:${C.font};font-size:13px;color:${C.muted};margin:24px 0 0;line-height:1.65;border-top:1px solid ${C.border};padding-top:20px;">${html}</p>`;
+// ─── PS block ─────────────────────────────────────────────────────────────────
+export function psBlock(html: string): string {
+  return `<p style="font-family:${C.font};font-size:13px;color:${C.muted};margin:20px 0 0;line-height:1.65;">${html}</p>`;
 }
 
+// ─── Warteliste block (in alle außer Tag 9) ───────────────────────────────────
 export function wartelisteBlock(): string {
   return `
   <tr>
-    <td style="padding:0 32px 32px;">
-      <table cellpadding="0" cellspacing="0" border="0" width="100%" style="border:1px solid ${C.border};border-radius:12px;">
+    <td style="padding:0 40px 36px;">
+      <table cellpadding="0" cellspacing="0" border="0" width="100%" style="border:1px solid ${C.border};border-radius:12px;background-color:${C.surface};">
         <tr>
-          <td style="padding:24px;">
-            <p style="font-family:${C.font};font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:${C.accent};margin:0 0 10px;">PS · CALINESS APP</p>
-            <p style="font-family:${C.font};font-size:18px;font-weight:700;color:${C.white};margin:0 0 10px;line-height:1.3;">Bald gibt's CALINESS als App.</p>
-            <p style="font-family:${C.font};font-size:14px;color:${C.dim};margin:0 0 16px;line-height:1.65;">Dein persönliches Longevity-System — täglicher Plan, Score-Tracking, AI-Coach. Beta-Anmelder sichern sich 9€/Monat lifetime statt 20€.</p>
-            <a href="https://caliness.academy/app" style="font-family:${C.font};font-size:14px;font-weight:700;color:${C.accent};text-decoration:none;">Platz auf der Warteliste sichern →</a>
+          <td style="padding:22px 24px;">
+            <p style="font-family:${C.font};font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:${C.accent};margin:0 0 8px;">PS · CALINESS APP</p>
+            <p style="font-family:${C.font};font-size:17px;font-weight:700;color:${C.white};margin:0 0 8px;line-height:1.3;">Bald gibt's CALINESS als App.</p>
+            <p style="font-family:${C.font};font-size:13px;color:${C.dim};margin:0 0 14px;line-height:1.65;">Täglicher Plan, Score-Tracking, AI-Coach. Beta-Anmelder: 9€/Monat lifetime statt 20€.</p>
+            <a href="https://caliness-academy.de/app" style="font-family:${C.font};font-size:13px;font-weight:700;color:${C.accent};text-decoration:none;">Platz sichern →</a>
           </td>
         </tr>
       </table>
@@ -114,25 +173,28 @@ export function wartelisteBlock(): string {
   </tr>`;
 }
 
+// ─── Legal footer ─────────────────────────────────────────────────────────────
 export function emailFooter(): string {
   return `
   <tr>
-    <td style="padding:28px 32px;border-top:1px solid ${C.border};">
-      <p style="font-family:${C.font};font-size:12px;color:${C.muted};margin:0 0 6px;text-align:center;line-height:1.5;">
-        Caliness Academy · hallo@caliness.academy
+    <td style="padding:24px 40px 40px;border-top:1px solid ${C.border};">
+      <p style="font-family:${C.font};font-size:11px;color:${C.muted};margin:0 0 6px;text-align:center;line-height:1.6;">
+        Caliness Academy · David &amp; Sarah · hallo@caliness-academy.de
       </p>
-      <p style="font-family:${C.font};font-size:12px;color:${C.muted};margin:0;text-align:center;line-height:1.5;">
-        <a href="https://caliness.academy/impressum" style="color:${C.muted};text-decoration:underline;">Impressum</a>
+      <p style="font-family:${C.font};font-size:11px;color:${C.faint};margin:0;text-align:center;line-height:1.6;">
+        <a href="https://caliness-academy.de/impressum" style="color:${C.faint};text-decoration:underline;">Impressum</a>
         &nbsp;&middot;&nbsp;
-        <a href="https://caliness.academy/datenschutz" style="color:${C.muted};text-decoration:underline;">Datenschutz</a>
+        <a href="https://caliness-academy.de/datenschutz" style="color:${C.faint};text-decoration:underline;">Datenschutz</a>
         &nbsp;&middot;&nbsp;
-        <a href="https://caliness.academy/abmelden" style="color:${C.muted};text-decoration:underline;">Abmelden</a>
+        <a href="https://caliness-academy.de/abmelden" style="color:${C.faint};text-decoration:underline;">Abmelden</a>
       </p>
     </td>
   </tr>`;
 }
 
+// ─── Email wrapper ────────────────────────────────────────────────────────────
 export function wrapEmail(
+  tagLabel: string,
   bodyRows: string,
   preheader: string,
   includeWarteliste = true,
@@ -146,15 +208,15 @@ export function wrapEmail(
   <meta name="color-scheme" content="dark" />
   <meta name="supported-color-schemes" content="dark" />
   <title>CALINESS Reset</title>
-  <!--[if mso]><style>table{border-collapse:collapse;}a{color:#3DFF6E;}</style><![endif]-->
+  <!--[if mso]><style type="text/css">table{border-collapse:collapse;}a{color:#3DFF6E;}</style><![endif]-->
 </head>
 <body style="margin:0;padding:0;background-color:#080808;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
-  <div style="display:none;max-height:0;overflow:hidden;font-size:1px;color:#080808;">${preheader}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
-  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#080808;">
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;color:#080808;line-height:1px;">${preheader}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
+  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#080808;min-width:320px;">
     <tr>
-      <td align="center" style="padding:40px 16px;">
-        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;">
-          ${emailHeader()}
+      <td align="center" style="padding:32px 12px 48px;">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;background-color:#080808;border:1px solid rgba(255,255,255,0.06);border-radius:16px;overflow:hidden;">
+          ${emailHeader(tagLabel)}
           ${bodyRows}
           ${includeWarteliste ? wartelisteBlock() : ""}
           ${emailFooter()}

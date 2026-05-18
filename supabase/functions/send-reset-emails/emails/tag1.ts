@@ -1,8 +1,13 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// TAG 1 – DEIN START
+// TAG 1 — DEIN START
+// Ziel: Erster Eindruck, Vertrauen aufbauen, App-Öffnung triggern
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { C, eyebrow, greenLine, headline, bodyText, label, quoteBlock, checkList, card, ctaButton, psText, wrapEmail } from "./shared.ts";
+import {
+  C, accentLine, heroHeadline, sectionLabel, bodyText,
+  quoteBlock, checkList, surfaceCard, statRow, ctaButton,
+  signature, psBlock, wrapEmail,
+} from "./shared.ts";
 
 export function renderTag1(
   vorname: string | null,
@@ -12,55 +17,79 @@ export function renderTag1(
 
   const bodyRows = `
   <tr>
-    <td style="padding:0 32px 40px;">
-      ${eyebrow("TAG 1 · DEIN START")}
-      ${greenLine()}
-      ${headline("Heute geht's nicht ums Mehr. Sondern ums Richtige.")}
+    <td style="padding:44px 40px 40px;">
+
+      ${accentLine()}
+      ${heroHeadline("Heute geht's nicht ums Mehr.<br/>Sondern ums Richtige.")}
 
       ${bodyText(`${name},`)}
-      ${bodyText("Die ersten 7 Tage funktionieren anders als alles, was du bisher versucht hast — weil sie nicht auf Disziplin setzen, sondern auf Regulation. Dein System braucht keine Push-Energie. Es braucht Stabilität.")}
+      ${bodyText("Du hast es wahrscheinlich schon mit früher schlafen, weniger Essen, mehr Disziplin versucht. Nichts hat dauerhaft geholfen. Das liegt nicht an dir — es liegt daran, dass das System falsch angesetzt hat.")}
+      ${bodyText("Die nächsten 7 Tage sind anders. Nicht weil sie härter sind. Sondern weil sie <strong style=\"color:${C.white}\">an der richtigen Stelle</strong> ansetzen.")}
 
-      ${quoteBlock("„Stabilität ist kein Stillstand — sie ist die Grundlage."")}
+      ${quoteBlock("„Stabilität ist kein Stillstand — sie ist die Grundlage, auf der alles andere aufbaut."")}
 
-      ${label("Heute — deine 3 Punkte:")}
-      ${card(checkList([
-        "30 Min ruhige Bewegung an der frischen Luft",
-        "2 proteinreiche Mahlzeiten (Frühstück + Abendessen)",
-        "Schlafenszeit festlegen — heute & alle nächsten 6 Tage gleich",
+      ${statRow([
+        { value: "7", label: "Tage" },
+        { value: "~10 Min", label: "täglich" },
+        { value: "200+", label: "Teilnehmer" },
+      ])}
+
+      ${sectionLabel("Deine 3 Aufgaben für heute")}
+      ${surfaceCard(checkList([
+        "<strong style=\"color:${C.white}\">30 Min Bewegung</strong> — ruhig, draußen, ohne Kopfhörer",
+        "<strong style=\"color:${C.white}\">2 proteinreiche Mahlzeiten</strong> — Frühstück und Abendessen",
+        "<strong style=\"color:${C.white}\">Schlafenszeit festlegen</strong> — heute, und die nächsten 6 Tage gleich",
       ]))}
 
-      ${ctaButton("Tag 1 in der App öffnen →", resetAppUrl)}
+      ${ctaButton("Tag 1 jetzt öffnen →", resetAppUrl, "Kein Konto erforderlich · Kostenlos · direkt im Browser")}
 
-      ${psText(`Auf WhatsApp begleite ich dich täglich kurz. Falls du noch nicht eingetragen bist: <a href="https://caliness.academy/whatsapp" style="color:${C.accent};text-decoration:none;">hier eintragen →</a>`)}
+      ${signature("David", "Caliness Academy · hallo@caliness-academy.de")}
+
+      ${psBlock(`Auf WhatsApp begleite ich dich täglich mit einem kurzen Impuls. Falls du noch nicht dabei bist: <a href="https://caliness-academy.de/whatsapp" style="color:${C.accent};text-decoration:none;font-weight:600;">hier eintragen →</a>`)}
+
     </td>
   </tr>`;
 
-  const text = `TAG 1 · DEIN START
-━━━━━━━━━━━━━━━━━━━━━━━
+  const text = `CALINESS ACADEMY — 7-TAGE RESET
+TAG 1 · DEIN START
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Heute geht's nicht ums Mehr. Sondern ums Richtige.
 
 ${name},
 
-Die ersten 7 Tage funktionieren anders als alles, was du bisher versucht hast — weil sie nicht auf Disziplin setzen, sondern auf Regulation. Dein System braucht keine Push-Energie. Es braucht Stabilität.
+Du hast es wahrscheinlich schon mit früher schlafen, weniger Essen, mehr Disziplin versucht. Nichts hat dauerhaft geholfen. Das liegt nicht an dir — es liegt daran, dass das System falsch angesetzt hat.
 
-„Stabilität ist kein Stillstand — sie ist die Grundlage."
+Die nächsten 7 Tage sind anders. Nicht weil sie härter sind. Sondern weil sie an der richtigen Stelle ansetzen.
 
-Heute — deine 3 Punkte:
-✓ 30 Min ruhige Bewegung an der frischen Luft
-✓ 2 proteinreiche Mahlzeiten (Frühstück + Abendessen)
-✓ Schlafenszeit festlegen — heute & alle nächsten 6 Tage gleich
+„Stabilität ist kein Stillstand — sie ist die Grundlage, auf der alles andere aufbaut."
 
-App öffnen: ${resetAppUrl}
+7 Tage · ~10 Min täglich · 200+ Teilnehmer
 
-PS: Auf WhatsApp begleite ich dich täglich kurz. Falls du noch nicht eingetragen bist: https://caliness.academy/whatsapp
+DEINE 3 AUFGABEN FÜR HEUTE:
+✓ 30 Min Bewegung — ruhig, draußen, ohne Kopfhörer
+✓ 2 proteinreiche Mahlzeiten — Frühstück und Abendessen
+✓ Schlafenszeit festlegen — heute, und die nächsten 6 Tage gleich
+
+→ Tag 1 öffnen: ${resetAppUrl}
+
+David
+Caliness Academy · hallo@caliness-academy.de
+
+PS: Auf WhatsApp begleite ich dich täglich mit einem kurzen Impuls.
+Falls du noch nicht dabei bist: https://caliness-academy.de/whatsapp
 
 —
-CALINESS ACADEMY · hallo@caliness.academy
-Abmelden: https://caliness.academy/abmelden`;
+Impressum: https://caliness-academy.de/impressum
+Abmelden: https://caliness-academy.de/abmelden`;
 
   return {
-    html: wrapEmail(bodyRows, "Tag 1 ist da — 3 Punkte für heute.", true),
+    html: wrapEmail(
+      "TAG 1 · DEIN START",
+      bodyRows,
+      `${name}, dein Reset beginnt heute — das ist Schritt 1.`,
+      true,
+    ),
     text,
   };
 }

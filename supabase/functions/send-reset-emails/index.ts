@@ -26,13 +26,13 @@ const MAIL_SCHEDULE: Record<number, string> = {
   9: "tag-9",
 };
 
-// Subject lines (lowercase, per brand)
-const SUBJECTS: Record<string, string> = {
-  "tag-1": "tag 1 — los geht's",
-  "tag-3": "tag 3 — kurz reingrätschen",
-  "tag-5": "tag 5 — was die meisten jetzt merken",
-  "tag-7": "dein reset ist durch — drei wege wie's weitergeht",
-  "tag-9": "gründerpreis sichern — letzte chance",
+// Subject lines — lowercase brand voice, curiosity over clickbait
+const SUBJECTS: Record<string, (name: string | null) => string> = {
+  "tag-1": (n) => n ? `${n}, tag 1 — los geht's` : "tag 1 — los geht's",
+  "tag-3": (n) => n ? `${n}, tag 3 — kurz reingrätschen` : "tag 3 — kurz reingrätschen",
+  "tag-5": (n) => n ? `${n}, was dein körper gerade macht` : "was dein körper gerade macht",
+  "tag-7": (n) => n ? `${n}, dein reset ist durch — drei wege wie's weitergeht` : "dein reset ist durch — drei wege wie's weitergeht",
+  "tag-9": (n) => n ? `${n}, ein letzter hinweis` : "ein letzter hinweis",
 };
 
 interface Participant {
@@ -67,7 +67,8 @@ async function sendEmail(
   mailKey: string,
 ): Promise<void> {
   const { html, text } = renderEmail(mailKey, vorname);
-  const subject = SUBJECTS[mailKey] ?? `CALINESS Reset – ${mailKey}`;
+  const subjectFn = SUBJECTS[mailKey];
+  const subject = subjectFn ? subjectFn(vorname) : `CALINESS Reset – ${mailKey}`;
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -76,12 +77,12 @@ async function sendEmail(
       Authorization: `Bearer ${RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: "David von Caliness <hallo@caliness.academy>",
+      from: "David von Caliness Academy <hallo@caliness-academy.de>",
       to: [email],
       subject,
       html,
       text,
-      reply_to: "hallo@caliness.academy",
+      reply_to: "hallo@caliness-academy.de",
     }),
   });
 
