@@ -1,17 +1,23 @@
 // ═══════════════════════════════════════════════════════════════════════════
 // SEND RESET EMAILS – CALINESS ACADEMY
 // Cron-driven Edge Function: täglich 08:00 UTC
-// Sendet Tag-1/5/7/9-Mails an aktive Reset-Participants via Resend
+// Sendet Tag-1/3/5/7/9-Mails an aktive Reset-Participants via Resend
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { renderTag1 } from "./emails/tag1.ts";
+import { renderTag3 } from "./emails/tag3.ts";
+import { renderTag5 } from "./emails/tag5.ts";
+import { renderTag7 } from "./emails/tag7.ts";
+import { renderTag9 } from "./emails/tag9.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") as string;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") as string;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") as string;
+const RESET_APP_URL = Deno.env.get("RESET_APP_URL") || "https://caliness.academy/reset";
 
-// Mail schedule: which days trigger which mail
+// Mail schedule: day number → mail key
 const MAIL_SCHEDULE: Record<number, string> = {
   1: "tag-1",
   3: "tag-3",
@@ -20,92 +26,49 @@ const MAIL_SCHEDULE: Record<number, string> = {
   9: "tag-9",
 };
 
+// Subject lines (lowercase, per brand)
+const SUBJECTS: Record<string, string> = {
+  "tag-1": "tag 1 — los geht's",
+  "tag-3": "tag 3 — kurz reingrätschen",
+  "tag-5": "tag 5 — was die meisten jetzt merken",
+  "tag-7": "dein reset ist durch — drei wege wie's weitergeht",
+  "tag-9": "gründerpreis sichern — letzte chance",
+};
+
 interface Participant {
   id: string;
   email: string;
   vorname: string | null;
   start_datum: string;
-  ziel: string | null;
   mails_sent: string[];
 }
 
-// ─── Email content placeholders ─────────────────────────────────────────────
-// Mail-Inhalte werden separat geliefert und hier eingesetzt.
-// Bis dahin werden strukturierte Platzhalter verwendet.
+// ─── Render correct template per day ────────────────────────────────────────
 
-function buildEmailHtml(mailKey: string, vorname: string | null): string {
-  const name = vorname || "du";
-  const dayNum = mailKey.replace("tag-", "");
-
-  return `<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>7-Tage Reset – Tag ${dayNum}</title>
-</head>
-<body style="margin:0;padding:0;background-color:#0a0c0e;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#0a0c0e;">
-    <tr>
-      <td align="center" style="padding:40px 16px;">
-        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;background-color:#111318;border-radius:16px;border:1px solid rgba(255,255,255,0.06);">
-          <!-- Header -->
-          <tr>
-            <td align="center" style="padding:40px 32px 32px;border-bottom:1px solid rgba(255,255,255,0.06);">
-              <img src="https://caliness-academy.de/images/caliness-logo-white.png" alt="Caliness Academy" width="140" style="display:block;max-width:140px;height:auto;">
-              <p style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#6b7a8f;margin:12px 0 0;">7-Tage Reset · Tag ${dayNum}</p>
-            </td>
-          </tr>
-          <!-- Body – PLACEHOLDER: wird durch echten Inhalt ersetzt -->
-          <tr>
-            <td style="padding:32px;">
-              <p style="font-size:15px;font-weight:500;color:#f8fafc;margin:0 0 16px;">Hallo ${name},</p>
-              <p style="font-size:14px;color:#b8c4d4;line-height:1.7;margin:0 0 24px;">
-                [Inhalt für ${mailKey} folgt – wird separat befüllt]
-              </p>
-            </td>
-          </tr>
-          <!-- Footer -->
-          <tr>
-            <td style="padding:24px 32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
-              <a href="mailto:team@caliness-academy.de" style="font-size:12px;color:#2dd36f;text-decoration:none;">team@caliness-academy.de</a>
-              <p style="font-size:11px;color:#6b7a8f;margin:12px 0 0;">© ${new Date().getFullYear()} Caliness Academy</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`;
+function renderEmail(
+  mailKey: string,
+  vorname: string | null,
+): { html: string; text: string } {
+  switch (mailKey) {
+    case "tag-1": return renderTag1(vorname, RESET_APP_URL);
+    case "tag-3": return renderTag3(vorname);
+    case "tag-5": return renderTag5(vorname);
+    case "tag-7": return renderTag7(vorname);
+    case "tag-9": return renderTag9(vorname);
+    default: return { html: "", text: "" };
+  }
 }
 
-function buildEmailText(mailKey: string, vorname: string | null): string {
-  const name = vorname || "du";
-  const dayNum = mailKey.replace("tag-", "");
-  return `CALINESS ACADEMY – 7-TAGE RESET · TAG ${dayNum}\n\nHallo ${name},\n\n[Inhalt für ${mailKey} folgt – wird separat befüllt]\n\nBei Fragen: team@caliness-academy.de\n© ${new Date().getFullYear()} Caliness Academy`;
-}
-
-function buildSubject(mailKey: string, vorname: string | null): string {
-  const name = vorname ? `, ${vorname}` : "";
-  const subjects: Record<string, string> = {
-    "tag-1": `Dein Reset beginnt heute${name} — das ist dein erster Schritt`,
-    "tag-3": `Tag 3${name} — wie läuft es bisher?`,
-    "tag-5": `Tag 5${name} — du bist auf Kurs`,
-    "tag-7": `Tag 7${name} — du hast es durchgezogen`,
-    "tag-9": `Wie war dein Reset${name}? Und wie geht es weiter?`,
-  };
-
-  return subjects[mailKey] ?? `7-Tage Reset – ${mailKey}`;
-}
-
-// ─── Send a single email via Resend ─────────────────────────────────────────
+// ─── Send single email via Resend ───────────────────────────────────────────
 
 async function sendEmail(
   email: string,
   vorname: string | null,
   mailKey: string,
 ): Promise<void> {
+  const { html, text } = renderEmail(mailKey, vorname);
+  const subject = SUBJECTS[mailKey] ?? `CALINESS Reset – ${mailKey}`;
+
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -113,18 +76,18 @@ async function sendEmail(
       Authorization: `Bearer ${RESEND_API_KEY}`,
     },
     body: JSON.stringify({
-      from: "Caliness Academy <noreply@caliness-academy.de>",
+      from: "David von Caliness <hallo@caliness.academy>",
       to: [email],
-      subject: buildSubject(mailKey, vorname),
-      html: buildEmailHtml(mailKey, vorname),
-      text: buildEmailText(mailKey, vorname),
-      reply_to: "team@caliness-academy.de",
+      subject,
+      html,
+      text,
+      reply_to: "hallo@caliness.academy",
     }),
   });
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(`Resend error for ${email}: ${JSON.stringify(err)}`);
+    throw new Error(`Resend error: ${JSON.stringify(err)}`);
   }
 
   const data = await res.json();
@@ -138,10 +101,9 @@ const handler = async (_req: Request): Promise<Response> => {
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-  // Fetch all active participants
   const { data: participants, error } = await supabase
     .from("reset_participants")
-    .select("id, email, vorname, start_datum, ziel, mails_sent")
+    .select("id, email, vorname, start_datum, mails_sent")
     .eq("status", "active");
 
   if (error) {
@@ -164,27 +126,22 @@ const handler = async (_req: Request): Promise<Response> => {
     const start = new Date(p.start_datum);
     start.setUTCHours(0, 0, 0, 0);
 
-    // Day difference: start_datum = day 1, so +0 days = day 1
-    const diffMs = today.getTime() - start.getTime();
-    const dayNumber = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
-
+    // Day 1 = start_datum, Day 2 = +1 day, etc.
+    const dayNumber = Math.floor((today.getTime() - start.getTime()) / 86_400_000) + 1;
     const mailKey = MAIL_SCHEDULE[dayNumber];
 
-    // Skip if no mail scheduled today or already sent
     if (!mailKey) continue;
     if (p.mails_sent.includes(mailKey)) {
-      console.log(`send-reset-emails: ${p.email} already received ${mailKey} – skip`);
+      console.log(`send-reset-emails: ${p.email} already received ${mailKey} — skip`);
       continue;
     }
 
     try {
       await sendEmail(p.email, p.vorname, mailKey);
 
-      // Mark mail as sent
-      const updatedMailsSent = [...p.mails_sent, mailKey];
       await supabase
         .from("reset_participants")
-        .update({ mails_sent: updatedMailsSent })
+        .update({ mails_sent: [...p.mails_sent, mailKey] })
         .eq("id", p.id);
 
       sent++;
@@ -195,11 +152,11 @@ const handler = async (_req: Request): Promise<Response> => {
     }
   }
 
-  console.log(`send-reset-emails: Done. sent=${sent}, errors=${errors}, checked=${participants.length}`);
-  return new Response(JSON.stringify({ sent, errors, checked: participants.length }), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+  console.log(`send-reset-emails: Done. sent=${sent} errors=${errors} checked=${participants.length}`);
+  return new Response(
+    JSON.stringify({ sent, errors, checked: participants.length }),
+    { status: 200, headers: { "Content-Type": "application/json" } },
+  );
 };
 
 serve(handler);
