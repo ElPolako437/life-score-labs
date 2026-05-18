@@ -1,16 +1,17 @@
 // ═══════════════════════════════════════════════════════════════════════════
 // REGISTER RESET PARTICIPANT
 // Schritt 1: DB upsert + Resend Audience
-// Schritt 2: DB whatsapp update + ManyChat webhook
+// Schritt 2: DB whatsapp update + ManyChat findByPhone → sendFlow
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const RESEND_API_KEY          = Deno.env.get("RESEND_API_KEY") as string;
-const SUPABASE_URL            = Deno.env.get("SUPABASE_URL") as string;
+const RESEND_API_KEY            = Deno.env.get("RESEND_API_KEY") as string;
+const SUPABASE_URL              = Deno.env.get("SUPABASE_URL") as string;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") as string;
-const MANYCHAT_WEBHOOK_URL    = Deno.env.get("MANYCHAT_WEBHOOK_URL") ?? "";
+const MANYCHAT_API_KEY          = Deno.env.get("MANYCHAT_API_KEY") ?? "";
+const MANYCHAT_FLOW_NS          = Deno.env.get("MANYCHAT_FLOW_NS") ?? "";
 
 const RESEND_AUDIENCE_ID = "a5efa272-2dff-4913-9676-0c17ca1760ef";
 
@@ -41,26 +42,64 @@ async function addToResendAudience(email: string, vorname: string | null): Promi
   }
 }
 
-// ─── ManyChat webhook ────────────────────────────────────────────────────────
-async function callManyChatWebhook(payload: {
-  vorname: string | null;
-  whatsapp_nummer: string;
-  ziel: string | null;
-  start_datum: string;
-}): Promise<void> {
-  if (!MANYCHAT_WEBHOOK_URL) {
-    console.log("register-reset-participant: MANYCHAT_WEBHOOK_URL not set — skipping webhook");
+// ─── ManyChat: find subscriber by phone number ───────────────────────────────
+async function manyChatFindByPhone(phone: string): Promise<string | null> {
+  if (!MANYCHAT_API_KEY) {
+    console.log("register-reset-participant: MANYCHAT_API_KEY not set — skipping");
+    return null;
+  }
+
+  const res = await fetch("https://api.manychat.com/whatsapp/subscribers/findByPhone", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${MANYCHAT_API_KEY}`,
+    },
+    body: JSON.stringify({ phone }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    console.warn("register-reset-participant: ManyChat findByPhone failed:", JSON.stringify(err));
+    return null;
+  }
+
+  const data = await res.json();
+  const subscriberId = data?.data?.id ?? null;
+
+  if (subscriberId) {
+    console.log("register-reset-participant: ManyChat subscriber found →", subscriberId);
+  } else {
+    console.log("register-reset-participant: ManyChat subscriber not found for phone:", phone);
+  }
+
+  return subscriberId ? String(subscriberId) : null;
+}
+
+// ─── ManyChat: trigger flow for subscriber ───────────────────────────────────
+async function manyChatSendFlow(subscriberId: string): Promise<void> {
+  if (!MANYCHAT_FLOW_NS) {
+    console.log("register-reset-participant: MANYCHAT_FLOW_NS not set — skipping sendFlow");
     return;
   }
-  const res = await fetch(MANYCHAT_WEBHOOK_URL, {
+
+  const res = await fetch("https://api.manychat.com/fb/sending/sendFlow", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${MANYCHAT_API_KEY}`,
+    },
+    body: JSON.stringify({
+      subscriber_id: subscriberId,
+      flow_ns: MANYCHAT_FLOW_NS,
+    }),
   });
+
   if (!res.ok) {
-    console.warn("register-reset-participant: ManyChat webhook failed:", res.status);
+    const err = await res.json().catch(() => ({}));
+    console.warn("register-reset-participant: ManyChat sendFlow failed:", JSON.stringify(err));
   } else {
-    console.log("register-reset-participant: ManyChat webhook sent →", payload.whatsapp_nummer);
+    console.log("register-reset-participant: ManyChat flow triggered →", MANYCHAT_FLOW_NS);
   }
 }
 
@@ -84,9 +123,8 @@ const handler = async (req: Request): Promise<Response> => {
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const today = new Date().toISOString().split("T")[0];
 
-    // ── SCHRITT 1: Registrierung (email + optional vorname/ziel) ─────────────
+    // ── SCHRITT 1: Registrierung ─────────────────────────────────────────────
     if (!step || step === "register") {
-      // DB upsert — ignoriert Duplikate (gleiche email)
       const { error: dbErr } = await supabase
         .from("reset_participants")
         .upsert(
@@ -100,11 +138,10 @@ const handler = async (req: Request): Promise<Response> => {
         );
 
       if (dbErr) {
-        console.error("register-reset-participant: DB error:", dbErr.message);
-        // Fehler loggen aber nicht blockieren — User bekommt trotzdem Zugang
+        console.error("register-reset-participant: DB upsert error:", dbErr.message);
       }
 
-      // Resend Audience (fire-and-forget, blockiert nicht)
+      // Resend Audience — fire-and-forget
       addToResendAudience(email, vorname ?? null).catch(console.error);
 
       return new Response(JSON.stringify({ success: true, step: "register" }), {
@@ -113,35 +150,45 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    // ── SCHRITT 2: WhatsApp-Nummer speichern + ManyChat ──────────────────────
+    // ── SCHRITT 2: WhatsApp-Nummer + ManyChat ────────────────────────────────
     if (step === "whatsapp" && whatsapp_nummer) {
       const cleanedNumber = whatsapp_nummer.trim();
 
-      // Update in DB
+      // 1. WhatsApp-Nummer in DB speichern
       const { error: updateErr } = await supabase
         .from("reset_participants")
         .update({ whatsapp_nummer: cleanedNumber })
         .eq("email", email.toLowerCase().trim());
 
       if (updateErr) {
-        console.warn("register-reset-participant: WhatsApp update error:", updateErr.message);
+        console.warn("register-reset-participant: WhatsApp DB update error:", updateErr.message);
       }
 
-      // ManyChat Webhook (fire-and-forget)
-      callManyChatWebhook({
-        vorname: vorname ?? null,
-        whatsapp_nummer: cleanedNumber,
-        ziel: ziel ?? null,
-        start_datum: start_datum ?? today,
-      }).catch(console.error);
-
-      return new Response(JSON.stringify({ success: true, step: "whatsapp" }), {
-        status: 200,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+      // 2. ManyChat: Subscriber per Telefonnummer suchen
+      const subscriberId = await manyChatFindByPhone(cleanedNumber).catch(e => {
+        console.error("register-reset-participant: findByPhone exception:", e);
+        return null;
       });
+
+      if (subscriberId) {
+        // 3. subscriber_id in DB persistieren
+        await supabase
+          .from("reset_participants")
+          .update({ manychat_subscriber_id: subscriberId })
+          .eq("email", email.toLowerCase().trim())
+          .catch(console.error);
+
+        // 4. Flow triggern (nur wenn MANYCHAT_FLOW_NS gesetzt)
+        manyChatSendFlow(subscriberId).catch(console.error);
+      }
+
+      return new Response(
+        JSON.stringify({ success: true, step: "whatsapp", manychat_found: !!subscriberId }),
+        { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
     }
 
-    // step=whatsapp aber keine Nummer → skip (User hat übersprungen)
+    // step=whatsapp ohne Nummer → User hat übersprungen
     return new Response(JSON.stringify({ success: true, step: "skipped" }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
@@ -150,7 +197,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("register-reset-participant: Unexpected error:", msg);
-    // Immer 200 zurückgeben — User-Erlebnis darf nicht blockiert werden
+    // Immer 200 — User-Erlebnis wird nie durch technische Fehler geblockt
     return new Response(JSON.stringify({ success: true, error: msg }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
