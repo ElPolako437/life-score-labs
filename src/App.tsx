@@ -14,6 +14,7 @@ import ResetCheckIn from "./pages/reset/ResetCheckIn";
 import ResetReflection from "./pages/reset/ResetReflection";
 import ResetSprintReady from "./pages/reset/ResetSprintReady";
 import ResetNext from "./pages/reset/ResetNext";
+import ResetWhatsApp from "./pages/reset/ResetWhatsApp";
 import Datenschutz from "./pages/Datenschutz";
 import Impressum from "./pages/Impressum";
 import NotFound from "./pages/NotFound";
@@ -29,6 +30,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ResetWelcome />} />
+          <Route path="/whatsapp" element={<ResetWhatsApp />} />
           <Route path="/onboarding" element={<ResetOnboarding />} />
           <Route path="/focus" element={<ResetFocus />} />
           <Route path="/week" element={<ResetWeek />} />
