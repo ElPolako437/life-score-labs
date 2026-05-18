@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useReset } from '@/contexts/ResetContext';
 import { track, captureLead } from '@/lib/analytics';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function ResetWelcome() {
   const navigate = useNavigate();
@@ -12,9 +13,23 @@ export default function ResetWelcome() {
   const [localEmail, setLocalEmail] = useState('');
   const hasProgress = goal !== null;
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (localName.trim()) setName(localName.trim());
-    if (localEmail.trim()) captureLead(localEmail, localName);
+    if (localEmail.trim()) {
+      captureLead(localEmail, localName);
+      // Register participant for automated email sequence
+      if (!hasProgress) {
+        await supabase.from('reset_participants').upsert(
+          {
+            email: localEmail.trim().toLowerCase(),
+            vorname: localName.trim() || null,
+            start_datum: new Date().toISOString().split('T')[0],
+            ziel: goal ?? null,
+          },
+          { onConflict: 'email', ignoreDuplicates: true }
+        );
+      }
+    }
     track(hasProgress ? 'reset_resumed' : 'reset_started', { hasName: !!localName.trim(), hasEmail: !!localEmail.trim() });
     if (hasProgress) {
       // Go directly to active day if it's not completed yet
