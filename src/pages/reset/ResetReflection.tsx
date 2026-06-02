@@ -51,7 +51,7 @@ export default function ResetReflection() {
         {/* Sliders */}
         <div className="space-y-6 mb-4">
           {DIMENSIONS.map(d => {
-            const baseVal = baseline ? (baseline as Record<string, number>)[d.key] : null;
+            const baseVal = baseline ? (baseline as unknown as Record<string, number>)[d.key] : null;
             const currentVal = values[d.key];
             const diff = baseVal != null ? currentVal - baseVal : null;
             return (
