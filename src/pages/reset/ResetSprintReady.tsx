@@ -85,8 +85,8 @@ export default function ResetSprintReady() {
             <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-3">Deine Veränderung</p>
             <div className="space-y-2.5">
               {DIMS.map(k => {
-                const before = (baseline as Record<string, number>)[k] ?? 0;
-                const after = (reflection as Record<string, number>)[k] ?? 0;
+                const before = (baseline as unknown as Record<string, number>)[k] ?? 0;
+                const after = (reflection as unknown as Record<string, number>)[k] ?? 0;
                 const diff = after - before;
                 return (
                   <div key={k} className="flex items-center justify-between">

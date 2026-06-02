@@ -242,7 +242,7 @@ export default function ResetNext() {
             <div className="space-y-3">
               {(['energy', 'sleep', 'calm', 'eating', 'body'] as const).map(key => {
                 const val = reflection[key as keyof typeof reflection] as number;
-                const baseVal = baseline ? (baseline as Record<string, number>)[key] : null;
+                const baseVal = baseline ? (baseline as unknown as Record<string, number>)[key] : null;
                 const diff = baseVal != null ? val - baseVal : null;
                 const isStrong = val >= 4;
                 const isWeak = val <= 2;
