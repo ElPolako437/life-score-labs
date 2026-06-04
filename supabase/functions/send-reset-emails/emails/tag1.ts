@@ -24,7 +24,7 @@ export function renderTag1(
 
       ${bodyText(`${name},`)}
       ${bodyText("Du hast es wahrscheinlich schon mit früher schlafen, weniger Essen, mehr Disziplin versucht. Nichts hat dauerhaft geholfen. Das liegt nicht an dir — es liegt daran, dass das System falsch angesetzt hat.")}
-      ${bodyText("Die nächsten 7 Tage sind anders. Nicht weil sie härter sind. Sondern weil sie <strong style=\"color:${C.white}\">an der richtigen Stelle</strong> ansetzen.")}
+      ${bodyText(`Die nächsten 7 Tage sind anders. Nicht weil sie härter sind. Sondern weil sie <strong style="color:${C.white}">an der richtigen Stelle</strong> ansetzen.`)}
 
       ${quoteBlock("„Stabilität ist kein Stillstand — sie ist die Grundlage, auf der alles andere aufbaut."")}
 
