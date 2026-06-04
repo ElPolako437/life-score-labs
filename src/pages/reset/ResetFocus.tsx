@@ -5,10 +5,10 @@ import { getFocusText } from '@/lib/focusTexts';
 import type { Goal } from '@/contexts/ResetContext';
 
 const DAY1_TEASER: Record<Goal, string> = {
-  energy: 'Tag 1 zeigt dir, warum du erschöpft bist — obwohl du "genug" schläfst.',
-  fatloss: 'Tag 1 zeigt dir, warum du trotz Verzicht nicht abnimmst.',
-  structure: 'Tag 1 zeigt dir, wie 3 Ankerpunkte mehr Struktur geben als jeder Plan.',
-  sleep: 'Tag 1 zeigt dir, warum schlechter Schlaf selten ein Schlaf-Problem ist.',
+  energy: 'Tag 1 zeigt dir warum du erschöpft bist, obwohl du eigentlich genug schläfst.',
+  fatloss: 'Tag 1 zeigt dir warum der Körper Fett festhält und was du heute noch ändern kannst.',
+  structure: 'Tag 1 zeigt dir wie drei Ankerpunkte mehr verändern als jeder ausgefeilte Plan.',
+  sleep: 'Tag 1 zeigt dir warum schlechter Schlaf fast nie wirklich ein Schlaf-Problem ist.',
 };
 
 export default function ResetFocus() {

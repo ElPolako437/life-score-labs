@@ -106,7 +106,7 @@ export default function ResetWelcome() {
             Du bist erschöpft —<br />aber nicht aus dem Grund,<br />den du denkst.
           </h1>
           <p className="text-sm text-muted-foreground/70 leading-relaxed">
-            7 Tage. Täglich ~10 Minuten. Kostenlos. Über 200 Teilnehmer haben diesen Reset bereits absolviert.
+            7 Tage. Täglich ~10 Minuten. Kostenlos.<br />Über 200 Menschen haben das bereits durchgezogen.
           </p>
         </div>
 
@@ -117,8 +117,8 @@ export default function ResetWelcome() {
             <img src="/images/sarah.jpg" alt="Sarah" className="w-8 h-8 rounded-full object-cover grayscale brightness-75 ring-2 ring-background" />
           </div>
           <p className="text-xs text-muted-foreground/45 text-left leading-snug">
-            Von David &amp; Sarah — Caliness Academy<br />
-            <span className="text-muted-foreground/25">über 200 Teilnehmer persönlich begleitet</span>
+            David &amp; Sarah — Caliness Academy<br />
+            <span className="text-muted-foreground/25">über 200 Menschen persönlich begleitet</span>
           </p>
         </div>
 
