@@ -42,7 +42,7 @@ const LOCKED_TEASERS: Record<number, string> = {
 export default function ResetWeek() {
   const navigate = useNavigate();
   const { currentDay, getDayData, reflection, goal, name } = useReset();
-  const allDone = currentDay > 7;
+  const allDone = currentDay > 5;
   const [streakAtRisk, setStreakAtRisk] = useState(false);
   const [justCompletedDay, setJustCompletedDay] = useState<number | null>(null);
   const [showInstall, setShowInstall] = useState(false);
@@ -101,7 +101,7 @@ export default function ResetWeek() {
 
         <div className="flex items-center justify-between mb-1">
           <h1 className="font-outfit text-2xl font-bold text-foreground">
-            {name ? `${name}, Tag ${Math.min(currentDay, 7)}` : `Tag ${Math.min(currentDay, 7)} von 7`}
+            {name ? `${name}, Tag ${Math.min(currentDay, 5)}` : `Tag ${Math.min(currentDay, 5)} von 5`}
           </h1>
           {streak > 0 && (
             <div className="flex flex-col items-end">
@@ -111,7 +111,7 @@ export default function ResetWeek() {
           )}
         </div>
 
-        <Progress value={(Math.min(currentDay, 7) / 7) * 100} variant="neon" className="mb-8 h-2" />
+        <Progress value={(Math.min(currentDay, 5) / 5) * 100} variant="neon" className="mb-8 h-2" />
 
         {/* Return celebration banner */}
         {justCompletedDay && (
@@ -165,7 +165,11 @@ export default function ResetWeek() {
                 key={dayNum}
                 disabled={isFuture}
                 onClick={() => {
-                  if (isActive || isCompleted) navigate(`/day/${dayNum}`);
+                  if (dayNum === 5 && (isActive || isCompleted)) {
+                    navigate('/synthesis');
+                  } else if (isActive || isCompleted) {
+                    navigate(`/day/${dayNum}`);
+                  }
                 }}
                 className={cn(
                   'w-full text-left p-4 rounded-2xl border transition-all duration-200 flex items-center gap-4',

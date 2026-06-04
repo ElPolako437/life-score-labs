@@ -8,6 +8,7 @@ import { isMobile, isStandalone } from '@/lib/installPrompt';
 import { track } from '@/lib/analytics';
 import { Check, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import PillarResult from '@/components/reset/PillarResult';
 
 const GOAL_LABEL: Record<string, string> = {
   energy: 'mehr Energie',
@@ -84,12 +85,22 @@ export default function ResetCheckIn() {
   };
 
   const handleContinue = () => {
-    if (dayNum === 7) {
-      navigate('/reflection');
+    if (dayNum === 5) {
+      navigate('/synthesis');
     } else {
       navigate('/week');
     }
   };
+
+  // Pillar days 1–4: show PillarResult instead of old content
+  const isPillarDay = dayNum >= 1 && dayNum <= 4;
+  const { ernaehrungsTyp, bewegungsTyp, schlafTyp, mentalTyp } = useReset();
+  const hasPillarResult = (
+    (dayNum === 1 && !!ernaehrungsTyp) ||
+    (dayNum === 2 && !!bewegungsTyp) ||
+    (dayNum === 3 && !!schlafTyp) ||
+    (dayNum === 4 && !!mentalTyp)
+  );
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 py-10">
@@ -126,8 +137,15 @@ export default function ResetCheckIn() {
         )}
 
         <p className="text-sm text-muted-foreground mb-6">
-          {dayNum < 7 ? 'Morgen geht es weiter.' : 'Zeit für deine Reflexion.'}
+          {dayNum < 5 ? 'Morgen geht es weiter.' : 'Deine Auswertung wartet.'}
         </p>
+
+        {/* Pillar-Ergebnis-Karte (Tage 1–4) */}
+        {isPillarDay && hasPillarResult && (
+          <div className="text-left mb-6">
+            <PillarResult day={dayNum} />
+          </div>
+        )}
 
         {/* Retention hook (days 1–6) */}
         {retentionHook && (
