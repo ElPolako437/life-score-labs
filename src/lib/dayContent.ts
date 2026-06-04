@@ -14,20 +14,19 @@ export interface DayContent {
 export const DAY_CONTENT: DayContent[] = [
   // Tag 1
   {
-    title: 'Rauschen reduzieren',
-    goal: 'Heute geht es darum, bewusst weniger Reize zuzulassen.',
-    impulse: '„Erster Tag. Kein großes Statement nötig. Einfach die Aufgaben machen und schauen was passiert. Du wirst überrascht sein wie leicht das ist."',
-    insight: 'Warum du müde bist, obwohl du genug schläfst: Dein Nervensystem unterscheidet nicht zwischen echter Gefahr und einer Push-Nachricht. Jede Benachrichtigung, jede News-Headline löst denselben Alarm aus. Du bist nicht erschöpft weil du zu wenig schläfst. Du bist erschöpft weil du den ganzen Tag nie wirklich abschaltest.',
-    sofortTipp: '30 Minuten ALLE Benachrichtigungen aus. Nicht nur Social Media, alles. Schau was passiert.',
+    title: 'Dein Reset-Kompass',
+    goal: 'Verstehe wo dein System gerade steht, bevor du etwas veränderst.',
+    impulse: '„Heute geht es nicht ums Machen. Heute geht es ums Hinschauen. Das ist schwerer als es klingt."',
+    insight: 'Die meisten starten einen Reset und suchen sofort die Lösung. Das Problem dabei: Ohne zu wissen welche Säule bei dir gerade am schwächsten ist, arbeitest du am falschen Punkt. Dein Reset-Kompass zeigt dir heute deinen persönlichen Startpunkt entlang der 4 Säulen.',
+    sofortTipp: 'Lies dein Kompass-Ergebnis einmal in Ruhe durch. Schreib eine Sache auf die dich überrascht hat.',
     tasks: [
-      '30 Min bewusst offline, kein Bildschirm',
-      'Kein Alkohol heute',
-      'Einen festen Zeitpunkt für deine letzte Mahlzeit setzen',
+      'Kompass-Ergebnis lesen und eine überraschende Erkenntnis aufschreiben',
+      '10 Min Abend-Beobachtung: Was hat heute die meiste Energie gekostet?',
     ],
-    taskKeys: ['offline', 'alcohol', 'last_meal'],
+    taskKeys: ['read_compass', 'energy_observation'],
     goalBonus: {
-      energy: 'Beobachte wann heute deine Energie am höchsten ist. Direkt nach dem Offline-Block oder davor? Das sagt dir mehr als jede App.',
-      fatloss: 'Jedes Mal wenn du heute Hunger spürst: Ist das echter Hunger oder Langeweile? Nur beobachten, nicht bewerten.',
+      energy: 'Beobachte heute wann deine Energie am höchsten ist. Nach dem Kompass-Block oder vorher? Das sagt dir mehr als jede App.',
+      fatloss: 'Beobachte heute wann Hunger kommt. Echter Hunger oder Gewohnheit, Stress, Langeweile? Nur beobachten, nicht bewerten.',
       structure: 'Schreib heute Abend drei konkrete Punkte für morgen auf. Nicht eine lange Liste, drei Punkte. Bevor du das Handy nimmst.',
       sleep: 'Entscheide jetzt deine feste Schlafenszeit für die nächsten 7 Tage. Schreib sie auf. Das ist dein Anker.',
     },

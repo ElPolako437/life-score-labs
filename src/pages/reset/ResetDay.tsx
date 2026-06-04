@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
 import { DAY_CONTENT, type GoalKey } from '@/lib/dayContent';
+import { computeCompass } from '@/lib/resetCompass';
 import { track } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -9,16 +10,26 @@ import { Progress } from '@/components/ui/progress';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+const PILLAR_ICON: Record<string, string> = {
+  ernährung: '⚡',
+  bewegung: '🏃',
+  schlaf: '🌙',
+  mental: '🧠',
+};
+
 export default function ResetDay() {
   const { id } = useParams();
   const dayNum = Number(id);
   const navigate = useNavigate();
-  const { currentDay, getDayData, toggleTask, completedTaskCount, completeDay, goal } = useReset();
+  const { currentDay, getDayData, toggleTask, completedTaskCount, completeDay, goal, hurdle, baseline } = useReset();
   const [celebrating, setCelebrating] = useState(false);
   const [ctaPulse, setCtaPulse] = useState(false);
 
   const content = DAY_CONTENT[dayNum - 1];
   const goalBonus = goal ? content?.goalBonus?.[goal as GoalKey] : null;
+  const compass = (dayNum === 1 && goal && hurdle && baseline)
+    ? computeCompass(goal, hurdle, baseline)
+    : null;
   const dayData = getDayData(dayNum);
   const completedCount = completedTaskCount(dayNum);
   const totalTasks = content?.tasks.length || 0;
@@ -130,6 +141,24 @@ export default function ResetDay() {
             </div>
           </div>
         </div>
+
+        {/* Kompass-Card — nur Tag 1 */}
+        {compass && (
+          <div className="mb-6 p-4 rounded-xl border border-primary/20 bg-primary/5">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-base">{PILLAR_ICON[compass.focusPillar]}</span>
+              <div>
+                <p className="text-[10px] font-semibold text-primary uppercase tracking-widest">Dein Reset-Kompass</p>
+                <p className="text-xs text-muted-foreground/60">{compass.pillarLabel}</p>
+              </div>
+              <span className="ml-auto text-[10px] font-semibold text-primary/60 border border-primary/20 rounded-full px-2 py-0.5">
+                {compass.compassTypeLabel}
+              </span>
+            </div>
+            <p className="text-sm font-semibold text-foreground mb-1">{compass.headline}</p>
+            <p className="text-xs text-muted-foreground/70 leading-relaxed">{compass.fokusWoche}</p>
+          </div>
+        )}
 
         {/* Tasks */}
         <div className="space-y-3 mb-8">
