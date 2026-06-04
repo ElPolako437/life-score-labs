@@ -150,6 +150,20 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
+    // ── GOAL UPDATE: nach Onboarding ziel in DB schreiben ───────────────────
+    if (step === "update_goal" && ziel) {
+      await supabase
+        .from("reset_participants")
+        .update({ ziel })
+        .eq("email", email.toLowerCase().trim())
+        .catch((e: Error) => console.warn("register-reset-participant: ziel update error:", e.message));
+
+      return new Response(JSON.stringify({ success: true, step: "update_goal" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
     // ── SCHRITT 2: WhatsApp-Nummer + ManyChat ────────────────────────────────
     if (step === "whatsapp" && whatsapp_nummer) {
       const cleanedNumber = whatsapp_nummer.trim();

@@ -29,9 +29,9 @@ export function renderTag3(
 
       ${sectionLabel("Was du vielleicht gerade schon merkst")}
       ${surfaceCard(checkList([
-        "<strong style=\"color:${C.white}\">Schlaf:</strong> Tiefere Phasen, weniger Aufwachen in der Nacht",
-        "<strong style=\"color:${C.white}\">Energie:</strong> Gleichmäßiger über den Tag, weniger Nachmittags-Crash",
-        "<strong style=\"color:${C.white}\">Kopf:</strong> Weniger Reizüberflutung, ruhigere Morgende",
+        `<strong style="color:${C.white}">Schlaf:</strong> Tiefere Phasen, weniger Aufwachen in der Nacht`,
+        `<strong style="color:${C.white}">Energie:</strong> Gleichmäßiger über den Tag, weniger Nachmittags-Crash`,
+        `<strong style="color:${C.white}">Kopf:</strong> Weniger Reizüberflutung, ruhigere Morgende`,
       ]))}
 
       ${bodyText("Wenn du <em>eine</em> dieser drei Sachen schon spürst — du bist auf Kurs. Wenn noch nicht: Tag 5 wird der Punkt sein, an dem es klickt.")}

@@ -15,7 +15,7 @@ import { renderTag9 } from "./emails/tag9.ts";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") as string;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") as string;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") as string;
-const RESET_APP_URL = Deno.env.get("RESET_APP_URL") || "https://caliness.academy/reset";
+const RESET_APP_URL = Deno.env.get("RESET_APP_URL") || "https://caliness-academy.de";
 
 // Mail schedule: day number → mail key
 const MAIL_SCHEDULE: Record<number, string> = {

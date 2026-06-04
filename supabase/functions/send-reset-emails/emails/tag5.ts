@@ -22,17 +22,17 @@ export function renderTag5(
       ${heroHeadline("Wenn die ersten Tage schwer waren — und es jetzt leichter wird.")}
 
       ${bodyText(`${name},`)}
-      ${bodyText("Was zwischen Tag 1 und Tag 5 passiert, hat einen Namen: <strong style=\"color:${C.white}\">Downregulation</strong>. Dein Nervensystem verlässt den Daueralarmzustand. Cortisol normalisiert sich. Dopaminrezeptoren erholen sich.")}
+      ${bodyText(`Was zwischen Tag 1 und Tag 5 passiert, hat einen Namen: <strong style="color:${C.white}">Downregulation</strong>. Dein Nervensystem verlässt den Daueralarmzustand. Cortisol normalisiert sich. Dopaminrezeptoren erholen sich.`)}
       ${bodyText("Das ist keine Motivationsfrage. Das ist Biologie — und du hast sie in Gang gesetzt.")}
 
       ${quoteBlock("„Das ist kein Zufall — das ist Regulation. Dein Körper hat begonnen, sich selbst zu korrigieren."")}
 
       ${sectionLabel("Was sich jetzt verändert haben sollte")}
       ${surfaceCard(checkList([
-        "<strong style=\"color:${C.white}\">Schlaftiefe:</strong> Erholsamer, auch wenn die Stunden gleich sind",
-        "<strong style=\"color:${C.white}\">Morgenenergie:</strong> Weniger Reizüberflutung, klarerer Start",
-        "<strong style=\"color:${C.white}\">Entscheidungen:</strong> Fühlen sich leichter an — weniger Grübeln",
-        "<strong style=\"color:${C.white}\">Hunger:</strong> Stabiler, weniger emotionaler Hunger am Abend",
+        `<strong style="color:${C.white}">Schlaftiefe:</strong> Erholsamer, auch wenn die Stunden gleich sind`,
+        `<strong style="color:${C.white}">Morgenenergie:</strong> Weniger Reizüberflutung, klarerer Start`,
+        `<strong style="color:${C.white}">Entscheidungen:</strong> Fühlen sich leichter an — weniger Grübeln`,
+        `<strong style="color:${C.white}">Hunger:</strong> Stabiler, weniger emotionaler Hunger am Abend`,
       ]))}
 
       ${bodyText("Übermorgen ist der Reset durch. Ich zeige dir dann drei konkrete Wege, wie das dauerhaft in deinen Alltag kommt — abgestimmt auf deinen Typ.")}

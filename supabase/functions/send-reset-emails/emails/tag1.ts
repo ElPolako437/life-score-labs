@@ -36,9 +36,9 @@ export function renderTag1(
 
       ${sectionLabel("Deine 3 Aufgaben für heute")}
       ${surfaceCard(checkList([
-        "<strong style=\"color:${C.white}\">30 Min Bewegung</strong> — ruhig, draußen, ohne Kopfhörer",
-        "<strong style=\"color:${C.white}\">2 proteinreiche Mahlzeiten</strong> — Frühstück und Abendessen",
-        "<strong style=\"color:${C.white}\">Schlafenszeit festlegen</strong> — heute, und die nächsten 6 Tage gleich",
+        `<strong style="color:${C.white}">30 Min Bewegung</strong> — ruhig, draußen, ohne Kopfhörer`,
+        `<strong style="color:${C.white}">2 proteinreiche Mahlzeiten</strong> — Frühstück und Abendessen`,
+        `<strong style="color:${C.white}">Schlafenszeit festlegen</strong> — heute, und die nächsten 6 Tage gleich`,
       ]))}
 
       ${ctaButton("Tag 1 jetzt öffnen →", resetAppUrl, "Kein Konto erforderlich · Kostenlos · direkt im Browser")}
