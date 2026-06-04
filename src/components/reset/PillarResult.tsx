@@ -8,18 +8,13 @@ import {
   getSchlafContent,
   getMentalContent,
 } from '@/lib/pillarAssessment';
+import { getRueckbezug } from '@/lib/pillarConnections';
 
 interface PillarResultProps {
   day: number; // 1–4
 }
 
-const PILLAR_ICON: Record<number, string> = {
-  1: '⚡',
-  2: '🏃',
-  3: '🌙',
-  4: '🧠',
-};
-
+const PILLAR_ICON: Record<number, string> = { 1: '⚡', 2: '🏃', 3: '🌙', 4: '🧠' };
 const PILLAR_LABEL: Record<number, string> = {
   1: 'Ernährung & Energie',
   2: 'Bewegung & Training',
@@ -33,7 +28,6 @@ export default function PillarResult({ day }: PillarResultProps) {
     tag1Data, name,
   } = useReset();
 
-  // Get content based on day
   const content = (() => {
     if (day === 1 && ernaehrungsTyp) return getErnaehrungsContent(ernaehrungsTyp);
     if (day === 2 && bewegungsTyp) return getBewegungsContent(bewegungsTyp);
@@ -44,6 +38,8 @@ export default function PillarResult({ day }: PillarResultProps) {
 
   const energy = day === 1 && tag1Data ? calcTag1Energy(tag1Data) : null;
 
+  const rueckbezug = getRueckbezug(day, ernaehrungsTyp, bewegungsTyp, schlafTyp, mentalTyp);
+
   if (!content) return null;
 
   return (
@@ -51,29 +47,31 @@ export default function PillarResult({ day }: PillarResultProps) {
       {/* Pillar badge */}
       <div className="flex items-center gap-2">
         <span className="text-xl">{PILLAR_ICON[day]}</span>
-        <div>
-          <p className="text-[10px] font-semibold text-primary uppercase tracking-widest">
-            Säule {day}: {PILLAR_LABEL[day]}
-          </p>
-        </div>
+        <p className="text-[10px] font-semibold text-primary uppercase tracking-widest">
+          Säule {day}: {PILLAR_LABEL[day]}
+        </p>
       </div>
+
+      {/* Rückbezug auf frühere Tage — nur wenn echte Verbindung besteht */}
+      {rueckbezug && (
+        <div className="flex items-start gap-2.5 p-3 rounded-xl bg-card border border-border/50 animate-fade-in">
+          <span className="text-primary text-xs mt-0.5 flex-shrink-0">🔗</span>
+          <p className="text-xs text-muted-foreground/70 leading-relaxed">{rueckbezug}</p>
+        </div>
+      )}
 
       {/* Headline */}
       <div>
-        {name && (
-          <p className="text-[11px] text-muted-foreground/50 mb-1">{name},</p>
-        )}
+        {name && <p className="text-[11px] text-muted-foreground/50 mb-1">{name},</p>}
         <h3 className="font-outfit text-xl font-bold text-foreground leading-tight">
           {content.headline}
         </h3>
       </div>
 
       {/* Einordnung */}
-      <p className="text-sm text-foreground/75 leading-relaxed">
-        {content.einordnung}
-      </p>
+      <p className="text-sm text-foreground/75 leading-relaxed">{content.einordnung}</p>
 
-      {/* Tag 1 only: Energie-Rahmen + Protein-Anker */}
+      {/* Tag 1 only: Protein-Anker + Energie-Rahmen */}
       {day === 1 && energy && energy.hasValidData && (
         <div className="p-4 rounded-xl border border-primary/25 bg-primary/5">
           <div className="flex items-start justify-between mb-3">
@@ -110,18 +108,14 @@ export default function PillarResult({ day }: PillarResultProps) {
         <p className="text-sm text-foreground/80 leading-relaxed">{content.tagesaufgabe}</p>
       </div>
 
-      {/* Sprint-Brücke (Text, kein Button — nur Tag 1 kein Button, Tag 2-4 gleich) */}
-      <div className="pt-1">
-        <p className="text-xs text-muted-foreground/50 leading-relaxed italic">
-          {content.sprintBruecke}
-        </p>
-      </div>
+      {/* Sprint-Brücke — Textsatz, kein Button */}
+      <p className="text-xs text-muted-foreground/50 leading-relaxed italic pt-1">
+        {content.sprintBruecke}
+      </p>
 
       {/* App-Teaser — nur Tage 2-4, subtil */}
       {day > 1 && content.appTeaser && (
-        <p className="text-[11px] text-muted-foreground/35 leading-relaxed">
-          {content.appTeaser}
-        </p>
+        <p className="text-[11px] text-muted-foreground/35 leading-relaxed">{content.appTeaser}</p>
       )}
     </div>
   );
