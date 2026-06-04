@@ -112,10 +112,24 @@ export default function ResetDay() {
         <h1 className="font-outfit text-2xl font-bold text-foreground mb-2">
           {content.title}
         </h1>
-        <p className="text-sm text-muted-foreground mb-2">{content.goal}</p>
-        <p className="text-sm text-foreground/70 italic mb-8 leading-relaxed">
-          {content.impulse}
-        </p>
+        <p className="text-sm text-muted-foreground mb-5">{content.goal}</p>
+
+        {/* David-Nachricht */}
+        <div className="flex items-start gap-3 mb-8">
+          <img
+            src="/images/david.jpg"
+            alt="David"
+            className="w-9 h-9 rounded-full object-cover flex-shrink-0 mt-0.5 ring-2 ring-primary/20"
+          />
+          <div className="flex-1">
+            <p className="text-[11px] font-semibold text-primary mb-1.5">David</p>
+            <div className="bg-card border border-border/50 rounded-2xl rounded-tl-sm px-4 py-3">
+              <p className="text-sm text-foreground/80 leading-relaxed italic">
+                {content.impulse.replace(/^„/, '').replace(/"$/, '')}
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Tasks */}
         <div className="space-y-3 mb-8">

@@ -13,7 +13,7 @@ const DAY1_TEASER: Record<Goal, string> = {
 
 export default function ResetFocus() {
   const navigate = useNavigate();
-  const { goal, hurdle } = useReset();
+  const { goal, hurdle, name } = useReset();
 
   if (!goal || !hurdle) {
     return <Navigate to="/onboarding" replace />;
@@ -23,20 +23,42 @@ export default function ResetFocus() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col px-6 py-8">
-      <div className="flex-1 flex flex-col items-center justify-center max-w-sm mx-auto w-full animate-fade-in">
-        {/* Logo small */}
-        <img
-          src="/images/caliness-logo-white.png"
-          alt=""
-          className="w-8 h-8 object-contain opacity-40 mb-8"
-        />
+      <div className="flex-1 flex flex-col justify-center max-w-sm mx-auto w-full animate-fade-in">
 
-        <p className="text-foreground text-base leading-relaxed text-center mb-10 font-medium">
-          {focusText}
-        </p>
+        {/* David & Sarah */}
+        <div className="flex items-center gap-3 mb-8">
+          <div className="flex -space-x-2 flex-shrink-0">
+            <img
+              src="/images/david.jpg"
+              alt="David"
+              className="w-10 h-10 rounded-full object-cover ring-2 ring-background"
+            />
+            <img
+              src="/images/sarah.jpg"
+              alt="Sarah"
+              className="w-10 h-10 rounded-full object-cover ring-2 ring-background"
+            />
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-foreground/80">David & Sarah</p>
+            <p className="text-[11px] text-muted-foreground/50">Caliness Academy</p>
+          </div>
+        </div>
+
+        {/* Persönlicher Fokus als Nachricht */}
+        <div className="mb-8">
+          {name && (
+            <p className="text-[11px] font-semibold text-primary uppercase tracking-widest mb-3">
+              Für dich, {name}
+            </p>
+          )}
+          <p className="text-foreground text-base leading-relaxed font-medium">
+            {focusText}
+          </p>
+        </div>
 
         {goal && (
-          <div className="w-full p-4 rounded-xl border border-primary/20 bg-primary/5 mb-6 text-left">
+          <div className="w-full p-4 rounded-xl border border-primary/20 bg-primary/5 mb-6">
             <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Heute</p>
             <p className="text-sm text-foreground/80 leading-relaxed">{DAY1_TEASER[goal]}</p>
           </div>
@@ -45,11 +67,11 @@ export default function ResetFocus() {
         <div className="w-full space-y-2 mb-8">
           <div className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border/40">
             <span className="text-primary text-lg">✦</span>
-            <span className="text-sm text-muted-foreground">~10 Minuten täglich — keine Ausrede</span>
+            <span className="text-sm text-muted-foreground">~10 Minuten täglich, keine Ausrede</span>
           </div>
           <div className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border/40">
             <span className="text-primary text-lg">✦</span>
-            <span className="text-sm text-muted-foreground">Konstanz schlägt Intensität — jeden Tag</span>
+            <span className="text-sm text-muted-foreground">Konstanz schlägt Intensität, jeden Tag</span>
           </div>
         </div>
 
@@ -61,8 +83,8 @@ export default function ResetFocus() {
         >
           Tag 1 starten →
         </Button>
-      </div>
 
+      </div>
     </div>
   );
 }

@@ -85,9 +85,18 @@ export default function ResetWeek() {
     <div className="min-h-screen bg-background flex flex-col px-6 py-8">
       <div className="max-w-sm mx-auto w-full animate-fade-in">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-2">
-          <img src="/images/caliness-logo-white.png" alt="" className="w-5 h-5 object-contain opacity-40" />
-          <span className="text-xs font-semibold text-muted-foreground tracking-widest uppercase">7-Tage Reset</span>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-3">
+            <img src="/images/caliness-logo-white.png" alt="" className="w-5 h-5 object-contain opacity-40" />
+            <span className="text-xs font-semibold text-muted-foreground tracking-widest uppercase">7-Tage Reset</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex -space-x-1.5">
+              <img src="/images/david.jpg" alt="David" className="w-6 h-6 rounded-full object-cover ring-2 ring-background" />
+              <img src="/images/sarah.jpg" alt="Sarah" className="w-6 h-6 rounded-full object-cover ring-2 ring-background" />
+            </div>
+            <span className="text-[10px] text-muted-foreground/40">begleiten dich</span>
+          </div>
         </div>
 
         <div className="flex items-center justify-between mb-1">

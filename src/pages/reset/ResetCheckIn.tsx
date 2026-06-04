@@ -26,6 +26,16 @@ const SOCIAL_PROOF: Record<number, string> = {
   7: 'Du hast es durchgezogen. Du gehörst zur Elite.',
 };
 
+const DAVID_MESSAGE: Record<number, string> = {
+  1: 'Erster Tag durch. Ich weiß, dass das klein klingt. Aber genau hier trennt sich, wer es wirklich machen will.',
+  2: 'Hab gesehen dass du dabei bist. Tag 2 ist der härteste, nicht wegen der Aufgaben, sondern weil das Neu-Gefühl weg ist. Du bist trotzdem da.',
+  3: 'Halbzeit fast. Ich frage mich: Hast du heute den Post-Meal Walk gemacht? Wenn ja, merk dir wie sich der Nachmittag angefühlt hat.',
+  4: 'Der Schlaf-Anker sitzt jetzt. Was viele nicht wissen: Ab heute arbeitet dein Körper auch nachts aktiv daran. Du machst das richtig.',
+  5: 'Fünf Tage. Das schaffen weniger als 20% die anfangen. Ich bin ehrlich beeindruckt.',
+  6: 'Vorletzter Tag. Heute nicht mehr erkämpfen, sondern weglassen. Was kannst du streichen damit morgen leichter wird?',
+  7: 'Sieben Tage. Ich bin stolz auf dich. Jetzt schau dir ehrlich an was sich verändert hat, nicht was noch fehlt.',
+};
+
 export default function ResetCheckIn() {
   const { id } = useParams();
   const dayNum = Number(id);
@@ -93,7 +103,26 @@ export default function ResetCheckIn() {
         </h2>
 
         {SOCIAL_PROOF[dayNum] && (
-          <p className="text-sm text-primary font-medium mb-1">{SOCIAL_PROOF[dayNum]}</p>
+          <p className="text-sm text-primary font-medium mb-4">{SOCIAL_PROOF[dayNum]}</p>
+        )}
+
+        {/* David-Nachricht */}
+        {DAVID_MESSAGE[dayNum] && (
+          <div className="flex items-start gap-3 mb-5 text-left">
+            <img
+              src="/images/david.jpg"
+              alt="David"
+              className="w-8 h-8 rounded-full object-cover flex-shrink-0 mt-0.5 ring-2 ring-primary/20"
+            />
+            <div className="flex-1">
+              <p className="text-[11px] font-semibold text-primary mb-1.5">David</p>
+              <div className="bg-card border border-border/50 rounded-2xl rounded-tl-sm px-4 py-3">
+                <p className="text-sm text-foreground/80 leading-relaxed">
+                  {DAVID_MESSAGE[dayNum]}
+                </p>
+              </div>
+            </div>
+          </div>
         )}
 
         <p className="text-sm text-muted-foreground mb-6">
