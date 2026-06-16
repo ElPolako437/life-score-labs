@@ -4,6 +4,29 @@ import { DAY_CONTENT } from '@/lib/dayContent';
 export type Goal = 'energy' | 'fatloss' | 'structure' | 'sleep';
 export type Hurdle = 'stress' | 'time' | 'nutrition' | 'consistency' | 'evening';
 export type Rating = 'good' | 'difficult' | 'failed';
+export type Sex = 'male' | 'female';
+export type Activity = 'low' | 'moderate' | 'high';
+export type Daily = 'sedentary' | 'mixed' | 'active';
+export type LeverKey = 'protein' | 'meals' | 'movement' | 'sleep' | 'stress' | 'structure';
+
+/** Tag-1 start profile: body inputs + derived nutrition anchors. */
+export interface StartProfile {
+  sex: Sex;
+  age: number;
+  height: number;
+  weight: number;
+  activity: Activity;
+  daily: Daily;
+  bmr: number;
+  tdee: number;
+  calLow: number;
+  calHigh: number;
+  proteinLow: number;
+  proteinHigh: number;
+  mealCount: number;
+  mainLever: LeverKey;
+  createdAt: number;
+}
 
 export interface DayData {
   tasks: boolean[];
@@ -31,11 +54,13 @@ export interface ReflectionData {
   hardest: string;
 }
 
-interface ResetState {
+export interface ResetState {
   email: string | null;
   name: string | null;
   goal: Goal | null;
   hurdle: Hurdle | null;
+  sex: Sex | null;
+  weight: number | null;
   currentDay: number;
   days: Record<string, DayData>;
   baseline: BaselineData | null;
@@ -43,6 +68,8 @@ interface ResetState {
   homescreenHintShown: boolean;
   midFunnelIntent: 'alone' | 'guided' | null;
   frictionNote: string | null;
+  profile: StartProfile | null;
+  tools: Record<string, unknown>;
 }
 
 interface ResetContextValue extends ResetState {
@@ -50,6 +77,9 @@ interface ResetContextValue extends ResetState {
   setName: (name: string) => void;
   setGoal: (goal: Goal) => void;
   setHurdle: (hurdle: Hurdle) => void;
+  setBody: (sex: Sex, weight: number) => void;
+  setProfile: (profile: StartProfile) => void;
+  setTool: (key: string, data: unknown) => void;
   setBaseline: (data: BaselineData) => void;
   setMidFunnelIntent: (intent: 'alone' | 'guided') => void;
   setFrictionNote: (note: string) => void;
@@ -86,6 +116,8 @@ function loadState(): ResetState {
     name: null,
     goal: null,
     hurdle: null,
+    sex: null,
+    weight: null,
     currentDay: 1,
     days: {},
     baseline: null,
@@ -93,6 +125,8 @@ function loadState(): ResetState {
     homescreenHintShown: false,
     midFunnelIntent: null,
     frictionNote: null,
+    profile: null,
+    tools: {},
   };
 }
 
@@ -123,6 +157,19 @@ export function ResetProvider({ children }: { children: ReactNode }) {
 
   const setHurdle = useCallback((hurdle: Hurdle) => {
     setState(s => ({ ...s, hurdle }));
+  }, []);
+
+  const setBody = useCallback((sex: Sex, weight: number) => {
+    setState(s => ({ ...s, sex, weight }));
+  }, []);
+
+  const setProfile = useCallback((profile: StartProfile) => {
+    // Mirror sex/weight at top level so legacy consumers (getPersonalAnchor) keep working.
+    setState(s => ({ ...s, profile, sex: profile.sex, weight: profile.weight }));
+  }, []);
+
+  const setTool = useCallback((key: string, data: unknown) => {
+    setState(s => ({ ...s, tools: { ...s.tools, [key]: data } }));
   }, []);
 
   const setBaseline = useCallback((data: BaselineData) => {
@@ -179,6 +226,8 @@ export function ResetProvider({ children }: { children: ReactNode }) {
       name: null,
       goal: null,
       hurdle: null,
+      sex: null,
+      weight: null,
       currentDay: 1,
       days: {},
       baseline: null,
@@ -186,6 +235,8 @@ export function ResetProvider({ children }: { children: ReactNode }) {
       homescreenHintShown: false,
       midFunnelIntent: null,
       frictionNote: null,
+      profile: null,
+      tools: {},
     };
     setState(fresh);
   }, []);
@@ -208,6 +259,9 @@ export function ResetProvider({ children }: { children: ReactNode }) {
         setName,
         setGoal,
         setHurdle,
+        setBody,
+        setProfile,
+        setTool,
         setBaseline,
         setMidFunnelIntent,
         setFrictionNote,
@@ -226,11 +280,11 @@ export function ResetProvider({ children }: { children: ReactNode }) {
 }
 
 const FALLBACK: ResetContextValue = {
-  email: null, name: null, goal: null, hurdle: null, currentDay: 1,
+  email: null, name: null, goal: null, hurdle: null, sex: null, weight: null, currentDay: 1,
   days: {}, baseline: null, reflection: null, homescreenHintShown: false,
-  midFunnelIntent: null, frictionNote: null,
+  midFunnelIntent: null, frictionNote: null, profile: null, tools: {},
   setEmail: () => {}, setName: () => {}, setGoal: () => {}, setHurdle: () => {},
-  setBaseline: () => {}, setMidFunnelIntent: () => {}, setFrictionNote: () => {},
+  setBody: () => {}, setProfile: () => {}, setTool: () => {}, setBaseline: () => {}, setMidFunnelIntent: () => {}, setFrictionNote: () => {},
   toggleTask: () => {}, completeDay: () => {}, setReflection: () => {},
   markHomescreenHintShown: () => {}, resetAll: () => {},
   getDayData: (day: number) => getDefaultDay(day),

@@ -2,14 +2,6 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useReset } from '@/contexts/ResetContext';
 import { getFocusText } from '@/lib/focusTexts';
-import type { Goal } from '@/contexts/ResetContext';
-
-const DAY1_TEASER: Record<Goal, string> = {
-  energy: 'Tag 1 zeigt dir, warum du erschöpft bist — obwohl du "genug" schläfst.',
-  fatloss: 'Tag 1 zeigt dir, warum du trotz Verzicht nicht abnimmst.',
-  structure: 'Tag 1 zeigt dir, wie 3 Ankerpunkte mehr Struktur geben als jeder Plan.',
-  sleep: 'Tag 1 zeigt dir, warum schlechter Schlaf selten ein Schlaf-Problem ist.',
-};
 
 export default function ResetFocus() {
   const navigate = useNavigate();
@@ -37,8 +29,10 @@ export default function ResetFocus() {
 
         {goal && (
           <div className="w-full p-4 rounded-xl border border-primary/20 bg-primary/5 mb-6 text-left">
-            <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Heute</p>
-            <p className="text-sm text-foreground/80 leading-relaxed">{DAY1_TEASER[goal]}</p>
+            <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Tag 1</p>
+            <p className="text-sm text-foreground/80 leading-relaxed">
+              Gleich berechnest du deinen persönlichen Startpunkt — Kalorien, Proteinziel und deinen größten Hebel.
+            </p>
           </div>
         )}
 

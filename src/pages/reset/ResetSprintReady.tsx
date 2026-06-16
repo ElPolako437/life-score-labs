@@ -3,6 +3,7 @@ import { useReset } from '@/contexts/ResetContext';
 import { ArrowRight, Share2, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { buildResetSummary } from '@/lib/resetSummary';
 
 const DIMENSION_LABELS: Record<string, string> = {
   energy: 'Energie',
@@ -16,8 +17,10 @@ const DIMS = ['energy', 'sleep', 'calm', 'eating', 'body'] as const;
 
 export default function ResetSprintReady() {
   const navigate = useNavigate();
-  const { name, reflection, baseline } = useReset();
+  const reset = useReset();
+  const { name, reflection, baseline } = reset;
   const [shared, setShared] = useState(false);
+  const summary = buildResetSummary(reset);
 
   const handleShare = async () => {
     const lines = reflection ? [
@@ -76,7 +79,7 @@ export default function ResetSprintReady() {
         </h1>
 
         <p className="text-sm text-muted-foreground/80 leading-relaxed mb-6">
-          Das machen weniger als 20% aller, die anfangen. Was du jetzt weißt, haben die meisten noch nie ausprobiert.
+          Das ziehen die wenigsten durch. Was du jetzt über deinen Körper weißt, haben die meisten nie ausprobiert.
         </p>
 
         {/* Vorher / Nachher summary — only if baseline exists */}
@@ -112,6 +115,23 @@ export default function ResetSprintReady() {
             )}
           </div>
         )}
+
+        {/* Personal evaluation — was lief / größtes Risiko / nächster Schritt */}
+        <div className="p-4 rounded-2xl border border-border/40 bg-card/60 mb-6 text-left space-y-4">
+          <p className="text-xs font-semibold text-primary uppercase tracking-widest">Deine Auswertung</p>
+          <div>
+            <p className="text-[11px] uppercase tracking-widest text-muted-foreground/50 font-semibold mb-1">Was funktioniert hat</p>
+            <p className="text-sm text-foreground/85 leading-relaxed"><span className="text-primary font-semibold">{summary.workedLabel}.</span> {summary.workedLine}</p>
+          </div>
+          <div>
+            <p className="text-[11px] uppercase tracking-widest text-muted-foreground/50 font-semibold mb-1">Dein größtes Risiko</p>
+            <p className="text-sm text-foreground/85 leading-relaxed"><span className="text-foreground font-semibold">{summary.riskLabel}.</span> {summary.riskLine}</p>
+          </div>
+          <div>
+            <p className="text-[11px] uppercase tracking-widest text-muted-foreground/50 font-semibold mb-1">Dein nächster Schritt</p>
+            <p className="text-sm text-foreground/85 leading-relaxed">{summary.nextStep}</p>
+          </div>
+        </div>
 
         {/* Bridge text */}
         <div className="p-4 rounded-xl border border-border/30 bg-card/50 mb-8 text-left">

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Shield, Lock, Eye, Trash2, Mail } from "lucide-react";
+import { ArrowLeft, Shield, Lock, Eye, Trash2, Mail, BarChart2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Section = ({ icon: Icon, title, children }: { icon: React.ElementType; title: string; children: React.ReactNode }) => (
@@ -50,42 +50,57 @@ const Datenschutz = () => {
           </Section>
 
           <Section icon={Eye} title="2. Welche Daten wir verarbeiten">
-            <p>Der CALINESS 7-Tage Reset verarbeitet ausschließlich Daten, die du selbst eingibst:</p>
+            <p>Der CALINESS 7-Tage Reset verarbeitet zwei Kategorien von Daten:</p>
+            <p><strong className="text-foreground">a) Lokal auf deinem Gerät (kein Serverzugriff):</strong></p>
             <ul className="list-disc list-inside space-y-1">
-              <li>Dein persönliches Ziel und deine aktuelle Hürde (Onboarding)</li>
+              <li>Dein Name (optional), persönliches Ziel und Hürde (Onboarding)</li>
               <li>Tägliche Aufgaben-Fortschritte und Check-in Bewertungen</li>
               <li>Optionale Notizen zu einzelnen Tagen</li>
-              <li>Selbsteinschätzungen zur Reflexion (Energie, Schlaf, Wohlbefinden)</li>
+              <li>Selbsteinschätzungen (Energie, Schlaf, Wohlbefinden)</li>
             </ul>
-            <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 mt-2">
-              <p className="font-medium text-foreground">Alle Daten bleiben auf deinem Gerät.</p>
-              <p className="mt-1">Es gibt keinen Server, keine Datenbank, keine Cloud. Alle Informationen werden ausschließlich im lokalen Speicher deines Browsers (localStorage) gespeichert. Wir haben keinen Zugriff darauf.</p>
-            </div>
+            <p className="mt-2"><strong className="text-foreground">b) Nutzungs-Ereignisse (anonymisiert, EU-Server):</strong></p>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Welche Schritte du in der App durchläufst (z.B. "Reset gestartet", "Tag 3 abgeschlossen")</li>
+              <li>Technische Informationen: Browser-Typ, Gerätekategorie, anonymisierte IP-Adresse</li>
+            </ul>
+            <p className="text-xs text-muted-foreground/60 mt-2">Diese Ereignis-Daten enthalten keine persönlichen Inhalte deiner Eingaben. Sie dienen ausschließlich der Produktverbesserung.</p>
           </Section>
 
           <Section icon={Lock} title="3. Rechtsgrundlage">
-            <p>Die Verarbeitung erfolgt auf Basis deiner Einwilligung gemäß <strong className="text-foreground">Art. 6 Abs. 1 lit. a DSGVO</strong>, die du durch die aktive Nutzung der App erteilst.</p>
-            <p>Selbsteinschätzungen zu Wohlbefinden und Schlaf können als gesundheitsbezogene Daten im Sinne von Art. 9 DSGVO eingestuft werden. Da diese Daten ausschließlich lokal auf deinem Gerät gespeichert werden und wir keinerlei Zugriff darauf haben, findet keine Übermittlung oder externe Verarbeitung statt.</p>
+            <p><strong className="text-foreground">Lokale Daten (Abschnitt 2a):</strong> Verarbeitung erfolgt auf Basis deiner Einwilligung gemäß <strong className="text-foreground">Art. 6 Abs. 1 lit. a DSGVO</strong>. Da wir keinen Serverzugriff auf diese Daten haben, findet keine externe Übermittlung statt.</p>
+            <p><strong className="text-foreground">Nutzungs-Ereignisse (Abschnitt 2b):</strong> Verarbeitung auf Basis unseres berechtigten Interesses gemäß <strong className="text-foreground">Art. 6 Abs. 1 lit. f DSGVO</strong>, d.h. der Optimierung und Weiterentwicklung des kostenlosen Produktangebots. Die Ereignisse sind anonymisiert und enthalten keine Gesundheitsdaten.</p>
+            <p>Selbsteinschätzungen zu Wohlbefinden und Schlaf verbleiben ausschließlich lokal auf deinem Gerät und werden nicht an externe Dienste übermittelt.</p>
           </Section>
 
           <Section icon={Trash2} title="4. Speicherdauer und Löschung">
-            <p>Deine Daten verbleiben so lange im lokalen Speicher deines Geräts, bis du sie selbst löschst.</p>
-            <p><strong className="text-foreground">Daten löschen:</strong> Nutze die Funktion "Reset wiederholen" in der App — sie löscht alle gespeicherten Daten vollständig. Alternativ kannst du den Browser-Verlauf und Website-Daten in deinen Browser-Einstellungen löschen.</p>
-            <p>Da wir keine Daten erhalten, können wir auf Anfrage keine Löschung auf Servern durchführen — es gibt keine.</p>
+            <p><strong className="text-foreground">Lokale Daten:</strong> Verbleiben im Browser-localStorage bis du sie selbst löschst. Nutze "Reset wiederholen" in der App oder lösche die Website-Daten in deinen Browser-Einstellungen.</p>
+            <p><strong className="text-foreground">Nutzungs-Ereignisse:</strong> Werden bei PostHog EU (Frankfurt) für maximal 12 Monate gespeichert. Du kannst jederzeit per E-Mail an <a href="mailto:hi@caliness.de" className="text-primary hover:underline">hi@caliness.de</a> die Löschung beantragen.</p>
           </Section>
 
-          <Section icon={Shield} title="5. Keine Drittanbieter, kein Tracking">
+          <Section icon={BarChart2} title="5. Analytics — PostHog EU">
+            <p>Wir nutzen <strong className="text-foreground">PostHog</strong> zur anonymisierten Nutzungsanalyse. PostHog verarbeitet Daten ausschließlich auf EU-Servern in Frankfurt (Deutschland) und ist DSGVO-konform zertifiziert.</p>
+            <ul className="list-disc list-inside space-y-1">
+              <li>IP-Adressen werden vor der Speicherung anonymisiert</li>
+              <li>Kein Einsatz von Cookies oder Cross-Site-Tracking</li>
+              <li>Daten verlassen die EU nicht</li>
+              <li>Keine Weitergabe an Dritte zu Werbezwecken</li>
+            </ul>
+            <p className="text-xs text-muted-foreground/60 mt-2">
+              Datenschutzerklärung PostHog: <a href="https://posthog.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">posthog.com/privacy</a>
+            </p>
+          </Section>
+
+          <Section icon={Shield} title="6. Keine Werbung, keine Drittanbieter-Tracker">
             <p>Die App verwendet:</p>
             <ul className="list-disc list-inside space-y-1">
-              <li>Keine Analytics (kein Google Analytics, kein Plausible, nichts)</li>
-              <li>Keine Werbe-Tracker oder Pixel</li>
+              <li>Keine Werbe-Tracker oder Pixel (kein Meta Pixel, kein Google Ads)</li>
+              <li>Kein Google Analytics, kein Facebook Analytics</li>
               <li>Keine externen Schriften — Fonts sind lokal eingebunden</li>
-              <li>Keine Cookies</li>
+              <li>Keine Third-Party-Cookies</li>
             </ul>
-            <p className="mt-1">Es werden keine Daten an Dritte übermittelt.</p>
           </Section>
 
-          <Section icon={Lock} title="6. Deine Rechte">
+          <Section icon={Lock} title="7. Deine Rechte">
             <p>Gemäß DSGVO hast du das Recht auf:</p>
             <ul className="list-disc list-inside space-y-1">
               <li>Auskunft über deine Daten (Art. 15)</li>
@@ -100,7 +115,7 @@ const Datenschutz = () => {
             </p>
           </Section>
 
-          <Section icon={Mail} title="7. Kontakt bei Datenschutzfragen">
+          <Section icon={Mail} title="8. Kontakt bei Datenschutzfragen">
             <p>Bei Fragen zum Datenschutz erreichst du uns unter:<br />
             <a href="mailto:hi@caliness.de" className="text-primary hover:underline">hi@caliness.de</a>
             </p>

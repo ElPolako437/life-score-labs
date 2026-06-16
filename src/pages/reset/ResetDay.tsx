@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useReset } from '@/contexts/ResetContext';
+import { useReset, type Rating } from '@/contexts/ResetContext';
 import { DAY_CONTENT, type GoalKey } from '@/lib/dayContent';
+import { DAY_TOOLS } from '@/components/reset/dayTools';
+import CaliNote from '@/components/reset/CaliNote';
+import { caliLine } from '@/lib/caliLines';
 import { track } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -13,9 +16,11 @@ export default function ResetDay() {
   const { id } = useParams();
   const dayNum = Number(id);
   const navigate = useNavigate();
-  const { currentDay, getDayData, toggleTask, completedTaskCount, completeDay, goal } = useReset();
+  const reset = useReset();
+  const { currentDay, getDayData, toggleTask, completedTaskCount, completeDay, goal } = reset;
   const [celebrating, setCelebrating] = useState(false);
   const [ctaPulse, setCtaPulse] = useState(false);
+  const [showRating, setShowRating] = useState(false);
 
   const content = DAY_CONTENT[dayNum - 1];
   const goalBonus = goal ? content?.goalBonus?.[goal as GoalKey] : null;
@@ -23,6 +28,11 @@ export default function ResetDay() {
   const completedCount = completedTaskCount(dayNum);
   const totalTasks = content?.tasks.length || 0;
   const minRequired = Math.min(3, totalTasks);
+
+  // Interactive tool for this day (if any). Its completion gates the day's task list + CTA.
+  const toolEntry = content?.toolId ? DAY_TOOLS[content.toolId] : null;
+  const toolDone = toolEntry ? toolEntry.isComplete(reset) : true;
+  const ToolComponent = toolEntry?.Component;
 
   const prevCount = useRef(completedCount);
 
@@ -83,13 +93,46 @@ export default function ResetDay() {
     if (dayData.completed) {
       navigate('/week');
     } else {
-      completeDay(dayNum, 'good');
-      track('day_completed', { day: dayNum });
-      localStorage.setItem('caliness_just_completed', String(dayNum));
-      setCelebrating(true);
-      setTimeout(() => navigate(`/checkin/${dayNum}`), 700);
+      setShowRating(true);
     }
   };
+
+  const handleRating = (rating: Rating) => {
+    completeDay(dayNum, rating);
+    track('day_completed', { day: dayNum, rating });
+    localStorage.setItem('caliness_just_completed', String(dayNum));
+    setShowRating(false);
+    setCelebrating(true);
+    setTimeout(() => navigate(`/checkin/${dayNum}`), 700);
+  };
+
+  const tasksBlock = (
+    <div className="space-y-3 mb-8">
+      {content.tasks.map((task, i) => (
+        <label
+          key={i}
+          className={cn(
+            'flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all duration-200',
+            dayData.tasks[i]
+              ? 'border-primary/40 bg-primary/5'
+              : 'border-border/60 bg-card hover:border-primary/30'
+          )}
+        >
+          <Checkbox
+            checked={dayData.tasks[i] || false}
+            onCheckedChange={() => toggleTask(dayNum, i)}
+            className="mt-0.5 transition-transform data-[state=checked]:scale-110"
+          />
+          <span className={cn(
+            'text-sm leading-relaxed',
+            dayData.tasks[i] ? 'text-foreground' : 'text-muted-foreground'
+          )}>
+            {task}
+          </span>
+        </label>
+      ))}
+    </div>
+  );
 
   return (
     <>
@@ -109,81 +152,102 @@ export default function ResetDay() {
         </p>
         <Progress value={(dayNum / 7) * 100} variant="neon" className="mb-6 h-1.5" />
 
-        <h1 className="font-outfit text-2xl font-bold text-foreground mb-2">
-          {content.title}
-        </h1>
-        <p className="text-sm text-muted-foreground mb-2">{content.goal}</p>
-        <p className="text-sm text-foreground/70 italic mb-8 leading-relaxed">
-          {content.impulse}
-        </p>
+        <CaliNote line={caliLine(dayNum, reset)} />
 
-        {/* Tasks */}
-        <div className="space-y-3 mb-8">
-          {content.tasks.map((task, i) => (
-            <label
-              key={i}
+        {toolEntry ? (
+          /* Interactive-tool day: tool first, Tagesauftrag only once the tool is done */
+          <>
+            {ToolComponent && <ToolComponent />}
+            {toolDone && (
+              <div className="mt-8">
+                <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-3">Dein erster Tagesauftrag</p>
+                {tasksBlock}
+              </div>
+            )}
+          </>
+        ) : (
+          /* Classic content day */
+          <>
+            <h1 className="font-outfit text-2xl font-bold text-foreground mb-2">
+              {content.title}
+            </h1>
+            <p className="text-sm text-muted-foreground mb-2">{content.goal}</p>
+            <p className="text-sm text-foreground/70 italic mb-8 leading-relaxed">
+              {content.impulse}
+            </p>
+
+            {tasksBlock}
+
+            {/* Goal-spezifischer Fokus */}
+            {goalBonus && (
+              <div className="mb-4 p-4 rounded-xl border border-border/40 bg-card/60">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-1.5">Dein Fokus heute</p>
+                <p className="text-sm text-foreground/80 leading-relaxed">{goalBonus}</p>
+              </div>
+            )}
+
+            {/* Sofort-Tipp */}
+            <div className="mb-6 p-4 rounded-xl border border-primary/40 bg-primary/5">
+              <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Sofort-Tipp</p>
+              <p className="text-sm text-foreground/90 leading-relaxed">{content.sofortTipp}</p>
+            </div>
+
+            {/* Insight — always fully visible */}
+            <div className="mb-8 p-4 rounded-xl border border-border/30 bg-card/50">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Warum das funktioniert</p>
+              <p className="text-sm text-foreground/85 leading-relaxed">{content.insight}</p>
+            </div>
+          </>
+        )}
+
+        {/* CTA / daily check-in — hidden until the day's tool is complete */}
+        {(!toolEntry || toolDone) && (!showRating ? (
+          <>
+            <Button
+              variant="premium"
+              size="lg"
               className={cn(
-                'flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all duration-200',
-                dayData.tasks[i]
-                  ? 'border-primary/40 bg-primary/5'
-                  : 'border-border/60 bg-card hover:border-primary/30'
+                'w-full min-h-[48px] transition-all duration-300',
+                ctaPulse && 'ring-2 ring-primary ring-offset-2 ring-offset-background scale-[1.02]',
+                ctaPulse && '[box-shadow:0_0_24px_hsl(142_76%_46%/0.45)]'
               )}
+              disabled={!canComplete && !dayData.completed}
+              onClick={handleComplete}
             >
-              <Checkbox
-                checked={dayData.tasks[i] || false}
-                onCheckedChange={() => toggleTask(dayNum, i)}
-                className="mt-0.5 transition-transform data-[state=checked]:scale-110"
-              />
-              <span className={cn(
-                'text-sm leading-relaxed',
-                dayData.tasks[i] ? 'text-foreground' : 'text-muted-foreground'
-              )}>
-                {task}
-              </span>
-            </label>
-          ))}
-        </div>
+              {dayData.completed ? 'Zurück zur Übersicht' : 'Tag abschließen'}
+            </Button>
 
-        {/* Goal-spezifischer Fokus */}
-        {goalBonus && (
-          <div className="mb-4 p-4 rounded-xl border border-border/40 bg-card/60">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-1.5">Dein Fokus heute</p>
-            <p className="text-sm text-foreground/80 leading-relaxed">{goalBonus}</p>
+            {!canComplete && !dayData.completed && (
+              <p className="text-xs text-muted-foreground/50 text-center mt-3">
+                Erledige mindestens {minRequired} Aufgaben
+              </p>
+            )}
+          </>
+        ) : (
+          <div className="animate-fade-in">
+            <p className="text-sm font-medium text-foreground text-center mb-1">Wie hat sich Tag {dayNum} angefühlt?</p>
+            <p className="text-xs text-muted-foreground/50 text-center mb-4">Ehrlich — das schärft deine Auswertung.</p>
+            <div className="space-y-2.5">
+              {([
+                { rating: 'good', emoji: '✓', label: 'Lief richtig gut', sub: 'Fühlte sich machbar an' },
+                { rating: 'difficult', emoji: '~', label: 'War okay', sub: 'Hat etwas Überwindung gekostet' },
+                { rating: 'failed', emoji: '!', label: 'War hart', sub: 'Hab mich durchgekämpft' },
+              ] as { rating: Rating; emoji: string; label: string; sub: string }[]).map(opt => (
+                <button
+                  key={opt.rating}
+                  onClick={() => handleRating(opt.rating)}
+                  className="w-full flex items-center gap-3 p-4 rounded-xl border border-border/60 bg-card text-left hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 active:scale-[0.99]"
+                >
+                  <span className="w-8 h-8 rounded-full bg-primary/15 text-primary flex items-center justify-center text-sm font-bold shrink-0">{opt.emoji}</span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-foreground">{opt.label}</p>
+                    <p className="text-xs text-muted-foreground/60">{opt.sub}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
-        )}
-
-        {/* Sofort-Tipp */}
-        <div className="mb-6 p-4 rounded-xl border border-primary/40 bg-primary/5">
-          <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-1.5">Sofort-Tipp</p>
-          <p className="text-sm text-foreground/90 leading-relaxed">{content.sofortTipp}</p>
-        </div>
-
-        {/* Insight — always fully visible */}
-        <div className="mb-8 p-4 rounded-xl border border-border/30 bg-card/50">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Warum das funktioniert</p>
-          <p className="text-sm text-foreground/85 leading-relaxed">{content.insight}</p>
-        </div>
-
-        {/* CTA */}
-        <Button
-          variant="premium"
-          size="lg"
-          className={cn(
-            'w-full min-h-[48px] transition-all duration-300',
-            ctaPulse && 'ring-2 ring-primary ring-offset-2 ring-offset-background scale-[1.02]',
-            ctaPulse && '[box-shadow:0_0_24px_hsl(142_76%_46%/0.45)]'
-          )}
-          disabled={!canComplete && !dayData.completed}
-          onClick={handleComplete}
-        >
-          {dayData.completed ? 'Zurück zur Übersicht' : 'Tag abschließen'}
-        </Button>
-
-        {!canComplete && !dayData.completed && (
-          <p className="text-xs text-muted-foreground/50 text-center mt-3">
-            Erledige mindestens {minRequired} Aufgaben
-          </p>
-        )}
+        ))}
 
       </div>
     </div>

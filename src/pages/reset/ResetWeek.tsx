@@ -8,8 +8,10 @@ import { isMobile, isStandalone } from '@/lib/installPrompt';
 
 const INSTALL_D3_KEY = 'caliness_install_d3_shown';
 import { cn } from '@/lib/utils';
-import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
+import ProgressRing from '@/components/reset/ProgressRing';
+import CountUp from '@/components/reset/CountUp';
+import CollectedProfile from '@/components/reset/CollectedProfile';
 
 const LAST_VISIT_KEY = 'caliness_week_last_visit';
 
@@ -41,8 +43,9 @@ const LOCKED_TEASERS: Record<number, string> = {
 
 export default function ResetWeek() {
   const navigate = useNavigate();
-  const { currentDay, getDayData, reflection, goal, name } = useReset();
+  const { currentDay, getDayData, reflection, goal, name, profile } = useReset();
   const allDone = currentDay > 7;
+  const completedDays = DAY_CONTENT.reduce((n, _, i) => n + (getDayData(i + 1).completed ? 1 : 0), 0);
   const [streakAtRisk, setStreakAtRisk] = useState(false);
   const [justCompletedDay, setJustCompletedDay] = useState<number | null>(null);
   const [showInstall, setShowInstall] = useState(false);
@@ -102,7 +105,31 @@ export default function ResetWeek() {
           )}
         </div>
 
-        <Progress value={(Math.min(currentDay, 7) / 7) * 100} variant="neon" className="mb-8 h-2" />
+        {/* Reset profile — progress ring + personal anchor */}
+        <div className="mt-4 mb-8 p-5 rounded-2xl border border-border/50 bg-card/60 flex items-center gap-5">
+          <ProgressRing progress={completedDays / 7} size={104} stroke={7}>
+            <CountUp to={completedDays} duration={0.9} className="font-outfit text-2xl font-bold text-foreground tabular-nums leading-none" />
+            <span className="text-[10px] text-muted-foreground/50 mt-0.5">von 7 Tagen</span>
+          </ProgressRing>
+          <div className="flex-1 min-w-0 space-y-2.5">
+            <div>
+              <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 font-semibold">Streak</p>
+              <p className="text-sm font-semibold text-foreground">{streak > 0 ? `🔥 ${streak} ${streak === 1 ? 'Tag' : 'Tage'} am Stück` : 'Heute startest du'}</p>
+            </div>
+            {profile ? (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 font-semibold">Dein Startprofil</p>
+                <p className="text-sm font-semibold text-foreground tabular-nums">{profile.calLow.toLocaleString('de-DE')}–{profile.calHigh.toLocaleString('de-DE')} kcal</p>
+                <p className="text-xs text-muted-foreground/60 tabular-nums">{profile.proteinLow}–{profile.proteinHigh} g Protein / Tag</p>
+              </div>
+            ) : (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 font-semibold">Dein Startprofil</p>
+                <p className="text-sm text-muted-foreground/60">Tag 1 berechnet deine Werte</p>
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Return celebration banner */}
         {justCompletedDay && (
@@ -141,6 +168,9 @@ export default function ResetWeek() {
             </Button>
           </div>
         )}
+
+        {/* Reset profile — building blocks accumulating across the week */}
+        <CollectedProfile />
 
         {/* Day cards */}
         <div className="space-y-3">
@@ -192,7 +222,7 @@ export default function ResetWeek() {
                   )}
                   {isCompleted && data.rating && (
                     <p className="text-xs text-muted-foreground/60 mt-0.5">
-                      {data.rating === 'good' ? 'Lief gut' : data.rating === 'difficult' ? 'War schwierig' : 'Nicht geschafft'}
+                      {data.rating === 'good' ? 'Lief gut' : data.rating === 'difficult' ? 'War okay' : 'War hart'}
                     </p>
                   )}
                   {isFuture && (() => {

@@ -9,27 +9,29 @@ export interface DayContent {
   tasks: string[];
   taskKeys: string[];
   goalBonus: Record<GoalKey, string>;
+  /** Optional interactive tool rendered on this day (see components/reset/dayTools). */
+  toolId?: string;
 }
 
 export const DAY_CONTENT: DayContent[] = [
-  // Tag 1 — Rauschen reduzieren
+  // Tag 1 — Dein Reset-Start (interaktiver Rechner)
   {
-    title: 'Rauschen reduzieren',
-    goal: 'Heute geht es darum, bewusst weniger Reize zuzulassen.',
-    impulse: '„Heute geht es nicht um Perfektion. Es geht darum, anzufangen. Dein einziges Ziel: den Tag bewusst abschließen."',
-    insight: 'Warum du müde bist, obwohl du genug schläfst: Allostatic Load — jede Benachrichtigung, jede News-Headline kostet dieselbe Energie wie eine echte Bedrohung. Die meisten Menschen sind nicht erschöpft weil sie zu wenig schlafen, sondern weil sie tagsüber zu viele Reize aufnehmen.',
-    sofortTipp: '30 Minuten ALLE Benachrichtigungen aus. Nicht nur Social Media — alles.',
+    title: 'Dein Reset-Start',
+    goal: 'Dein persönlicher Startpunkt: Kalorien, Protein, Mahlzeiten, Hebel.',
+    impulse: '„Heute geht es nicht um Perfektion. Es geht darum, deinen Ausgangspunkt zu kennen — und den ersten Schritt zu machen."',
+    insight: 'Die meisten starten mit allgemeinen Tipps. Du startest mit deinen eigenen Zahlen. Das ist der Unterschied zwischen „mehr Protein essen" und „155 g für deinen Körper".',
+    sofortTipp: 'Iss heute in jede Mahlzeit bewusst eine Handfläche Protein — das ist dein erster konkreter Hebel.',
     tasks: [
-      '30 Min bewusst offline — kein Bildschirm',
-      'Kein Alkohol heute',
-      'Einen festen Zeitpunkt für deine letzte Mahlzeit setzen',
+      'In jede heutige Mahlzeit eine Handfläche Protein einbauen',
+      'Heute keine Snacks zwischen den Mahlzeiten',
     ],
-    taskKeys: ['offline', 'alcohol', 'last_meal'],
+    taskKeys: ['protein_each_meal', 'no_snacks'],
+    toolId: 'day1',
     goalBonus: {
-      energy: 'Beobachte heute dein Energieniveau nach dem Offline-Block. Wann fühlst du dich leichter?',
-      fatloss: 'Notiere mental wann du heute Hunger spürst vs. wann du aus Reiz essen willst.',
-      structure: 'Plane heute Abend den morgigen Tag in 3 konkreten Punkten — bevor du schläfst.',
-      sleep: 'Lege heute Abend deine feste Schlafenszeit fest. Schreib sie auf.',
+      energy: 'Achte heute darauf, wie sich gleichmäßiges Protein auf deine Energie am Nachmittag auswirkt.',
+      fatloss: 'Protein in jeder Mahlzeit hält dich satt — der einfachste Hebel gegen Heißhunger im Defizit.',
+      structure: 'Feste Mahlzeiten mit Protein geben deinem ganzen Tag einen Rahmen.',
+      sleep: 'Halte die letzte proteinreiche Mahlzeit mind. 3h vor dem Schlafen.',
     },
   },
   // Tag 2 — Mahlzeiten ordnen
@@ -40,11 +42,11 @@ export const DAY_CONTENT: DayContent[] = [
     insight: 'Das Snacking-Problem ist kein Hunger-Problem: Jede Zwischenmahlzeit hebt Insulin. Insulin blockiert Fettabbau komplett. Zwei klare Mahlzeiten mit Pausen geben dem Körper Zeitfenster für echten Fettabbau. Kein Hungern — Timing.',
     sofortTipp: 'Erste Mahlzeit erst bei echtem Hunger. Eine Handfläche Protein pro Mahlzeit.',
     tasks: [
-      '2 proteinreiche Mahlzeiten — keine Snacks dazwischen',
-      'Mindestens 2 Liter Wasser über den Tag verteilt',
-      'Nach der letzten Mahlzeit: Küche zu, nichts mehr essen',
+      'Eine deiner vorgeschlagenen proteinreichen Mahlzeiten essen',
+      'Keine Snacks zwischen den Mahlzeiten',
     ],
-    taskKeys: ['meals', 'water', 'kitchen_closed'],
+    taskKeys: ['protein_meal', 'no_snacks'],
+    toolId: 'day2',
     goalBonus: {
       energy: 'Iss deine erste Mahlzeit erst wenn echter Hunger da ist — nicht aus Gewohnheit.',
       fatloss: 'Halte die Pause zwischen den zwei Mahlzeiten so lang wie möglich. Mindestens 5 Stunden.',
@@ -60,11 +62,11 @@ export const DAY_CONTENT: DayContent[] = [
     insight: 'Warum ein Spaziergang mehr bringt als HIIT: 10–15 Min Spaziergang nach einer Mahlzeit senkt den Blutzuckeranstieg um bis zu 30%. Effektiver als jedes Supplement. Aktiviert den Parasympathikus für Regeneration und Verdauung.',
     sofortTipp: 'Direkt nach der größten Mahlzeit 10–15 Min spazieren. Entspannt, kein Tempo.',
     tasks: [
-      '30 Min ruhige Bewegung — Spaziergang, kein Workout',
-      '2 proteinreiche Mahlzeiten wie gestern',
-      '15 Min nach einer Mahlzeit bewusst bewegen',
+      'Dein Schrittziel heute erreichen — ungefähr reicht',
+      '1 Spaziergang nach der größten Mahlzeit',
     ],
-    taskKeys: ['movement', 'meals', 'post_meal_walk'],
+    taskKeys: ['steps', 'post_meal_walk'],
+    toolId: 'day3',
     goalBonus: {
       energy: 'Geh nach dem Mittagessen spazieren — nicht abends. Beobachte den Energieunterschied am Nachmittag.',
       fatloss: 'Der Post-Meal Walk ist heute dein wichtigstes Fettverlust-Tool. Direkt nach der größten Mahlzeit.',
@@ -80,12 +82,11 @@ export const DAY_CONTENT: DayContent[] = [
     insight: 'Dein Körper regeneriert nicht im Schlaf — er regeneriert im Rhythmus: Wachstumshormon, Melatonin, Cortisol folgen einem festen Takt. Unterschiedliche Schlafenszeiten stören den Takt — auch bei 8 Stunden. Feste Schlafenszeit (±15 Min) ist der stärkste Einzelhebel.',
     sofortTipp: 'Alarm stellen zum INS-BETT-GEHEN, nicht zum Aufwachen.',
     tasks: [
-      'Feste Schlafenszeit festlegen und einhalten (mind. 8h im Bett)',
-      '60 Min vor dem Schlafen: kein Bildschirm',
-      '2 klare Mahlzeiten — letzte Mahlzeit mind. 2h vor dem Schlafen',
-      'Kein Koffein nach 14 Uhr',
+      'Deine persönliche Schlaf-Stellschraube heute umsetzen',
+      'Feste Schlafenszeit einhalten (mind. 8h im Bett)',
     ],
-    taskKeys: ['sleep', 'screen_free', 'meals_timed', 'no_caffeine'],
+    taskKeys: ['sleep_screw', 'sleep_anchor'],
+    toolId: 'day4',
     goalBonus: {
       energy: 'Teste heute: Gleiche Schlafenszeit wie gestern — und beobachte dein Energieniveau morgen früh.',
       fatloss: 'Schlechter Schlaf erhöht Ghrelin (Hungerhormon) um bis zu 24%. Heute Nacht ist Fettverlust-Arbeit.',
@@ -101,12 +102,11 @@ export const DAY_CONTENT: DayContent[] = [
     insight: 'Dein Abend-Problem ist ein Nachmittags-Problem: Kontrollverlust am Abend (Snacks, Bildschirm, Alkohol) liegt an dem was zwischen 14–17 Uhr passiert. Cortisol fällt natürlich ab. Bei Dauerstress fällt es zu tief → Körper kompensiert mit schneller Energie. Abend ist Symptom, Nachmittag ist Ursache.',
     sofortTipp: 'Zwischen 15–16 Uhr bewusst 10 Min Pause. Kein Kaffee, kein Snack — nur Ruhe.',
     tasks: [
-      'Abendessen vorher planen — nicht spontan entscheiden',
-      'Eine Abendroutine definieren (z.B. Tee, Lesen, Spaziergang)',
-      'Kein Bildschirm im Bett',
-      'Wenn Heißhunger kommt: 10 Min warten, Wasser trinken',
+      'Deinen persönlichen Gegenhebel heute anwenden',
+      'Den Moment bewusst abfangen, in dem dein Tag kippt',
     ],
-    taskKeys: ['plan_dinner', 'evening_routine', 'no_screen_bed', 'hunger_strategy'],
+    taskKeys: ['counter_lever', 'catch_moment'],
+    toolId: 'day5',
     goalBonus: {
       energy: 'Plane heute zwischen 15–16 Uhr eine 10-Min Pause ohne Bildschirm. Das rettet deinen Abend.',
       fatloss: 'Abend-Heißhunger ist kein Hunger. Es ist ein Zeichen dass du tagsüber zu wenig gegessen oder zu viel Stress hattest.',
@@ -114,19 +114,19 @@ export const DAY_CONTENT: DayContent[] = [
       sleep: 'Beginne heute deine Schlafroutine 90 Min vor der Schlafenszeit. Nicht 30 — 90.',
     },
   },
-  // Tag 6 — Alltag vereinfachen
+  // Tag 6 — Deine Wochenstruktur (interaktiver Builder)
   {
-    title: 'Alltag vereinfachen',
+    title: 'Deine Wochenstruktur',
     goal: 'Alles weglassen, was keinen Beitrag zur Stabilität leistet.',
     impulse: '„Jetzt wird es leicht — wenn du es richtig aufsetzt. Du bist seit fast einer Woche in diesem Rhythmus. Das ist kein Zufall — das ist ein System."',
     insight: 'Decision Fatigue — warum weniger Entscheidungen zu besserem Fettverlust führen: Jede Entscheidung kostet mentales Budget. Morgens Entscheidungen treffen = abends ist das Budget leer → schlechteste Optionen. Lösung: Entscheidungen eliminieren, nicht besser treffen.',
     sofortTipp: 'Heute Abend für morgen festlegen: Was anziehen? Was essen? Wann rausgehen?',
     tasks: [
+      'Deine Trainingstage für die nächste Woche festlegen',
       'Mahlzeiten für morgen vorbereiten oder planen',
-      'Störquellen identifizieren und eine bewusst abstellen',
-      'Schlafenszeit wie gestern einhalten',
     ],
-    taskKeys: ['meal_prep', 'reduce_friction', 'sleep_anchor'],
+    taskKeys: ['set_training_days', 'meal_prep'],
+    toolId: 'day6',
     goalBonus: {
       energy: 'Identifiziere die eine Sache die dir täglich die meiste Energie kostet. Kann sie weg oder reduziert werden?',
       fatloss: 'Räume heute alle Snacks aus deinem Sichtfeld. Was nicht sichtbar ist, wird nicht gegessen.',

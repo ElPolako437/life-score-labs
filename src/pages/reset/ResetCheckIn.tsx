@@ -18,12 +18,18 @@ const GOAL_LABEL: Record<string, string> = {
 
 const SOCIAL_PROOF: Record<number, string> = {
   1: 'Du hast angefangen. Die meisten tun es nicht.',
-  2: 'Du gehörst jetzt zu den 40%, die Tag 2 schaffen.',
-  3: 'Du gehörst jetzt zu den 29%, die Tag 3 schaffen.',
-  4: 'Du gehörst jetzt zu den Wenigen, die Tag 4 erreichen.',
-  5: 'Du gehörst jetzt zu den 18%, die Tag 5 schaffen.',
-  6: 'Du gehörst jetzt zu den 15%, die fast am Ziel sind.',
-  7: 'Du hast es durchgezogen. Du gehörst zur Elite.',
+  2: 'Tag 2 — genau hier hören die meisten schon auf.',
+  3: 'Drei Tage am Stück. Das ist der Punkt, an dem aus Vorsatz ein Muster wird.',
+  4: 'Über die Hälfte. Ab hier wird es zur Gewohnheit statt zur Anstrengung.',
+  5: 'Fünf Tage. Die wenigsten kommen so weit.',
+  6: 'Vorletzter Tag. Du ziehst das wirklich durch.',
+  7: 'Sieben Tage am Stück. Das schaffen die wenigsten — du gehörst dazu.',
+};
+
+const RATING_RESPONSE: Record<string, string> = {
+  good: 'Wenn es sich machbar anfühlt, springt dein System an — das ist kein Zufall, das ist Adaption.',
+  difficult: 'Dass es Überwindung gekostet hat, ist normal. Genau an diesen Tagen entsteht die eigentliche Veränderung.',
+  failed: 'Hart durchgezogen zählt am meisten. Nicht die leichten Tage formen dich — die schweren, an denen du trotzdem geblieben bist.',
 };
 
 export default function ResetCheckIn() {
@@ -32,6 +38,7 @@ export default function ResetCheckIn() {
   const navigate = useNavigate();
   const {
     goal,
+    getDayData,
     homescreenHintShown,
     markHomescreenHintShown,
     midFunnelIntent,
@@ -39,6 +46,8 @@ export default function ResetCheckIn() {
     frictionNote,
     setFrictionNote,
   } = useReset();
+
+  const dayRating = getDayData(dayNum).rating;
 
   const [showInstall, setShowInstall] = useState(false);
   const [localFriction, setLocalFriction] = useState(frictionNote || '');
@@ -99,6 +108,13 @@ export default function ResetCheckIn() {
         <p className="text-sm text-muted-foreground mb-6">
           {dayNum < 7 ? 'Morgen geht es weiter.' : 'Zeit für deine Reflexion.'}
         </p>
+
+        {/* Rating-aware coaching line */}
+        {dayRating && RATING_RESPONSE[dayRating] && (
+          <p className="text-sm text-foreground/75 leading-relaxed italic mb-6 animate-fade-in">
+            {RATING_RESPONSE[dayRating]}
+          </p>
+        )}
 
         {/* Retention hook (days 1–6) */}
         {retentionHook && (

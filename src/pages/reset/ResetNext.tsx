@@ -118,7 +118,7 @@ const FAQ = [
 
 export default function ResetNext() {
   const navigate = useNavigate();
-  const { goal, hurdle, reflection, baseline, resetAll, name, midFunnelIntent, frictionNote } = useReset();
+  const { goal, hurdle, reflection, baseline, resetAll, name, midFunnelIntent, frictionNote, profile } = useReset();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [shared, setShared] = useState(false);
 
@@ -289,6 +289,25 @@ export default function ResetNext() {
           </div>
         )}
 
+        {/* Start-profile recap — ties the free value to the paid pitch */}
+        {profile && (
+          <div className="mb-8 p-4 rounded-xl border border-primary/20 bg-primary/5">
+            <p className="text-[10px] uppercase tracking-widest text-primary/70 font-semibold mb-2">Dein Startprofil aus Tag 1</p>
+            <div className="flex items-center gap-4 mb-2">
+              <div>
+                <p className="font-outfit text-lg font-bold text-foreground tabular-nums leading-none">{profile.calLow.toLocaleString('de-DE')}–{profile.calHigh.toLocaleString('de-DE')}</p>
+                <p className="text-[10px] text-muted-foreground/60 mt-0.5">kcal / Tag</p>
+              </div>
+              <div className="w-px h-8 bg-border/40" />
+              <div>
+                <p className="font-outfit text-lg font-bold text-foreground tabular-nums leading-none">{profile.proteinLow}–{profile.proteinHigh}</p>
+                <p className="text-[10px] text-muted-foreground/60 mt-0.5">g Protein / Tag</p>
+              </div>
+            </div>
+            <p className="text-sm text-foreground/80 leading-snug">Im Sprint wird aus dieser Startschätzung ein Plan, der sich an <span className="text-foreground font-medium">deine</span> echten Daten anpasst.</p>
+          </div>
+        )}
+
         <h1 className="font-outfit text-2xl font-bold text-foreground mb-4 leading-tight">
           {name ? `${name}, der Reset war der Einstieg.` : 'Der Reset war der Einstieg.'}
           <br />
@@ -434,20 +453,20 @@ export default function ResetNext() {
           </p>
         </div>
 
-        {/* Scarcity — short-term urgency */}
+        {/* Scarcity — honest, capacity-based */}
         <div className="text-center mb-3">
           <p className="text-xs text-foreground/70 font-medium">
-            Diese Woche noch <span className="text-primary">3 Plätze</span> frei.
+            Persönliche Begleitung heißt <span className="text-primary">begrenzte Plätze</span> pro Aufnahme.
           </p>
           <p className="text-xs text-muted-foreground/40 mt-0.5">
-            Nächste Aufnahme: {getNextSprintDate()} — danach wieder Warteliste.
+            Nächste Aufnahme: {getNextSprintDate()} — sichere dir deinen Platz.
           </p>
         </div>
 
         {/* Cost of inaction */}
         <div className="p-3 rounded-xl border border-border/20 bg-card/40 mb-5">
           <p className="text-xs text-muted-foreground/60 text-center leading-relaxed">
-            78% der Reset-Teilnehmer ohne Anschlussplan fallen innerhalb von 21 Tagen in alte Muster zurück. Du hast 7 Tage investiert — der Caliness-Sprint sichert diesen Fortschritt.
+            Ohne Anschlussplan fallen die meisten nach wenigen Wochen in alte Muster zurück. Du hast 7 Tage investiert — der Caliness-Sprint sichert genau diesen Fortschritt.
           </p>
         </div>
 
