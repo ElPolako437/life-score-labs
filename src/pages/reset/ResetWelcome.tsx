@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useReset } from '@/contexts/ResetContext';
-import { track, captureLead } from '@/lib/analytics';
+import { track, captureLead, triggerResetSignup } from '@/lib/analytics';
 
 export default function ResetWelcome() {
   const navigate = useNavigate();
@@ -14,7 +14,10 @@ export default function ResetWelcome() {
 
   const handleStart = () => {
     if (localName.trim()) setName(localName.trim());
-    if (localEmail.trim()) captureLead(localEmail, localName);
+    if (localEmail.trim()) {
+      captureLead(localEmail, localName);
+      triggerResetSignup(localEmail, localName);
+    }
     track(hasProgress ? 'reset_resumed' : 'reset_started', { hasName: !!localName.trim(), hasEmail: !!localEmail.trim() });
     if (hasProgress) {
       // Go directly to active day if it's not completed yet

@@ -71,3 +71,26 @@ export async function captureLead(email: string, name?: string | null): Promise<
     // fail silently
   }
 }
+
+const SUPABASE_FUNCTIONS_URL = 'https://aorrcpmlkubsmrthzals.supabase.co/functions/v1';
+
+/**
+ * Trigger the Reset email nurture sequence (day0 = welcome, sent immediately).
+ * Fire-and-forget — must never block the user flow.
+ */
+export function triggerResetSignup(email: string, name?: string | null): void {
+  if (!email.trim()) return;
+  try {
+    fetch(`${SUPABASE_FUNCTIONS_URL}/send-reset-sequence`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        trigger: 'reset_signup',
+        email: email.trim().toLowerCase(),
+        name: name?.trim() || undefined,
+      }),
+    }).catch(() => {});
+  } catch {
+    // fire-and-forget
+  }
+}
