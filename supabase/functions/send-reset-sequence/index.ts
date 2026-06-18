@@ -20,10 +20,10 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
 const SENDER = { name: "CALI von CALINESS", email: "noreply@caliness-academy.de" };
 
-// TODO: Replace with your production URLs
-const RESET_URL = "https://TODO-RESET-WEBAPP-URL.de/reset";
-const APP_TRIAL_URL = "https://TODO-APP-TRIAL-URL.de";
-const COACHING_URL = "https://TODO-COACHING-CALENDLY-URL.de";
+const RESET_URL = "https://life-score-labs.lovable.app";
+// App ist noch nicht live — URL führt zur Warteliste / Early Access.
+const APP_TRIAL_URL = "https://caliness-academy.de/app";
+const COACHING_URL = "https://calendly.com/team-calinessacademy/new-meeting";
 const UNSUBSCRIBE_BASE = `${SUPABASE_URL}/functions/v1/send-reset-sequence`;
 const IMPRESSUM_URL = "https://caliness-academy.de/impressum";
 const DATENSCHUTZ_URL = "https://caliness-academy.de/datenschutz";
@@ -203,7 +203,6 @@ const SEQUENCE: EmailDef[] = [
           body(
             `Gestern hast du deinen Reset gestartet. Heute kommt der erste echte Schritt — klein, machbar, spürbar.`
           ),
-          // TODO: Konkreten Quick-Win-Inhalt hier einfügen (z.B. Protein-Frühstück, Wasser-Routine o.ä.)
           body(
             `<strong>Dein Mini-Reset für heute:</strong><br>Starte den Tag mit einer proteinreichen Mahlzeit — mindestens 30 g. Klingt banal, verändert aber deinen ganzen Tag: stabilerer Blutzucker, weniger Heißhunger, besserer Fokus.`
           ),
@@ -297,24 +296,25 @@ const SEQUENCE: EmailDef[] = [
           crossRow("Alleine weitermachen und hoffen, dass es hält"),
           checkRow("Mit einem System arbeiten, das sich an dein Leben anpasst"),
           divider(),
-          body(`<strong>Option 1: Die CALINESS App</strong>`),
+          body(`<strong>Option 1: Die CALINESS App (bald verfügbar)</strong>`),
           body(
             `Dein Reset-Profil wird zum Ausgangspunkt. Die App erstellt dir einen personalisierten Plan über die 4 Säulen (Ernährung, Bewegung, Schlaf, Mindset) — mit täglichen Check-ins, die sich an deine echte Woche anpassen.`
           ),
-          // TODO: Preis/Angebot einfügen
-          priceCard("CALINESS App", "TODO: Preis", [
+          priceCard("CALINESS App · ab 9 €/Monat", "7 Tage kostenlos testen", [
             "Personalisierter 4-Säulen-Plan",
             "Tägliche Check-ins + KI-Coaching",
             "Wöchentliche Auswertung + Anpassung",
             "Basiert auf deinem Reset-Profil",
           ]),
-          cta("App kostenlos testen →", APP_TRIAL_URL),
-          divider(),
-          body(`<strong>Option 2: Persönliches Coaching</strong>`),
+          cta("Auf die Warteliste — Frühzugang sichern →", APP_TRIAL_URL),
           body(
-            `Du möchtest es lieber 1:1? In einem Strategiegespräch schauen wir uns dein Reset-Ergebnis gemeinsam an und bauen einen konkreten Plan für die nächsten 4 Wochen.`
+            `<span style="color:${C.muted};font-size:12px;">Die App startet in den nächsten Wochen. Wer jetzt auf der Warteliste ist, bekommt den ersten Zugang und die ersten Monate vergünstigt.</span>`
           ),
-          // TODO: Coaching-Preis einfügen
+          divider(),
+          body(`<strong>Option 2: Persönliches Coaching (sofort verfügbar)</strong>`),
+          body(
+            `Du möchtest jetzt starten, nicht warten? In einem kostenlosen Strategiegespräch (30 Min) schauen wir uns dein Reset-Ergebnis gemeinsam an und bauen einen konkreten Plan für die nächsten 4 Wochen.`
+          ),
           cta("Strategiegespräch buchen →", COACHING_URL),
           urgencyBanner(
             "Dein Reset-Profil bleibt 14 Tage aktiv — danach werden die Daten gelöscht."
