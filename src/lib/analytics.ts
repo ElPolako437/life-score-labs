@@ -72,7 +72,7 @@ export async function captureLead(email: string, name?: string | null): Promise<
   }
 }
 
-const SUPABASE_FUNCTIONS_URL = 'https://aorrcpmlkubsmrthzals.supabase.co/functions/v1';
+const SUPABASE_FUNCTIONS_URL = 'https://zlmldahbtrwbemndclwm.supabase.co/functions/v1';
 
 /**
  * Trigger the Reset email nurture sequence (day0 = welcome, sent immediately).

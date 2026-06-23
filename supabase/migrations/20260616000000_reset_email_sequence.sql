@@ -83,7 +83,7 @@ select cron.schedule(
   '0 8 * * *',   -- daily 08:00 UTC
   $$
   select net.http_post(
-    url := 'https://aorrcpmlkubsmrthzals.supabase.co/functions/v1/send-reset-sequence',
+    url := 'https://zlmldahbtrwbemndclwm.supabase.co/functions/v1/send-reset-sequence',
     headers := jsonb_build_object(
       'Content-Type', 'application/json',
       'Authorization', 'Bearer ' || (
