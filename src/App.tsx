@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ResetProvider } from "./contexts/ResetContext";
 import { captureInstallPrompt } from "./lib/installPrompt";
 import ResetWelcome from "./pages/reset/ResetWelcome";
+import ResetInstall from "./pages/reset/ResetInstall";
 import ResetWhatsApp from "./pages/reset/ResetWhatsApp";
 import ResetOnboarding from "./pages/reset/ResetOnboarding";
 import ResetFocus from "./pages/reset/ResetFocus";
@@ -30,6 +31,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ResetWelcome />} />
+          <Route path="/install" element={<ResetInstall />} />
           <Route path="/whatsapp" element={<ResetWhatsApp />} />
           <Route path="/onboarding" element={<ResetOnboarding />} />
           <Route path="/focus" element={<ResetFocus />} />

@@ -31,11 +31,10 @@ export default function ResetWelcome() {
       // Returning user → straight to active day
       const activeDay = Math.min(currentDay, 7);
       navigate(`/day/${activeDay}`);
-    } else if (localEmail.trim()) {
-      // Email given → WhatsApp opt-in step (V3 flow), then onboarding
-      navigate('/whatsapp');
     } else {
-      navigate('/onboarding');
+      // First-time: Install-Tutorial → WhatsApp → Onboarding
+      // /install redirected sich selbst weiter wenn Desktop oder schon Standalone
+      navigate('/install');
     }
   };
 
