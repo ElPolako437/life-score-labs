@@ -114,21 +114,62 @@ export default function ResetInstall() {
           </div>
         )}
 
-        {/* Android / Chrome: Native Install Prompt */}
+        {/* Android: schneller Weg via Native Prompt + manueller Fallback */}
         {!ios && (
-          <div className="w-full bg-card border border-border/40 rounded-2xl p-5 space-y-3">
-            <div className="flex items-start gap-3">
-              <div className="w-7 h-7 rounded-full bg-primary/15 text-primary flex items-center justify-center text-sm font-bold shrink-0">1</div>
-              <p className="text-sm text-foreground/90 leading-relaxed pt-0.5">
-                Tipp unten auf <strong>„App installieren"</strong>.
+          <div className="w-full space-y-3">
+            <div className="bg-card border border-border/40 rounded-2xl p-5 space-y-3">
+              <p className="text-[11px] font-semibold tracking-widest uppercase text-primary/80">
+                Schneller Weg
               </p>
+              <div className="flex items-start gap-3">
+                <div className="w-7 h-7 rounded-full bg-primary/15 text-primary flex items-center justify-center text-sm font-bold shrink-0">1</div>
+                <p className="text-sm text-foreground/90 leading-relaxed pt-0.5">
+                  Tipp unten auf <strong>„App installieren"</strong>.
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-7 h-7 rounded-full bg-primary/15 text-primary flex items-center justify-center text-sm font-bold shrink-0">2</div>
+                <p className="text-sm text-foreground/90 leading-relaxed pt-0.5">
+                  Bestätige im Browser-Dialog. Fertig.
+                </p>
+              </div>
             </div>
-            <div className="flex items-start gap-3">
-              <div className="w-7 h-7 rounded-full bg-primary/15 text-primary flex items-center justify-center text-sm font-bold shrink-0">2</div>
-              <p className="text-sm text-foreground/90 leading-relaxed pt-0.5">
-                Bestätige im Browser-Dialog. Das war's.
-              </p>
-            </div>
+
+            <details className="bg-card/60 border border-border/30 rounded-2xl px-5 py-3.5 text-sm">
+              <summary className="cursor-pointer text-muted-foreground/80 font-medium select-none">
+                Funktioniert der Button nicht? Manueller Weg
+              </summary>
+              <div className="mt-4 space-y-4 pl-1">
+                <div>
+                  <p className="text-[11px] font-semibold tracking-widest uppercase text-muted-foreground/60 mb-2">
+                    Chrome / Edge
+                  </p>
+                  <ol className="space-y-1.5 text-sm text-foreground/85 leading-relaxed list-decimal list-inside">
+                    <li>Tippe oben rechts auf das <strong>⋮</strong>-Menü.</li>
+                    <li>Wähl <strong>„App installieren"</strong> oder <strong>„Zum Startbildschirm hinzufügen"</strong>.</li>
+                    <li>Bestätige mit <strong>„Installieren"</strong>.</li>
+                  </ol>
+                </div>
+                <div>
+                  <p className="text-[11px] font-semibold tracking-widest uppercase text-muted-foreground/60 mb-2">
+                    Samsung Internet
+                  </p>
+                  <ol className="space-y-1.5 text-sm text-foreground/85 leading-relaxed list-decimal list-inside">
+                    <li>Tippe unten auf das <strong>☰</strong>-Menü.</li>
+                    <li>Wähl <strong>„Seite hinzufügen zu"</strong> → <strong>„Startbildschirm"</strong>.</li>
+                  </ol>
+                </div>
+                <div>
+                  <p className="text-[11px] font-semibold tracking-widest uppercase text-muted-foreground/60 mb-2">
+                    Firefox
+                  </p>
+                  <ol className="space-y-1.5 text-sm text-foreground/85 leading-relaxed list-decimal list-inside">
+                    <li>Tippe oben rechts auf das <strong>⋮</strong>-Menü.</li>
+                    <li>Wähl <strong>„Installieren"</strong> oder <strong>„Zur Startseite hinzufügen"</strong>.</li>
+                  </ol>
+                </div>
+              </div>
+            </details>
           </div>
         )}
 
