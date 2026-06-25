@@ -18,7 +18,9 @@ const BREVO_API_KEY = Deno.env.get("BREVO_API_KEY")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-const SENDER = { name: "CALI von CALINESS", email: "noreply@caliness-academy.de" };
+// Versand-Domain (Brevo-verifiziert) ist OHNE Bindestrich; Marken-Domain in Links + Footer
+// bleibt MIT Bindestrich (caliness-academy.de).
+const SENDER = { name: "CALI von CALINESS", email: "team@calinessacademy.de" };
 
 const RESET_URL = "https://life-score-labs.lovable.app";
 // App ist noch nicht live — URL führt zur Warteliste / Early Access.
@@ -350,7 +352,7 @@ async function sendViaBre(
       to: [{ email: to.email, name: to.name || to.email }],
       subject,
       htmlContent: html,
-      replyTo: { email: "team@caliness-academy.de", name: "CALINESS Team" },
+      replyTo: { email: "team@calinessacademy.de", name: "CALINESS Team" },
     }),
   });
 
@@ -375,7 +377,7 @@ async function sendIfNotSent(
 
   // Already sent?
   const { data: existing } = await supabase
-    .from("email_sends")
+    .from("reset_email_sends")
     .select("id")
     .eq("email", subscriber.email)
     .eq("email_type", emailType)
@@ -399,7 +401,7 @@ async function sendIfNotSent(
   }
 
   // Log the send (idempotency)
-  await supabase.from("email_sends").insert({
+  await supabase.from("reset_email_sends").insert({
     email: subscriber.email,
     email_type: emailType,
     message_id: result.messageId || null,
