@@ -4,10 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useReset } from '@/contexts/ResetContext';
 import { track, captureLead, triggerResetSignup } from '@/lib/analytics';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function ResetWelcome() {
   const navigate = useNavigate();
-  const { name, setName, currentDay, goal } = useReset();
+  const { name, setName, setEmail, currentDay, goal } = useReset();
   const [localName, setLocalName] = useState(name || '');
   const [localEmail, setLocalEmail] = useState('');
   const hasProgress = goal !== null;
@@ -15,14 +16,24 @@ export default function ResetWelcome() {
   const handleStart = () => {
     if (localName.trim()) setName(localName.trim());
     if (localEmail.trim()) {
+      setEmail(localEmail.trim());
       captureLead(localEmail, localName);
       triggerResetSignup(localEmail, localName);
+      // V3 register: write to reset_participants table (used by WhatsApp/ManyChat step)
+      supabase.functions
+        .invoke('register-reset-participant', {
+          body: { step: 'register', email: localEmail.trim(), vorname: localName.trim() || null, ziel: null },
+        })
+        .catch(() => {});
     }
     track(hasProgress ? 'reset_resumed' : 'reset_started', { hasName: !!localName.trim(), hasEmail: !!localEmail.trim() });
     if (hasProgress) {
-      // Go directly to active day if it's not completed yet
+      // Returning user → straight to active day
       const activeDay = Math.min(currentDay, 7);
       navigate(`/day/${activeDay}`);
+    } else if (localEmail.trim()) {
+      // Email given → WhatsApp opt-in step (V3 flow), then onboarding
+      navigate('/whatsapp');
     } else {
       navigate('/onboarding');
     }
