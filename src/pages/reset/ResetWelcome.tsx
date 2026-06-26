@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useReset } from '@/contexts/ResetContext';
 import { track, captureLead, triggerResetSignup } from '@/lib/analytics';
-import { supabase } from '@/integrations/supabase/client';
+import { recordSignup } from '@/lib/resetBackend';
 
 export default function ResetWelcome() {
   const navigate = useNavigate();
@@ -24,12 +24,8 @@ export default function ResetWelcome() {
       setEmail(localEmail.trim());
       captureLead(localEmail, localName);
       triggerResetSignup(localEmail, localName);
-      // V3 register: write to reset_participants table (used by WhatsApp/ManyChat step)
-      supabase.functions
-        .invoke('register-reset-participant', {
-          body: { step: 'register', email: localEmail.trim(), vorname: localName.trim() || null, ziel: null },
-        })
-        .catch(() => {});
+      // Server-side participant: consent (soft opt-in via disclosure) + UTM attribution
+      recordSignup(localEmail.trim(), localName.trim() || null, true);
     }
     track(hasProgress ? 'reset_resumed' : 'reset_started', { hasName: !!localName.trim(), hasEmail: !!localEmail.trim() });
     if (hasProgress) {
@@ -113,6 +109,12 @@ export default function ResetWelcome() {
               maxLength={100}
               className="bg-card border-border/60 text-foreground placeholder:text-muted-foreground/40 h-12 rounded-xl text-center"
             />
+            {localEmail.trim() && (
+              <p className="text-[11px] text-muted-foreground/40 leading-snug px-1">
+                Mit „Loslegen" bekommst du deine täglichen Reset-Impulse per E-Mail. Jederzeit mit einem Klick abbestellbar.{' '}
+                <a href="/datenschutz" className="underline hover:text-muted-foreground/60">Datenschutz</a>
+              </p>
+            )}
           </div>
         )}
 

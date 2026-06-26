@@ -5,6 +5,7 @@ import type { Goal, Hurdle } from '@/contexts/ResetContext';
 import { ArrowRight, ChevronDown, Share2, Check, TrendingUp, Shield } from 'lucide-react';
 import { useState } from 'react';
 import { track } from '@/lib/analytics';
+import { recordIntent } from '@/lib/resetBackend';
 
 const MONTHS_DE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 
@@ -118,7 +119,7 @@ const FAQ = [
 
 export default function ResetNext() {
   const navigate = useNavigate();
-  const { goal, hurdle, reflection, baseline, resetAll, name, midFunnelIntent, frictionNote, profile } = useReset();
+  const { goal, hurdle, reflection, baseline, resetAll, name, midFunnelIntent, frictionNote, profile, email } = useReset();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [shared, setShared] = useState(false);
 
@@ -157,6 +158,7 @@ export default function ResetNext() {
     track('sprint_cta_clicked', { channel, goal: goal ?? null });
     track('coaching_cta_clicked', { channel, goal: goal ?? null, source: 'next_page' });
     if (channel === 'whatsapp') track('whatsapp_clicked', { context: 'sprint_pitch', goal: goal ?? null });
+    recordIntent(email, channel === 'whatsapp' ? 'coaching_whatsapp' : 'coaching_instagram');
     window.open(channel === 'instagram' ? instagramUrl : whatsappUrl, '_blank');
   };
 

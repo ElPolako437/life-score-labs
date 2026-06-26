@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useReset } from '@/contexts/ResetContext';
 import { track } from '@/lib/analytics';
+import { recordIntent } from '@/lib/resetBackend';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Check, Activity, LineChart, Sparkles, CalendarClock } from 'lucide-react';
 
@@ -29,7 +30,7 @@ const FEATURES = [
 export default function ResetApp() {
   const navigate = useNavigate();
   const reduce = useReducedMotion();
-  const { name, goal, profile } = useReset();
+  const { name, goal, profile, email } = useReset();
   const [joined, setJoined] = useState(false);
 
   useEffect(() => {
@@ -38,6 +39,7 @@ export default function ResetApp() {
 
   const handleWaitlist = () => {
     track('app_cta_clicked', { goal: goal ?? null, source: 'app_page' });
+    recordIntent(email, 'app_waitlist');
     window.open(APP_WAITLIST_URL, '_blank', 'noopener,noreferrer');
     setJoined(true);
   };
@@ -140,7 +142,7 @@ export default function ResetApp() {
 
         {/* Soft cross-link to guided path */}
         <button
-          onClick={() => { track('coaching_cta_clicked', { goal: goal ?? null, source: 'app_page' }); navigate('/next'); }}
+          onClick={() => { track('coaching_cta_clicked', { goal: goal ?? null, source: 'app_page' }); recordIntent(email, 'coaching_cta'); navigate('/next'); }}
           className="mt-8 w-full text-center text-sm text-muted-foreground/55 hover:text-muted-foreground/80 transition-colors"
         >
           Lieber persönlich begleitet? <span className="text-primary/80">Coaching ansehen →</span>

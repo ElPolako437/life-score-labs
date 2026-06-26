@@ -4,6 +4,7 @@ import { ArrowRight, Share2, Check, Sparkles, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { buildResetSummary } from '@/lib/resetSummary';
 import { track } from '@/lib/analytics';
+import { recordIntent } from '@/lib/resetBackend';
 
 const DIMENSION_LABELS: Record<string, string> = {
   energy: 'Energie',
@@ -18,7 +19,7 @@ const DIMS = ['energy', 'sleep', 'calm', 'eating', 'body'] as const;
 export default function ResetSprintReady() {
   const navigate = useNavigate();
   const reset = useReset();
-  const { name, reflection, baseline, goal } = reset;
+  const { name, reflection, baseline, goal, email } = reset;
   const [shared, setShared] = useState(false);
   const summary = buildResetSummary(reset);
 
@@ -30,10 +31,12 @@ export default function ResetSprintReady() {
 
   const goApp = () => {
     track('app_cta_clicked', { goal: goal ?? null, source: 'decision_hub' });
+    recordIntent(email, 'app_cta');
     navigate('/app');
   };
   const goCoaching = () => {
     track('coaching_cta_clicked', { goal: goal ?? null, source: 'decision_hub' });
+    recordIntent(email, 'coaching_cta');
     navigate('/next');
   };
 

@@ -6,6 +6,7 @@ import { DAY_TOOLS } from '@/components/reset/dayTools';
 import CaliNote from '@/components/reset/CaliNote';
 import { caliLine } from '@/lib/caliLines';
 import { track } from '@/lib/analytics';
+import { recordProgress } from '@/lib/resetBackend';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
@@ -18,7 +19,7 @@ export default function ResetDay() {
   const dayNum = Number(id);
   const navigate = useNavigate();
   const reset = useReset();
-  const { currentDay, getDayData, toggleTask, completedTaskCount, completeDay, goal } = reset;
+  const { currentDay, getDayData, toggleTask, completedTaskCount, completeDay, goal, email } = reset;
   const [celebrating, setCelebrating] = useState(false);
   const [ctaPulse, setCtaPulse] = useState(false);
   const [showRating, setShowRating] = useState(false);
@@ -112,6 +113,8 @@ export default function ResetDay() {
   const handleRating = (rating: Rating) => {
     completeDay(dayNum, rating);
     track('day_completed', { day: dayNum, rating });
+    track(`reset_day_${dayNum}_completed`, { rating });
+    recordProgress(email, dayNum, goal);
     localStorage.setItem('caliness_just_completed', String(dayNum));
     setShowRating(false);
     setCelebrating(true);

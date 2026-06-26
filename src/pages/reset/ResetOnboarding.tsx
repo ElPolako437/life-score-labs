@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useReset, type Goal, type Hurdle } from '@/contexts/ResetContext';
 import { cn } from '@/lib/utils';
 import { track } from '@/lib/analytics';
+import { recordProgress } from '@/lib/resetBackend';
 import { Slider } from '@/components/ui/slider';
 
 const GOALS: { value: Goal; label: string }[] = [
@@ -30,7 +31,7 @@ const BASELINE_DIMS = [
 
 export default function ResetOnboarding() {
   const navigate = useNavigate();
-  const { setGoal, setHurdle, setBaseline } = useReset();
+  const { setGoal, setHurdle, setBaseline, email } = useReset();
   const [step, setStep] = useState(0);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [selectedHurdle, setSelectedHurdle] = useState<Hurdle | null>(null);
@@ -54,6 +55,9 @@ export default function ResetOnboarding() {
   const handleBaselineSubmit = () => {
     setBaseline(baselineValues as any);
     track('baseline_captured', baselineValues);
+    // Mirror the chosen goal server-side (so the lead record carries intent even
+    // before day 1 is completed).
+    recordProgress(email, 0, selectedGoal);
     navigate('/focus');
   };
 

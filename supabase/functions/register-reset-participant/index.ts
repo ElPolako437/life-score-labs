@@ -111,7 +111,7 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const body = await req.json();
-    const { step, email, vorname, ziel, whatsapp_nummer, start_datum } = body;
+    const { step, email, vorname, ziel, whatsapp_nummer, consent, utm, last_day_reached, signal } = body;
 
     if (!email) {
       return new Response(JSON.stringify({ error: "email required" }), {
@@ -123,19 +123,30 @@ const handler = async (req: Request): Promise<Response> => {
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const today = new Date().toISOString().split("T")[0];
 
+    const cleanEmail = email.toLowerCase().trim();
+
     // ── SCHRITT 1: Registrierung ─────────────────────────────────────────────
     if (!step || step === "register") {
+      const row: Record<string, unknown> = {
+        email: cleanEmail,
+        vorname: vorname?.trim() || null,
+        start_datum: today,
+        ziel: ziel ?? null,
+        last_seen_at: new Date().toISOString(),
+      };
+      // Consent (DSGVO) — nur setzen wenn explizit übergeben
+      if (consent === true) {
+        row.consent = true;
+        row.consent_at = new Date().toISOString();
+      }
+      // UTM-Attribution — nur beim Erstkontakt sinnvoll
+      if (utm && typeof utm === "object" && Object.keys(utm).length > 0) {
+        row.utm = utm;
+      }
+
       const { error: dbErr } = await supabase
         .from("reset_participants")
-        .upsert(
-          {
-            email: email.toLowerCase().trim(),
-            vorname: vorname?.trim() || null,
-            start_datum: today,
-            ziel: ziel ?? null,
-          },
-          { onConflict: "email", ignoreDuplicates: false }
-        );
+        .upsert(row, { onConflict: "email", ignoreDuplicates: false });
 
       if (dbErr) {
         console.error("register-reset-participant: DB upsert error:", dbErr.message);
@@ -145,6 +156,58 @@ const handler = async (req: Request): Promise<Response> => {
       addToResendAudience(email, vorname ?? null).catch(console.error);
 
       return new Response(JSON.stringify({ success: true, step: "register" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // ── PROGRESS: Fortschritt + Ziel serverseitig spiegeln ───────────────────
+    if (step === "progress") {
+      const { data: current } = await supabase
+        .from("reset_participants")
+        .select("last_day_reached")
+        .eq("email", cleanEmail)
+        .maybeSingle();
+
+      const prevDay = (current?.last_day_reached as number) ?? 0;
+      const nextDay = Math.max(prevDay, Number(last_day_reached) || 0);
+
+      const upd: Record<string, unknown> = {
+        last_day_reached: nextDay,
+        last_seen_at: new Date().toISOString(),
+      };
+      if (ziel) upd.ziel = ziel;
+
+      // Upsert so progress is captured even if the email never hit "register"
+      // (e.g. signup race) — keyed on email.
+      await supabase
+        .from("reset_participants")
+        .upsert({ email: cleanEmail, start_datum: today, ...upd }, { onConflict: "email", ignoreDuplicates: false })
+        .then(({ error }) => { if (error) console.warn("progress error:", error.message); });
+
+      return new Response(JSON.stringify({ success: true, step: "progress", last_day_reached: nextDay }), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // ── INTENT: High-Intent-Signal anhängen (app_cta / coaching_cta / whatsapp) ─
+    if (step === "intent" && signal) {
+      const { data: current } = await supabase
+        .from("reset_participants")
+        .select("high_intent")
+        .eq("email", cleanEmail)
+        .maybeSingle();
+
+      const arr = Array.isArray(current?.high_intent) ? current!.high_intent as unknown[] : [];
+      arr.push({ signal: String(signal), at: new Date().toISOString() });
+
+      await supabase
+        .from("reset_participants")
+        .upsert({ email: cleanEmail, start_datum: today, high_intent: arr, last_seen_at: new Date().toISOString() }, { onConflict: "email", ignoreDuplicates: false })
+        .then(({ error }) => { if (error) console.warn("intent error:", error.message); });
+
+      return new Response(JSON.stringify({ success: true, step: "intent", signal }), {
         status: 200,
         headers: { "Content-Type": "application/json", ...corsHeaders },
       });
