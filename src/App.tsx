@@ -2,23 +2,10 @@ import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { ResetProvider } from "./contexts/ResetContext";
 import { captureInstallPrompt } from "./lib/installPrompt";
-import ResetWelcome from "./pages/reset/ResetWelcome";
-import ResetInstall from "./pages/reset/ResetInstall";
-import ResetWhatsApp from "./pages/reset/ResetWhatsApp";
-import ResetOnboarding from "./pages/reset/ResetOnboarding";
-import ResetFocus from "./pages/reset/ResetFocus";
-import ResetWeek from "./pages/reset/ResetWeek";
-import ResetDay from "./pages/reset/ResetDay";
-import ResetCheckIn from "./pages/reset/ResetCheckIn";
-import ResetReflection from "./pages/reset/ResetReflection";
-import ResetSprintReady from "./pages/reset/ResetSprintReady";
-import ResetNext from "./pages/reset/ResetNext";
-import Datenschutz from "./pages/Datenschutz";
-import Impressum from "./pages/Impressum";
-import NotFound from "./pages/NotFound";
+import AnimatedRoutes from "./components/reset/AnimatedRoutes";
 
 const App = () => {
   useEffect(() => { captureInstallPrompt(); }, []);
@@ -29,22 +16,7 @@ const App = () => {
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<ResetWelcome />} />
-          <Route path="/install" element={<ResetInstall />} />
-          <Route path="/whatsapp" element={<ResetWhatsApp />} />
-          <Route path="/onboarding" element={<ResetOnboarding />} />
-          <Route path="/focus" element={<ResetFocus />} />
-          <Route path="/week" element={<ResetWeek />} />
-          <Route path="/day/:id" element={<ResetDay />} />
-          <Route path="/checkin/:id" element={<ResetCheckIn />} />
-          <Route path="/reflection" element={<ResetReflection />} />
-          <Route path="/sprint-ready" element={<ResetSprintReady />} />
-          <Route path="/next" element={<ResetNext />} />
-          <Route path="/impressum" element={<Impressum />} />
-          <Route path="/datenschutz" element={<Datenschutz />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AnimatedRoutes />
       </BrowserRouter>
     </TooltipProvider>
   </ResetProvider>
