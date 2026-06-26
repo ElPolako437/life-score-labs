@@ -1,11 +1,12 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// RESET 5-DAY EMAIL NURTURE SEQUENCE — CALINESS
+// RESET 7-DAY EMAIL NURTURE SEQUENCE — CALINESS
 //
 // Two entry points:
 //   POST { trigger: "reset_signup", email, name }  → immediate welcome (day0)
-//   POST { trigger: "cron" }                       → daily batch for day1–day4
+//   POST { trigger: "cron" }                       → daily batch for day1–day7
 //
-// Sends via Brevo Transactional SMTP API.
+// One themed mail per reset day (Start · Ernährung · Bewegung · Schlaf ·
+// Stress · Longevity · Auswertung). Sends via Brevo Transactional SMTP API.
 // Idempotent: each (email, email_type) is sent at most once.
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -193,7 +194,7 @@ function priceCard(title: string, price: string, features: string[]): string {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 5 EMAIL CONTENTS
+// 8 EMAIL CONTENTS — Welcome (day0) + ein themed Mail pro Reset-Tag (day1–7)
 // ═══════════════════════════════════════════════════════════════════════════
 
 interface EmailDef {
@@ -217,10 +218,10 @@ const SEQUENCE: EmailDef[] = [
             `Du hast dich für den <strong>CALINESS 7-Tage Reset</strong> angemeldet — 7 Tage, in denen du herausfindest, was für deinen Körper wirklich funktioniert. Kein starrer Plan, keine leeren Versprechen.`
           ),
           body(`<strong>Was dich erwartet:</strong>`),
-          checkRow("Tag 1 — dein persönlicher Startpunkt (Kalorien, Protein, Hebel)"),
-          checkRow("Tag 2–5 — interaktive Mini-Tools für Ernährung, Bewegung, Schlaf"),
-          checkRow("Tag 6 — dein Wochengerüst"),
-          checkRow("Tag 7 — persönliche Auswertung + nächster Schritt"),
+          checkRow("Tag 1 — dein persönlicher Startpunkt: Kalorien, Protein, dein größter Hebel"),
+          checkRow("Tag 2–5 — Ernährung, Bewegung, Schlaf und Stress, je ein Mini-Tool"),
+          checkRow("Tag 6 — dein Körpergefühl & Longevity-Blick"),
+          checkRow("Tag 7 — persönliche Auswertung + dein nächster Schritt"),
           body(
             `Jeden Tag bekommst du eine kurze Mail mit einem konkreten Impuls. Kein Spam, kein Verkauf — nur Substanz.`
           ),
@@ -233,138 +234,191 @@ const SEQUENCE: EmailDef[] = [
       ),
   },
 
-  // ─── DAY 1: Quick Win ──────────────────────────────────────────────────
+  // ─── DAY 1: Startpunkt — Kalorien & Protein ────────────────────────────
   {
     type: "reset_day1",
-    subject: (name) => `${name}, Tag 1 — dein erster Reset-Schritt`,
+    subject: (name) => `${name}, Tag 1 — deine echten Zahlen`,
     html: (name, unsub) =>
       shell(
-        "Dein erster konkreter Schritt. Kein Raten mehr.",
+        "Schluss mit Raten. Heute kennst du deinen Startpunkt.",
         [
-          badge("Tag 1 · Quick Win"),
-          headline(`${name}, eine Sache heute.`),
+          badge("Tag 1 · Startpunkt"),
+          headline(`${name}, hör auf zu raten.`),
           body(
-            `Gestern hast du deinen Reset gestartet. Heute kommt der erste echte Schritt — klein, machbar, spürbar.`
+            `Die meisten essen „nach Gefühl" und wundern sich, warum nichts passiert. Heute drehst du das um: In 2 Minuten berechnest du deinen <strong>persönlichen Kalorien- und Proteinbereich</strong> — kein Kalorienzählen, nur Orientierung.`
           ),
           body(
-            `<strong>Dein Mini-Reset für heute:</strong><br>Starte den Tag mit einer proteinreichen Mahlzeit — mindestens 30 g. Klingt banal, verändert aber deinen ganzen Tag: stabilerer Blutzucker, weniger Heißhunger, besserer Fokus.`
+            `<strong>Dein erster Mini-Reset:</strong> Bau in jede Mahlzeit eine Handfläche Protein ein. Das ist der eine Hebel, der bei fast jedem sofort wirkt — stabiler Blutzucker, weniger Heißhunger, mehr Fokus.`
           ),
-          checkRow("Skyr + Beeren + Nüsse = ~35 g Protein"),
-          checkRow("3 Eier + Vollkornbrot = ~30 g Protein"),
-          checkRow("Protein-Shake + Banane = ~28 g Protein"),
-          body(
-            `Das ist kein Ernährungsplan — das ist ein Experiment. Probier es heute und achte darauf, wie du dich bis 12 Uhr fühlst.`
-          ),
-          cta("Tag 1 im Reset öffnen", `${RESET_URL}/day/1`),
+          checkRow("Skyr + Beeren + Nüsse — ca. 35 g Protein"),
+          checkRow("3 Eier + Vollkornbrot — ca. 30 g Protein"),
+          checkRow("Hähnchen-Bowl mittags — ca. 45 g Protein"),
+          cta("Tag 1 berechnen", `${RESET_URL}/day/1`),
         ].join(""),
         unsub
       ),
   },
 
-  // ─── DAY 2: Aha-Moment + sanfte App-Erwähnung ─────────────────────────
+  // ─── DAY 2: Ernährung — Struktur statt Verbote ────────────────────────
   {
     type: "reset_day2",
-    subject: (name) => `${name}, warum Willenskraft überschätzt ist`,
+    subject: (name) => `${name}, Ernährung ohne Verbote`,
     html: (name, unsub) =>
       shell(
-        "Die Wissenschaft hinter deinem Nachmittagstief.",
+        "Warum dein Nachmittagstief kein Disziplinproblem ist.",
         [
-          badge("Tag 2 · Insight"),
-          headline(`${name}, das ist der Grund.`),
+          badge("Tag 2 · Ernährung"),
+          headline(`${name}, es liegt nicht an Disziplin.`),
           body(
-            `Die meisten Leute scheitern nicht an Disziplin — sie scheitern an Systemen. Genauer: an der Abwesenheit davon.`
+            `Heißhunger um 16 Uhr ist kein Versagen — es ist ein leerer Tank. Wer morgens zu wenig isst und Mahlzeiten dem Zufall überlässt, zahlt am Nachmittag drauf. Nicht mit Willenskraft, sondern mit Cravings.`
           ),
           body(
-            `<strong>Der wissenschaftliche Aha-Moment:</strong><br>Studien zeigen, dass Willenskraft ein endlicher Tagevorrat ist (<em>Ego Depletion</em>). Je mehr Mikro-Entscheidungen du morgens triffst ("Was esse ich?", "Gehe ich trainieren?"), desto weniger bleibt für den Nachmittag übrig. Heißhunger um 16 Uhr ist kein Versagen — es ist ein leerer Tank.`
+            `<strong>Die Lösung ist unspektakulär:</strong> feste Mahlzeiten-Slots statt Dauer-Entscheidungen. 2–3 Mahlzeiten, jede mit Protein, grob zur gleichen Zeit. Dein Körper hört auf zu kämpfen, wenn er weiß, was kommt.`
           ),
-          body(
-            `<strong>Die Lösung:</strong> Weniger Entscheidungen. Feste Mahlzeiten-Slots, vorbereitete Optionen, ein klarer Tagesanker. Genau das baust du im Reset auf.`
-          ),
+          checkRow("Plane heute 2–3 Mahlzeiten — Zeit, Ort, was. Egal was, Hauptsache fest."),
+          checkRow("Eine proteinreiche Option vorbereiten, die du magst und im Haus hast."),
           cta("Tag 2 im Reset öffnen", `${RESET_URL}/day/2`),
           divider(),
           body(
-            `<span style="font-size:13px;color:${C.muted};">💡 Übrigens: In der <strong>CALINESS App</strong> bauen wir genau solche Systeme für dich — automatisch, basierend auf deinen echten Daten. Aber dazu später mehr.</span>`
+            `<span style="font-size:13px;color:${C.muted};">In der <strong>CALINESS App</strong> kommen diese Vorschläge täglich automatisch — abgestimmt auf das, was du magst. Aber dazu später mehr.</span>`
           ),
         ].join(""),
         unsub
       ),
   },
 
-  // ─── DAY 3: Transformation + Social Proof ──────────────────────────────
+  // ─── DAY 3: Bewegung — NEAT schlägt HIIT ──────────────────────────────
   {
     type: "reset_day3",
-    subject: (name) => `${name}, eine Geschichte, die du kennen solltest`,
+    subject: (name) => `${name}, warum Spazieren unterschätzt wird`,
     html: (name, unsub) =>
       shell(
-        "Wie ein 7-Tage-Reset den Unterschied gemacht hat.",
+        "Ein ruhiger Spaziergang bringt mehr, als die meisten glauben.",
         [
-          badge("Tag 3 · Perspektive"),
-          headline(`${name}, kommt dir das bekannt vor?`),
+          badge("Tag 3 · Bewegung"),
+          headline(`${name}, du musst dich nicht quälen.`),
           body(
-            `"Ich weiß eigentlich, was ich tun müsste. Aber ich schaffe es nicht, dranzubleiben."<br><br>Das sagen 9 von 10 Menschen, die den Reset starten. Der Punkt ist: <strong>Wissen ist nicht das Problem. Struktur ist das Problem.</strong>`
+            `Die Idee, dass nur schweißtreibendes Training „zählt", hält viele vom Anfangen ab. Dabei kommt der größte Hebel im Alltag von <strong>NEAT</strong> — der Bewegung neben dem Sport: gehen, stehen, Treppen, ein Spaziergang nach dem Essen.`
+          ),
+          body(
+            `<strong>Heute:</strong> ein 10–15-Minuten-Spaziergang nach deiner größten Mahlzeit. Das senkt den Blutzucker-Peak spürbar — und ist sofort umsetzbar, ohne Gym, ohne Umziehen.`
+          ),
+          checkRow("Nach der größten Mahlzeit kurz raus — 10 Minuten reichen."),
+          checkRow("Dein Schrittziel im Reset checken — realistisch, nicht pauschal."),
+          cta("Tag 3 im Reset öffnen", `${RESET_URL}/day/3`),
+        ].join(""),
+        unsub
+      ),
+  },
+
+  // ─── DAY 4: Schlaf — der eigentliche Reset-Knopf ──────────────────────
+  {
+    type: "reset_day4",
+    subject: (name) => `${name}, dein Reset-Knopf heißt Schlaf`,
+    html: (name, unsub) =>
+      shell(
+        "Wenn Schlaf passt, holt sich der Körper den Rest.",
+        [
+          badge("Tag 4 · Schlaf"),
+          headline(`${name}, hier entscheidet sich das meiste.`),
+          body(
+            `Du kannst Ernährung und Bewegung perfekt machen — wenn der Schlaf nicht stimmt, bremst alles. Schlechter Schlaf heißt mehr Hunger am nächsten Tag, weniger Energie, schwächere Regeneration. Es ist der stillste, aber stärkste Hebel.`
+          ),
+          body(
+            `<strong>Die gute Nachricht:</strong> Du brauchst keine perfekte Nacht. Eine Sache besser zu machen reicht — meistens ist es eine: Koffein-Stopp am Nachmittag, Bildschirm-Pause vor dem Bett oder eine feste Zubettgeh-Zeit.`
+          ),
+          checkRow("Im Schlaf-Check findest du deine größte Stellschraube — nicht alle, eine."),
+          checkRow("Diese eine Sache heute Abend umsetzen. Mehr nicht."),
+          cta("Tag 4 im Reset öffnen", `${RESET_URL}/day/4`),
+        ].join(""),
+        unsub
+      ),
+  },
+
+  // ─── DAY 5: Stress — das Abend-Problem ist ein Nachmittags-Problem ────
+  {
+    type: "reset_day5",
+    subject: (name) => `${name}, warum dein Abend kippt`,
+    html: (name, unsub) =>
+      shell(
+        "Dein Abend-Problem entscheidet sich am Nachmittag.",
+        [
+          badge("Tag 5 · Stress & Muster"),
+          headline(`${name}, es ist selten der Abend.`),
+          body(
+            `Das Snacken vor dem Fernseher, der Stress-Hunger um 21 Uhr — das fühlt sich wie ein Abend-Problem an. Meistens ist es aber ein Nachmittags-Problem: zu wenig gegessen, zu viel Stress angesammelt, kein Ventil gehabt.`
+          ),
+          body(
+            `<strong>Heute findest du dein Muster:</strong> Was kippt deinen Tag wirklich? Hunger, Schlaf, Stress oder fehlende Struktur? Wenn du den Auslöser kennst, brauchst du keine Disziplin mehr — nur einen Gegenhebel.`
           ),
           quote(
-            "Ich dachte, ich brauche einen strengen Plan. Tatsächlich brauchte ich nur 3 feste Ankerpunkte am Tag. Der Reset hat mir gezeigt, welche das bei mir sind.",
-            "Sarah, 34 — nach 7-Tage-Reset"
+            "Ich dachte immer, mir fehlt Willenskraft. Tatsächlich hatte ich nachmittags einfach zu wenig Protein. Ein Snack um 15 Uhr — und der Abend war kein Thema mehr.",
+            "Markus, 38 — nach dem Reset"
+          ),
+          cta("Tag 5 im Reset öffnen", `${RESET_URL}/day/5`),
+        ].join(""),
+        unsub
+      ),
+  },
+
+  // ─── DAY 6: Körpergefühl & Longevity ──────────────────────────────────
+  {
+    type: "reset_day6",
+    subject: (name) => `${name}, was dein Alltag über dein Alter verrät`,
+    html: (name, unsub) =>
+      shell(
+        "Nicht das Gewicht zählt — das System dahinter.",
+        [
+          badge("Tag 6 · Körpergefühl & Longevity"),
+          headline(`${name}, denk in Jahrzehnten, nicht in Wochen.`),
+          body(
+            `Die meisten optimieren für die Waage. Dabei ist die spannendere Frage: Wie fühlst du dich in deinem Körper — und was sagt dein Alltag über deine nächsten 20, 30 Jahre? Energie, Schlaf, Bewegung und Stress sind nicht nur „Diät-Themen". Sie sind die Stellschrauben für ein langes, vitales Leben.`
           ),
           body(
-            `Du bist jetzt bei Tag 3. Das heißt: du hast schon länger durchgehalten als die Hälfte der Leute, die einen "Neustart" probieren. Das ist nicht trivial.`
+            `<strong>Heute:</strong> Spür bewusst hin. Wo stehst du gerade — und in welche Richtung zeigt dein aktueller Alltag? Das ist kein Urteil, sondern eine Standortbestimmung.`
           ),
-          cta("Tag 3 im Reset öffnen", `${RESET_URL}/day/3`),
+          checkRow("Dein Wochengerüst bauen — damit aus 7 Tagen ein System wird."),
+          cta("Tag 6 im Reset öffnen", `${RESET_URL}/day/6`),
           divider(),
           body(
-            `<span style="font-size:13px;color:${C.muted};">🔒 <strong>Fortschritt sichern:</strong> Dein Reset-Profil baut sich Tag für Tag auf. In der CALINESS App wird daraus ein angepasster Plan — mit Check-ins, die sich an dein Leben anpassen.</span>`
+            `<span style="font-size:13px;color:${C.muted};">Neugierig auf deinen Longevity-Status? Unser kurzer Bio-Age-Test gibt dir eine erste Einordnung — ganz ohne Verpflichtung, wenn du magst.</span>`
           ),
         ].join(""),
         unsub
       ),
   },
 
-  // ─── DAY 4: Conversion — Reset endet, Brücke zur App/Coaching ─────────
+  // ─── DAY 7: Auswertung + zwei Wege (App / Coaching) ───────────────────
   {
-    type: "reset_day4",
-    subject: (name) => `${name}, so geht's nach dem Reset weiter`,
+    type: "reset_day7",
+    subject: (name) => `${name}, dein Reset ist durch — so geht's weiter`,
     html: (name, unsub) =>
       shell(
-        "Dein Reset endet bald. So sicherst du deinen Fortschritt.",
+        "7 Tage geschafft. Jetzt entscheidet sich, ob es bleibt.",
         [
-          badge("Tag 5 · Dein nächster Schritt"),
-          headline(`${name}, die Frage nach Tag 7.`),
+          badge("Tag 7 · Auswertung"),
+          headline(`${name}, du hast es durchgezogen.`),
           body(
-            `In wenigen Tagen ist dein Reset abgeschlossen. Du hast deinen Startpunkt, deine Stellschrauben, dein Wochensystem. <strong>Die Frage ist: Was passiert danach?</strong>`
+            `Das ziehen die wenigsten durch. Du kennst jetzt deinen Startpunkt, deine Stellschrauben und dein Wochengerüst. Die ehrliche Frage ist: Was passiert in den nächsten Wochen, wenn der Alltag zurückkommt?`
           ),
           body(
-            `Hier ist die ehrliche Antwort: Ein Reset zeigt dir <em>was</em> funktioniert. Aber Veränderung passiert in den Wochen danach — wenn der Alltag zurückkommt, wenn die Motivation nachlässt, wenn das System getestet wird.`
-          ),
-          crossRow("Alleine weitermachen und hoffen, dass es hält"),
-          checkRow("Mit einem System arbeiten, das sich an dein Leben anpasst"),
-          divider(),
-          body(`<strong>Option 1: Die CALINESS App (bald verfügbar)</strong>`),
-          body(
-            `Dein Reset-Profil wird zum Ausgangspunkt. Die App erstellt dir einen personalisierten Plan über die 4 Säulen (Ernährung, Bewegung, Schlaf, Mindset) — mit täglichen Check-ins, die sich an deine echte Woche anpassen.`
-          ),
-          priceCard("CALINESS App · ab 9 €/Monat", "7 Tage kostenlos testen", [
-            "Personalisierter 4-Säulen-Plan",
-            "Tägliche Check-ins + KI-Coaching",
-            "Wöchentliche Auswertung + Anpassung",
-            "Basiert auf deinem Reset-Profil",
-          ]),
-          cta("Auf die Warteliste — Frühzugang sichern", APP_TRIAL_URL),
-          body(
-            `<span style="color:${C.muted};font-size:12px;">Die App startet in den nächsten Wochen. Wer jetzt auf der Warteliste ist, bekommt den ersten Zugang und die ersten Monate vergünstigt.</span>`
+            `Ein Reset zeigt dir <em>was</em> funktioniert. Veränderung entsteht danach — und dafür gibt es zwei Wege. Beide bauen auf deinen 7 Tagen auf, keiner fängt bei null an.`
           ),
           divider(),
-          body(`<strong>Option 2: Persönliches Coaching (sofort verfügbar)</strong>`),
+          body(`<strong>Weg 1 — selbstständig mit der CALINESS App</strong>`),
           body(
-            `Du möchtest jetzt starten, nicht warten? In einem kostenlosen Strategiegespräch (30 Min) schauen wir uns dein Reset-Ergebnis gemeinsam an und bauen einen konkreten Plan für die nächsten 4 Wochen.`
+            `Für Selbststarter, die täglich Klarheit, Struktur und einen KI-Coach in der Tasche wollen. Dein Reset-Profil wird zum lebenden Dashboard — Plan, Auswertung und Fortschritt, jede Woche neu justiert.`
+          ),
+          cta("Frühzugang zur App sichern", APP_TRIAL_URL),
+          divider(),
+          body(`<strong>Weg 2 — begleitet mit dem Coaching</strong>`),
+          body(
+            `Für Menschen, die persönliche Strategie, Accountability und individuelle Umsetzung wollen. In einem kostenlosen Strategiegespräch (30 Min) schauen David & Sarah sich dein Ergebnis an und bauen mit dir einen konkreten Plan.`
           ),
           cta("Strategiegespräch buchen", COACHING_URL),
-          urgencyBanner(
-            "Dein Reset-Profil bleibt 14 Tage aktiv — danach werden die Daten gelöscht."
-          ),
           divider(),
           body(
-            `<span style="font-size:13px;color:${C.muted};">Kein Druck. Wenn der Reset dir gereicht hat, ist das völlig okay. Diese Mail ist die letzte in der Serie.</span>`
+            `<span style="font-size:13px;color:${C.muted};">Kein Druck. Wenn der Reset dir gereicht hat, ist das völlig okay — du hast echt etwas über deinen Körper gelernt. Das gehört dir, egal wie es weitergeht.</span>`
           ),
         ].join(""),
         unsub
@@ -499,9 +553,9 @@ async function handleSignup(
 async function handleCron(
   supabase: ReturnType<typeof createClient>
 ): Promise<Response> {
-  // Fetch all active subscribers within the 5-day window (day 0–4)
+  // Fetch all active subscribers within the 8-day window (day 0–7)
   const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - 5);
+  cutoff.setDate(cutoff.getDate() - 8);
 
   const { data: subs, error } = await supabase
     .from("reset_subscribers")
@@ -528,10 +582,10 @@ async function handleCron(
       (Date.now() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
     );
 
-    // day0 is sent on signup, cron handles day1..day4
-    // ageDays=1 → day1, ageDays=2 → day2, etc.
-    if (ageDays >= 1 && ageDays <= 4) {
-      const emailDef = SEQUENCE[ageDays]; // index 1–4
+    // day0 is sent on signup, cron handles day1..day7
+    // ageDays=1 → day1, ageDays=2 → day2, …, ageDays=7 → day7
+    if (ageDays >= 1 && ageDays <= 7) {
+      const emailDef = SEQUENCE[ageDays]; // index 1–7
       if (emailDef) {
         const sent = await sendIfNotSent(supabase, sub, emailDef);
         if (sent) sentCount++;
@@ -603,8 +657,21 @@ serve(async (req: Request): Promise<Response> => {
       return handleCron(supabase);
     }
 
+    // Preview: send one specific mail to one explicit address (no idempotency log).
+    // Used to review the design; harmless since it only targets the given email.
+    if (body.trigger === "preview" && body.email) {
+      const def = SEQUENCE.find((e) => e.type === body.type) ?? SEQUENCE[0];
+      const name = (body.name || "David").trim();
+      const unsubUrl = `${UNSUBSCRIBE_BASE}?action=unsubscribe&email=${encodeURIComponent(body.email)}`;
+      const r = await sendViaBre({ email: body.email, name }, `[Preview] ${def.subject(name)}`, def.html(name, unsubUrl));
+      return new Response(
+        JSON.stringify({ success: !r.error, type: def.type, error: r.error ?? null }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     return new Response(
-      JSON.stringify({ error: 'Unknown trigger. Use "reset_signup" or "cron".' }),
+      JSON.stringify({ error: 'Unknown trigger. Use "reset_signup", "cron" or "preview".' }),
       { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {
