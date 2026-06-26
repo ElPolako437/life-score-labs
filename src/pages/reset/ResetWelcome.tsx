@@ -58,13 +58,13 @@ export default function ResetWelcome() {
         </div>
 
         <div className="space-y-2">
-          <h1 className="font-outfit font-bold text-3xl tracking-tight text-foreground leading-tight">
-            Du bist erschöpft —<br />aber nicht aus dem Grund,<br />den du denkst.
+          <h1 className="font-outfit font-bold text-[26px] tracking-tight text-foreground leading-[1.15] text-balance">
+            Du machst nicht zu wenig.<br />Nur an der falschen Stelle.
           </h1>
         </div>
 
         <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-xs">
-          Wenn du das hier liest, hast du es wahrscheinlich schon mit früher schlafen, weniger Essen oder mehr Disziplin versucht. Nichts hat dauerhaft geholfen. Hier ist der Grund — und was tatsächlich funktioniert.
+          7 Tage. Etwa 10 Minuten am Tag. Danach weißt du, wo dein System gerade leerläuft. Und kannst aufhören, da Kraft reinzukippen.
         </p>
 
         {/* Trust signal — David & Sarah */}
@@ -117,7 +117,7 @@ export default function ResetWelcome() {
           className="w-full min-h-[48px]"
           onClick={handleStart}
         >
-          {hasProgress ? `Tag ${Math.min(currentDay, 7)} öffnen →` : 'Ich will das verstehen →'}
+          {hasProgress ? `Tag ${Math.min(currentDay, 7)} öffnen →` : 'Loslegen'}
         </Button>
       </div>
     </div>
