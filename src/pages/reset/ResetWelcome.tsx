@@ -73,17 +73,17 @@ export default function ResetWelcome() {
             <img
               src="/images/david.jpg"
               alt="David"
-              className="w-8 h-8 rounded-full object-cover grayscale brightness-75 ring-2 ring-background"
+              className="w-8 h-8 rounded-full object-cover ring-2 ring-background"
             />
             <img
               src="/images/sarah.jpg"
               alt="Sarah"
-              className="w-8 h-8 rounded-full object-cover grayscale brightness-75 ring-2 ring-background"
+              className="w-8 h-8 rounded-full object-cover ring-2 ring-background"
             />
           </div>
-          <p className="text-xs text-muted-foreground/50 text-left leading-snug">
-            Von David &amp; Sarah — Caliness Academy<br />
-            <span className="text-muted-foreground/30">über 200 Teilnehmer persönlich begleitet</span>
+          <p className="text-xs text-muted-foreground/60 text-left leading-snug">
+            David &amp; Sarah, Caliness Academy<br />
+            <span className="text-muted-foreground/40">200+ Mal mit echten Klienten gemacht. Daraus gebaut.</span>
           </p>
         </div>
 
