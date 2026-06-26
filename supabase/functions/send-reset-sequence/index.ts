@@ -29,6 +29,7 @@ const COACHING_URL = "https://calendly.com/team-calinessacademy/new-meeting";
 const UNSUBSCRIBE_BASE = `${SUPABASE_URL}/functions/v1/send-reset-sequence`;
 const IMPRESSUM_URL = "https://caliness-academy.de/impressum";
 const DATENSCHUTZ_URL = "https://caliness-academy.de/datenschutz";
+const LOGO_URL = `${RESET_URL}/icon-192.png`;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -47,16 +48,18 @@ function getSupabase() {
 // ═══════════════════════════════════════════════════════════════════════════
 
 const C = {
-  bg: "#0a0c0e",
-  card: "#111318",
-  surface: "#161a21",
-  border: "rgba(255,255,255,0.06)",
-  borderAccent: "rgba(34,197,94,0.25)",
+  bg: "#08090b",
+  card: "#0f1115",
+  surface: "#15181f",
+  border: "rgba(255,255,255,0.07)",
+  hairline: "rgba(255,255,255,0.045)",
+  borderAccent: "rgba(34,197,94,0.28)",
   accent: "#22c55e",
+  accentSoft: "rgba(34,197,94,0.10)",
   text: "#f8fafc",
-  textSec: "#b8c4d4",
+  textSec: "#aebacb",
   muted: "#6b7a8f",
-  font: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif",
+  font: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif",
 };
 
 function shell(preheader: string, content: string, unsubUrl: string): string {
@@ -64,23 +67,43 @@ function shell(preheader: string, content: string, unsubUrl: string): string {
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
   <title>CALINESS Reset</title>
 </head>
-<body style="margin:0;padding:0;background:${C.bg};-webkit-text-size-adjust:100%;">
-  <div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:${C.bg};">${preheader}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
-  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${C.bg};">
-    <tr><td align="center" style="padding:40px 16px;">
-      <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;background:${C.card};border-radius:16px;border:1px solid ${C.border};">
-        <tr><td align="center" style="padding:32px 32px 24px;border-bottom:1px solid ${C.border};">
-          <p style="font-family:${C.font};font-size:11px;letter-spacing:2px;text-transform:uppercase;color:${C.muted};margin:0;">CALINESS · 7-Tage Reset</p>
+<body style="margin:0;padding:0;background:${C.bg};-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+  <div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:${C.bg};opacity:0;">${preheader}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${C.bg};">
+    <tr><td align="center" style="padding:48px 16px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;background:${C.card};border-radius:22px;border:1px solid ${C.border};overflow:hidden;">
+
+        <!-- Top accent line -->
+        <tr><td style="height:4px;line-height:4px;font-size:0;background:${C.accent};">&nbsp;</td></tr>
+
+        <!-- Header: emblem + eyebrow -->
+        <tr><td align="center" style="padding:38px 40px 30px;">
+          <img src="${LOGO_URL}" width="52" height="52" alt="CALINESS" style="display:block;width:52px;height:52px;border:0;border-radius:14px;outline:none;text-decoration:none;" />
+          <p style="font-family:${C.font};font-size:11px;letter-spacing:3px;text-transform:uppercase;color:${C.muted};margin:18px 0 0;font-weight:600;">7-Tage Reset</p>
         </td></tr>
-        <tr><td style="padding:32px;">${content}</td></tr>
-        <tr><td style="padding:24px 32px;border-top:1px solid ${C.border};text-align:center;">
-          <p style="font-family:${C.font};font-size:11px;color:${C.muted};margin:0 0 8px;">
-            <a href="${IMPRESSUM_URL}" style="color:${C.muted};text-decoration:underline;">Impressum</a> · <a href="${DATENSCHUTZ_URL}" style="color:${C.muted};text-decoration:underline;">Datenschutz</a> · <a href="${unsubUrl}" style="color:${C.muted};text-decoration:underline;">Abmelden</a>
+
+        <!-- Content -->
+        <tr><td style="padding:8px 40px 40px;">${content}</td></tr>
+
+        <!-- Footer -->
+        <tr><td style="padding:28px 40px 32px;border-top:1px solid ${C.hairline};text-align:center;">
+          <p style="font-family:${C.font};font-size:13px;color:${C.textSec};margin:0 0 4px;font-weight:600;">CALINESS Academy</p>
+          <p style="font-family:${C.font};font-size:11px;color:${C.muted};margin:0 0 14px;line-height:1.6;">Evidence-based Longevity · Made in Germany</p>
+          <p style="font-family:${C.font};font-size:11px;color:${C.muted};margin:0;line-height:1.8;">
+            <a href="${IMPRESSUM_URL}" style="color:${C.muted};text-decoration:none;border-bottom:1px solid ${C.border};">Impressum</a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="${DATENSCHUTZ_URL}" style="color:${C.muted};text-decoration:none;border-bottom:1px solid ${C.border};">Datenschutz</a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="${unsubUrl}" style="color:${C.muted};text-decoration:none;border-bottom:1px solid ${C.border};">Abmelden</a>
           </p>
-          <p style="font-family:${C.font};font-size:11px;color:${C.muted};margin:0;">© ${new Date().getFullYear()} Caliness Academy</p>
+          <p style="font-family:${C.font};font-size:10px;color:${C.muted};margin:14px 0 0;opacity:0.6;">© ${new Date().getFullYear()} Caliness Academy</p>
+        </td></tr>
+      </table>
+
+      <!-- sub-card whisper -->
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;">
+        <tr><td align="center" style="padding:18px 16px 0;">
+          <p style="font-family:${C.font};font-size:11px;color:${C.muted};margin:0;opacity:0.55;">Du bekommst diese Mail, weil du den CALINESS Reset gestartet hast.</p>
         </td></tr>
       </table>
     </td></tr>
@@ -89,64 +112,78 @@ function shell(preheader: string, content: string, unsubUrl: string): string {
 }
 
 function badge(text: string): string {
-  return `<table cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:20px;">
-    <tr><td style="padding:6px 16px;background:${C.surface};border-radius:24px;border:1px solid ${C.borderAccent};">
-      <p style="font-family:${C.font};font-size:12px;font-weight:600;color:${C.accent};margin:0;letter-spacing:.5px;">${text}</p>
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 18px;">
+    <tr><td style="padding:7px 15px;background:${C.accentSoft};border-radius:100px;border:1px solid ${C.borderAccent};">
+      <p style="font-family:${C.font};font-size:11px;font-weight:700;color:${C.accent};margin:0;letter-spacing:1.2px;text-transform:uppercase;">${text}</p>
     </td></tr></table>`;
 }
 
 function headline(text: string): string {
-  return `<p style="font-family:${C.font};font-size:20px;font-weight:700;color:${C.text};margin:0 0 16px;line-height:1.3;">${text}</p>`;
+  return `<p style="font-family:${C.font};font-size:26px;font-weight:700;color:${C.text};margin:0 0 18px;line-height:1.22;letter-spacing:-0.4px;">${text}</p>`;
 }
 
 function body(text: string): string {
-  return `<p style="font-family:${C.font};font-size:14px;color:${C.textSec};margin:0 0 20px;line-height:1.7;">${text}</p>`;
+  return `<p style="font-family:${C.font};font-size:15px;color:${C.textSec};margin:0 0 20px;line-height:1.72;">${text}</p>`;
 }
 
 function divider(): string {
-  return `<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:24px 0;"><tr><td style="border-top:1px solid ${C.border};"></td></tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:28px 0;"><tr><td style="border-top:1px solid ${C.hairline};font-size:0;line-height:0;">&nbsp;</td></tr></table>`;
 }
 
 function cta(label: string, url: string): string {
-  return `<table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:24px 0;">
-    <tr><td style="padding:14px 32px;background:${C.accent};border-radius:8px;">
-      <a href="${url}" target="_blank" style="font-family:${C.font};font-size:14px;font-weight:600;color:${C.bg};text-decoration:none;display:inline-block;">${label}</a>
+  // Bulletproof, full-width premium button with rounded corners + glow.
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:28px 0;">
+    <tr><td align="center">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr><td align="center" style="border-radius:12px;background:${C.accent};box-shadow:0 8px 28px rgba(34,197,94,0.32);">
+          <a href="${url}" target="_blank" style="font-family:${C.font};font-size:15px;font-weight:700;color:#08090b;text-decoration:none;display:block;padding:17px 28px;border-radius:12px;letter-spacing:0.2px;">${label}&nbsp;&rarr;</a>
+        </td></tr>
+      </table>
     </td></tr></table>`;
 }
 
 function checkRow(text: string): string {
-  return `<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:8px;">
-    <tr><td width="24" valign="top" style="padding-top:2px;"><span style="color:${C.accent};font-size:14px;">✓</span></td>
-    <td style="font-family:${C.font};font-size:14px;color:${C.textSec};line-height:1.6;">${text}</td></tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:11px;">
+    <tr>
+      <td width="26" valign="top">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="18" height="18" align="center" valign="middle" style="width:18px;height:18px;background:${C.accentSoft};border:1px solid ${C.borderAccent};border-radius:50%;font-family:${C.font};font-size:10px;font-weight:700;color:${C.accent};line-height:18px;">&#10003;</td></tr></table>
+      </td>
+      <td style="font-family:${C.font};font-size:14px;color:${C.textSec};line-height:1.55;padding-top:0;">${text}</td>
+    </tr></table>`;
 }
 
 function crossRow(text: string): string {
-  return `<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:8px;">
-    <tr><td width="24" valign="top" style="padding-top:2px;"><span style="color:#ef4444;font-size:14px;">✗</span></td>
-    <td style="font-family:${C.font};font-size:14px;color:${C.muted};line-height:1.6;">${text}</td></tr></table>`;
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:11px;">
+    <tr>
+      <td width="26" valign="top">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="18" height="18" align="center" valign="middle" style="width:18px;height:18px;background:rgba(239,68,68,0.10);border:1px solid rgba(239,68,68,0.30);border-radius:50%;font-family:${C.font};font-size:10px;font-weight:700;color:#ef4444;line-height:18px;">&times;</td></tr></table>
+      </td>
+      <td style="font-family:${C.font};font-size:14px;color:${C.muted};line-height:1.55;">${text}</td>
+    </tr></table>`;
 }
 
 function quote(text: string, author: string): string {
-  return `<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:20px 0;">
-    <tr><td style="padding:20px;background:${C.surface};border-radius:12px;border-left:3px solid ${C.accent};">
-      <p style="font-family:${C.font};font-size:14px;color:${C.textSec};margin:0 0 8px;line-height:1.6;font-style:italic;">"${text}"</p>
-      <p style="font-family:${C.font};font-size:12px;color:${C.muted};margin:0;">— ${author}</p>
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:24px 0;">
+    <tr><td style="padding:24px 26px;background:${C.surface};border-radius:16px;border:1px solid ${C.hairline};">
+      <p style="font-family:Georgia,'Times New Roman',serif;font-size:30px;color:${C.accent};margin:0;line-height:0.4;height:14px;">&ldquo;</p>
+      <p style="font-family:${C.font};font-size:15px;color:${C.text};margin:0 0 12px;line-height:1.62;">${text}</p>
+      <p style="font-family:${C.font};font-size:12px;color:${C.muted};margin:0;font-weight:600;letter-spacing:0.2px;">${author}</p>
     </td></tr></table>`;
 }
 
 function urgencyBanner(text: string): string {
-  return `<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:20px 0;">
-    <tr><td style="padding:16px;background:rgba(34,197,94,0.08);border-radius:12px;border:1px solid ${C.borderAccent};text-align:center;">
-      <p style="font-family:${C.font};font-size:13px;font-weight:600;color:${C.accent};margin:0;">${text}</p>
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:24px 0;">
+    <tr><td style="padding:16px 20px;background:${C.accentSoft};border-radius:14px;border:1px solid ${C.borderAccent};text-align:center;">
+      <p style="font-family:${C.font};font-size:13px;font-weight:600;color:${C.accent};margin:0;line-height:1.5;">${text}</p>
     </td></tr></table>`;
 }
 
 function priceCard(title: string, price: string, features: string[]): string {
   const rows = features.map((f) => checkRow(f)).join("");
-  return `<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:20px 0;">
-    <tr><td style="padding:24px;background:${C.surface};border-radius:12px;border:1px solid ${C.borderAccent};">
-      <p style="font-family:${C.font};font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:${C.muted};margin:0 0 8px;">${title}</p>
-      <p style="font-family:${C.font};font-size:28px;font-weight:700;color:${C.text};margin:0 0 20px;">${price}</p>
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:24px 0;">
+    <tr><td style="padding:28px;background:${C.surface};border-radius:18px;border:1px solid ${C.borderAccent};">
+      <p style="font-family:${C.font};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;color:${C.accent};margin:0 0 6px;">${title}</p>
+      <p style="font-family:${C.font};font-size:30px;font-weight:700;color:${C.text};margin:0 0 22px;letter-spacing:-0.5px;">${price}</p>
       ${rows}
     </td></tr></table>`;
 }
@@ -183,7 +220,7 @@ const SEQUENCE: EmailDef[] = [
           body(
             `Jeden Tag bekommst du eine kurze Mail mit einem konkreten Impuls. Kein Spam, kein Verkauf — nur Substanz.`
           ),
-          cta("Reset starten →", RESET_URL),
+          cta("Reset starten", RESET_URL),
           body(
             `<span style="color:${C.muted};font-size:12px;">Antworte gerne auf diese Mail, wenn du Fragen hast. Wir lesen alles.</span>`
           ),
@@ -214,7 +251,7 @@ const SEQUENCE: EmailDef[] = [
           body(
             `Das ist kein Ernährungsplan — das ist ein Experiment. Probier es heute und achte darauf, wie du dich bis 12 Uhr fühlst.`
           ),
-          cta("Tag 1 im Reset öffnen →", `${RESET_URL}/day/1`),
+          cta("Tag 1 im Reset öffnen", `${RESET_URL}/day/1`),
         ].join(""),
         unsub
       ),
@@ -239,7 +276,7 @@ const SEQUENCE: EmailDef[] = [
           body(
             `<strong>Die Lösung:</strong> Weniger Entscheidungen. Feste Mahlzeiten-Slots, vorbereitete Optionen, ein klarer Tagesanker. Genau das baust du im Reset auf.`
           ),
-          cta("Tag 2 im Reset öffnen →", `${RESET_URL}/day/2`),
+          cta("Tag 2 im Reset öffnen", `${RESET_URL}/day/2`),
           divider(),
           body(
             `<span style="font-size:13px;color:${C.muted};">💡 Übrigens: In der <strong>CALINESS App</strong> bauen wir genau solche Systeme für dich — automatisch, basierend auf deinen echten Daten. Aber dazu später mehr.</span>`
@@ -269,7 +306,7 @@ const SEQUENCE: EmailDef[] = [
           body(
             `Du bist jetzt bei Tag 3. Das heißt: du hast schon länger durchgehalten als die Hälfte der Leute, die einen "Neustart" probieren. Das ist nicht trivial.`
           ),
-          cta("Tag 3 im Reset öffnen →", `${RESET_URL}/day/3`),
+          cta("Tag 3 im Reset öffnen", `${RESET_URL}/day/3`),
           divider(),
           body(
             `<span style="font-size:13px;color:${C.muted};">🔒 <strong>Fortschritt sichern:</strong> Dein Reset-Profil baut sich Tag für Tag auf. In der CALINESS App wird daraus ein angepasster Plan — mit Check-ins, die sich an dein Leben anpassen.</span>`
@@ -308,7 +345,7 @@ const SEQUENCE: EmailDef[] = [
             "Wöchentliche Auswertung + Anpassung",
             "Basiert auf deinem Reset-Profil",
           ]),
-          cta("Auf die Warteliste — Frühzugang sichern →", APP_TRIAL_URL),
+          cta("Auf die Warteliste — Frühzugang sichern", APP_TRIAL_URL),
           body(
             `<span style="color:${C.muted};font-size:12px;">Die App startet in den nächsten Wochen. Wer jetzt auf der Warteliste ist, bekommt den ersten Zugang und die ersten Monate vergünstigt.</span>`
           ),
@@ -317,7 +354,7 @@ const SEQUENCE: EmailDef[] = [
           body(
             `Du möchtest jetzt starten, nicht warten? In einem kostenlosen Strategiegespräch (30 Min) schauen wir uns dein Reset-Ergebnis gemeinsam an und bauen einen konkreten Plan für die nächsten 4 Wochen.`
           ),
-          cta("Strategiegespräch buchen →", COACHING_URL),
+          cta("Strategiegespräch buchen", COACHING_URL),
           urgencyBanner(
             "Dein Reset-Profil bleibt 14 Tage aktiv — danach werden die Daten gelöscht."
           ),
