@@ -29,7 +29,8 @@ const COACHING_URL = "https://calendly.com/team-calinessacademy/new-meeting";
 const UNSUBSCRIBE_BASE = `${SUPABASE_URL}/functions/v1/send-reset-sequence`;
 const IMPRESSUM_URL = "https://caliness-academy.de/impressum";
 const DATENSCHUTZ_URL = "https://caliness-academy.de/datenschutz";
-const LOGO_URL = `${RESET_URL}/icon-192.png`;
+// Weißes Wortmark-Logo (transparent) — auf Lovable verifiziert erreichbar (200).
+const LOGO_URL = `${RESET_URL}/images/caliness-logo-white.png`;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -80,10 +81,10 @@ function shell(preheader: string, content: string, unsubUrl: string): string {
         <!-- Top accent line -->
         <tr><td style="height:4px;line-height:4px;font-size:0;background:${C.accent};">&nbsp;</td></tr>
 
-        <!-- Header: emblem + eyebrow -->
-        <tr><td align="center" style="padding:38px 40px 30px;">
-          <img src="${LOGO_URL}" width="52" height="52" alt="CALINESS" style="display:block;width:52px;height:52px;border:0;border-radius:14px;outline:none;text-decoration:none;" />
-          <p style="font-family:${C.font};font-size:11px;letter-spacing:3px;text-transform:uppercase;color:${C.muted};margin:18px 0 0;font-weight:600;">7-Tage Reset</p>
+        <!-- Header: wordmark logo + eyebrow -->
+        <tr><td align="center" style="padding:40px 40px 30px;">
+          <img src="${LOGO_URL}" width="168" alt="CALINESS" style="display:block;width:168px;max-width:168px;height:auto;border:0;outline:none;text-decoration:none;margin:0 auto;" />
+          <p style="font-family:${C.font};font-size:11px;letter-spacing:3px;text-transform:uppercase;color:${C.muted};margin:20px 0 0;font-weight:600;">7-Tage Reset</p>
         </td></tr>
 
         <!-- Content -->
