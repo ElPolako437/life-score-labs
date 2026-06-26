@@ -155,6 +155,8 @@ export default function ResetNext() {
 
   const handleCta = (channel: 'instagram' | 'whatsapp') => {
     track('sprint_cta_clicked', { channel, goal: goal ?? null });
+    track('coaching_cta_clicked', { channel, goal: goal ?? null, source: 'next_page' });
+    if (channel === 'whatsapp') track('whatsapp_clicked', { context: 'sprint_pitch', goal: goal ?? null });
     window.open(channel === 'instagram' ? instagramUrl : whatsappUrl, '_blank');
   };
 

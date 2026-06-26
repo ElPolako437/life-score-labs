@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
-import { ArrowRight, Share2, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { ArrowRight, Share2, Check, Sparkles, Users } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { buildResetSummary } from '@/lib/resetSummary';
+import { track } from '@/lib/analytics';
 
 const DIMENSION_LABELS: Record<string, string> = {
   energy: 'Energie',
@@ -18,9 +18,24 @@ const DIMS = ['energy', 'sleep', 'calm', 'eating', 'body'] as const;
 export default function ResetSprintReady() {
   const navigate = useNavigate();
   const reset = useReset();
-  const { name, reflection, baseline } = reset;
+  const { name, reflection, baseline, goal } = reset;
   const [shared, setShared] = useState(false);
   const summary = buildResetSummary(reset);
+
+  // Tag 7 reached: the reset is finished and the conversion fork is shown.
+  useEffect(() => {
+    track('reset_finished', { goal: goal ?? null });
+    track('sprint_pitch_viewed', { goal: goal ?? null });
+  }, [goal]);
+
+  const goApp = () => {
+    track('app_cta_clicked', { goal: goal ?? null, source: 'decision_hub' });
+    navigate('/app');
+  };
+  const goCoaching = () => {
+    track('coaching_cta_clicked', { goal: goal ?? null, source: 'decision_hub' });
+    navigate('/next');
+  };
 
   const handleShare = async () => {
     const lines = reflection ? [
@@ -133,26 +148,63 @@ export default function ResetSprintReady() {
           </div>
         </div>
 
-        {/* Bridge text */}
-        <div className="p-4 rounded-xl border border-border/30 bg-card/50 mb-8 text-left">
-          <p className="text-sm text-foreground/80 leading-relaxed">
-            Das Fundament ist gelegt. Die Frage ist jetzt: Willst du darauf aufbauen — mit einem persönlichen Plan, der genau auf dich passt? Oder startest du ohne Plan und fällst in alte Muster zurück?
+        {/* Two-path fork */}
+        <div className="mb-2 text-left">
+          <p className="font-outfit text-lg font-bold text-foreground mb-1">Wie willst du weitermachen?</p>
+          <p className="text-sm text-muted-foreground/70 leading-relaxed mb-5">
+            Zwei Wege. Beide bauen auf deinen 7 Tagen auf — keiner fängt bei null an.
           </p>
         </div>
 
-        <Button
-          variant="premium"
-          size="lg"
-          className="w-full min-h-[52px] text-base gap-2 mb-4"
-          onClick={() => navigate('/next')}
+        {/* Door A — App (self-guided) */}
+        <button
+          onClick={goApp}
+          className="w-full text-left p-5 rounded-2xl border border-border/50 bg-card/60 hover:border-primary/50 hover:bg-primary/[0.04] transition-all duration-200 active:scale-[0.99] mb-3 group"
         >
-          Mein persönliches Sprint-Angebot ansehen
-          <ArrowRight className="w-4 h-4" />
-        </Button>
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
+              <Sparkles className="w-5 h-5 text-primary" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 font-semibold">Selbstständig</p>
+                <span className="text-[10px] text-primary/70 font-medium">Bald · Frühzugang</span>
+              </div>
+              <p className="text-base font-bold text-foreground mb-1">Mit der CALINESS App</p>
+              <p className="text-xs text-muted-foreground/70 leading-relaxed">
+                Dein täglicher Longevity-Coach. Auswertung, Plan und Fortschritt — passt sich jeden Tag an deine echten Daten an.
+              </p>
+              <p className="text-sm text-primary font-semibold mt-2.5 flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                Frühzugang ansehen <ArrowRight className="w-3.5 h-3.5" />
+              </p>
+            </div>
+          </div>
+        </button>
 
-        <p className="text-xs text-muted-foreground/30 mb-6">
-          Kostenlos ansehen — keine Verpflichtung
-        </p>
+        {/* Door B — Coaching (guided) */}
+        <button
+          onClick={goCoaching}
+          className="w-full text-left p-5 rounded-2xl border border-primary/40 bg-primary/[0.06] hover:border-primary/60 hover:bg-primary/[0.09] transition-all duration-200 active:scale-[0.99] mb-6 group"
+        >
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
+              <Users className="w-5 h-5 text-primary" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <p className="text-[10px] uppercase tracking-widest text-primary/60 font-semibold">Begleitet</p>
+                <span className="text-[10px] text-muted-foreground/50 font-medium">Begrenzte Plätze</span>
+              </div>
+              <p className="text-base font-bold text-foreground mb-1">Mit dem Caliness-Sprint</p>
+              <p className="text-xs text-muted-foreground/75 leading-relaxed">
+                14 Tage persönlich begleitet von David &amp; Sarah. Individuelle Strategie, Accountability, schnellere Umsetzung — kein Alleinkampf.
+              </p>
+              <p className="text-sm text-primary font-semibold mt-2.5 flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                Sprint ansehen <ArrowRight className="w-3.5 h-3.5" />
+              </p>
+            </div>
+          </div>
+        </button>
 
         {/* Share result */}
         <button

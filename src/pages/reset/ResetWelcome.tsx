@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,6 +12,11 @@ export default function ResetWelcome() {
   const [localName, setLocalName] = useState(name || '');
   const [localEmail, setLocalEmail] = useState('');
   const hasProgress = goal !== null;
+
+  // First touchpoint of the funnel — fires once per landing.
+  useEffect(() => {
+    track('reset_viewed', { returning: goal !== null });
+  }, []);
 
   const handleStart = () => {
     if (localName.trim()) setName(localName.trim());

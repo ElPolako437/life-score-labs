@@ -12,6 +12,7 @@ import ResetDay from '@/pages/reset/ResetDay';
 import ResetCheckIn from '@/pages/reset/ResetCheckIn';
 import ResetReflection from '@/pages/reset/ResetReflection';
 import ResetSprintReady from '@/pages/reset/ResetSprintReady';
+import ResetApp from '@/pages/reset/ResetApp';
 import ResetNext from '@/pages/reset/ResetNext';
 import Datenschutz from '@/pages/Datenschutz';
 import Impressum from '@/pages/Impressum';
@@ -71,6 +72,7 @@ export default function AnimatedRoutes() {
           <Route path="/checkin/:id" element={<ResetCheckIn />} />
           <Route path="/reflection" element={<ResetReflection />} />
           <Route path="/sprint-ready" element={<ResetSprintReady />} />
+          <Route path="/app" element={<ResetApp />} />
           <Route path="/next" element={<ResetNext />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/datenschutz" element={<Datenschutz />} />
