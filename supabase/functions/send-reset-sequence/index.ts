@@ -91,20 +91,23 @@ function shell(preheader: string, content: string, unsubUrl: string): string {
         <tr><td style="padding:8px 40px 40px;">${content}</td></tr>
 
         <!-- Footer -->
-        <tr><td style="padding:28px 40px 32px;border-top:1px solid ${C.hairline};text-align:center;">
-          <p style="font-family:${C.font};font-size:13px;color:${C.textSec};margin:0 0 4px;font-weight:600;">CALINESS Academy</p>
-          <p style="font-family:${C.font};font-size:11px;color:${C.muted};margin:0 0 14px;line-height:1.6;">Evidence-based Longevity · Made in Germany</p>
+        <tr><td style="padding:34px 40px 36px;border-top:1px solid ${C.hairline};text-align:center;">
+          <img src="${LOGO_URL}" width="120" alt="CALINESS" style="display:block;width:120px;max-width:120px;height:auto;border:0;outline:none;margin:0 auto 14px;opacity:0.85;" />
+          <p style="font-family:${C.font};font-size:11px;color:${C.muted};margin:0 0 18px;line-height:1.6;letter-spacing:0.3px;">Evidence-based Longevity &nbsp;·&nbsp; Made in Germany</p>
+
+          <!-- Social -->
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 18px;">
+            <tr>
+              <td style="padding:0 7px;"><a href="https://www.instagram.com/caliness_academy/" target="_blank" style="font-family:${C.font};font-size:11px;color:${C.textSec};text-decoration:none;font-weight:600;">Instagram</a></td>
+              <td style="color:${C.muted};font-size:10px;">·</td>
+              <td style="padding:0 7px;"><a href="${RESET_URL}" target="_blank" style="font-family:${C.font};font-size:11px;color:${C.textSec};text-decoration:none;font-weight:600;">7-Tage Reset</a></td>
+            </tr>
+          </table>
+
           <p style="font-family:${C.font};font-size:11px;color:${C.muted};margin:0;line-height:1.8;">
             <a href="${IMPRESSUM_URL}" style="color:${C.muted};text-decoration:none;border-bottom:1px solid ${C.border};">Impressum</a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="${DATENSCHUTZ_URL}" style="color:${C.muted};text-decoration:none;border-bottom:1px solid ${C.border};">Datenschutz</a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="${unsubUrl}" style="color:${C.muted};text-decoration:none;border-bottom:1px solid ${C.border};">Abmelden</a>
           </p>
-          <p style="font-family:${C.font};font-size:10px;color:${C.muted};margin:14px 0 0;opacity:0.6;">© ${new Date().getFullYear()} Caliness Academy</p>
-        </td></tr>
-      </table>
-
-      <!-- sub-card whisper -->
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;">
-        <tr><td align="center" style="padding:18px 16px 0;">
-          <p style="font-family:${C.font};font-size:11px;color:${C.muted};margin:0;opacity:0.55;">Du bekommst diese Mail, weil du den CALINESS Reset gestartet hast.</p>
+          <p style="font-family:${C.font};font-size:10px;color:${C.muted};margin:16px 0 0;opacity:0.55;">© ${new Date().getFullYear()} Caliness Academy · Du bekommst diese Mail, weil du den CALINESS Reset gestartet hast.</p>
         </td></tr>
       </table>
     </td></tr>
