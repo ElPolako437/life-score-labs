@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
 import { DAY_CONTENT, GOAL_LOCKED_TEASERS, type GoalKey } from '@/lib/dayContent';
 import { Check, ArrowRight, AlertTriangle } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import InstallPromptSheet from '@/components/InstallPromptSheet';
 import { isMobile, isStandalone } from '@/lib/installPrompt';
 
@@ -43,6 +44,7 @@ const LOCKED_TEASERS: Record<number, string> = {
 
 export default function ResetWeek() {
   const navigate = useNavigate();
+  const reduce = useReducedMotion();
   const { currentDay, getDayData, reflection, goal, name, profile } = useReset();
   const allDone = currentDay > 7;
   const completedDays = DAY_CONTENT.reduce((n, _, i) => n + (getDayData(i + 1).completed ? 1 : 0), 0);
@@ -182,17 +184,20 @@ export default function ResetWeek() {
             const isFuture = dayNum > currentDay;
 
             return (
-              <button
+              <motion.button
                 key={dayNum}
                 disabled={isFuture}
+                initial={reduce ? false : { opacity: 0, y: 14 }}
+                animate={{ opacity: isFuture ? 0.4 : (isCompleted && !isActive ? 0.7 : 1), y: 0 }}
+                transition={{ duration: 0.4, delay: reduce ? 0 : 0.06 * i, ease: [0.22, 1, 0.36, 1] }}
                 onClick={() => {
                   if (isActive || isCompleted) navigate(`/day/${dayNum}`);
                 }}
                 className={cn(
-                  'w-full text-left p-4 rounded-2xl border transition-all duration-200 flex items-center gap-4',
+                  'w-full text-left p-4 rounded-2xl border transition-colors duration-200 flex items-center gap-4',
                   isActive && 'border-primary/60 bg-primary/5 shadow-glow-subtle',
-                  isCompleted && !isActive && 'border-border/30 bg-card/60 opacity-70',
-                  isFuture && 'border-border/20 bg-card/30 opacity-40 cursor-not-allowed',
+                  isCompleted && !isActive && 'border-border/30 bg-card/60',
+                  isFuture && 'border-border/20 bg-card/30 cursor-not-allowed',
                   !isActive && !isCompleted && !isFuture && 'border-border/60 bg-card'
                 )}
               >
@@ -238,7 +243,7 @@ export default function ResetWeek() {
                     );
                   })()}
                 </div>
-              </button>
+              </motion.button>
             );
           })}
         </div>

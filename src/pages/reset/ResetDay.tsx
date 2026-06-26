@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { Check } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 export default function ResetDay() {
@@ -44,6 +45,17 @@ export default function ResetDay() {
     prevCount.current = completedCount;
   }, [completedCount]);
   const canComplete = completedCount >= minRequired;
+
+  // Celebration progress — total days done + current streak (for the success overlay)
+  const daysDone = DAY_CONTENT.reduce((n, _, i) => n + (getDayData(i + 1).completed ? 1 : 0), 0);
+  const streak = (() => {
+    let c = 0;
+    for (let i = 1; i <= 7; i++) {
+      if (getDayData(i).completed) c++;
+      else break;
+    }
+    return c;
+  })();
 
   if (!content || dayNum < 1 || dayNum > 7) {
     navigate('/week');
@@ -253,17 +265,79 @@ export default function ResetDay() {
     </div>
 
     {celebrating && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 animate-fade-in">
-        <div className="flex flex-col items-center gap-4 animate-scale-in">
-          <div
-            className="w-24 h-24 rounded-full flex items-center justify-center"
-            style={{ background: 'radial-gradient(circle, hsl(142 76% 46% / 0.25) 0%, hsl(142 76% 46% / 0.05) 70%)', boxShadow: '0 0 40px hsl(142 76% 46% / 0.3)' }}
-          >
-            <Check className="w-12 h-12 text-primary" strokeWidth={2.5} />
+      <motion.div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 px-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.25 }}
+      >
+        <div className="flex flex-col items-center gap-5 text-center">
+          <div className="relative w-28 h-28 flex items-center justify-center">
+            {/* Expanding glow burst */}
+            <motion.div
+              className="absolute inset-0 rounded-full"
+              style={{ background: 'radial-gradient(circle, hsl(142 76% 46% / 0.35) 0%, transparent 70%)' }}
+              initial={{ scale: 0.5, opacity: 0.9 }}
+              animate={{ scale: 2.2, opacity: 0 }}
+              transition={{ duration: 0.9, ease: 'easeOut' }}
+            />
+            {/* Orb with spring pop */}
+            <motion.div
+              className="relative w-24 h-24 rounded-full flex items-center justify-center"
+              style={{ background: 'radial-gradient(circle, hsl(142 76% 46% / 0.28) 0%, hsl(142 76% 46% / 0.05) 70%)', boxShadow: '0 0 48px hsl(142 76% 46% / 0.35)' }}
+              initial={{ scale: 0.3, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 16, delay: 0.05 }}
+            >
+              <motion.div
+                initial={{ scale: 0, rotate: -20 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 14, delay: 0.18 }}
+              >
+                <Check className="w-12 h-12 text-primary" strokeWidth={2.5} />
+              </motion.div>
+            </motion.div>
           </div>
-          <p className="font-outfit text-2xl font-bold text-foreground">Tag {dayNum} geschafft.</p>
+
+          <motion.p
+            className="font-outfit text-2xl font-bold text-foreground"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.28, duration: 0.3 }}
+          >
+            Tag {dayNum} geschafft.
+          </motion.p>
+
+          {/* 7-dot progress */}
+          <motion.div
+            className="flex items-center gap-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.3 }}
+          >
+            {Array.from({ length: 7 }).map((_, i) => (
+              <motion.span
+                key={i}
+                className={cn('w-2 h-2 rounded-full', i < daysDone ? 'bg-primary' : 'bg-foreground/15')}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.4 + i * 0.05, type: 'spring', stiffness: 400, damping: 18 }}
+              />
+            ))}
+          </motion.div>
+
+          {streak >= 2 && (
+            <motion.p
+              className="text-sm font-semibold text-primary"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.3 }}
+            >
+              🔥 {streak} Tage am Stück
+            </motion.p>
+          )}
         </div>
-      </div>
+      </motion.div>
     )}
     </>
   );

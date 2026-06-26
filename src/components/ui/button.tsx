@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/70 active:scale-[0.98] rounded-xl",
         ghost: "hover:bg-secondary/50 hover:text-foreground active:scale-[0.98] rounded-lg",
         link: "text-primary underline-offset-4 hover:underline",
-        premium: "bg-gradient-primary text-primary-foreground shadow-glow hover:shadow-glow-lg hover:-translate-y-0.5 active:translate-y-0 rounded-full",
+        premium: "bg-gradient-primary text-primary-foreground shadow-glow hover:shadow-glow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] rounded-full",
         // Quiz answer option variants with solid backgrounds for visibility
         answer: "border border-border/50 bg-card text-card-foreground hover:bg-elevated-surface hover:border-primary/50 active:scale-[0.98] rounded-xl",
         answerSelected: "border-2 border-primary bg-primary text-primary-foreground shadow-glow active:scale-[0.98] rounded-xl",
