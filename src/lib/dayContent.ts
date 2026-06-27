@@ -114,9 +114,9 @@ export const DAY_CONTENT: DayContent[] = [
       sleep: 'Beginne heute deine Schlafroutine 90 Min vor der Schlafenszeit. Nicht 30 — 90.',
     },
   },
-  // Tag 6 — Deine Wochenstruktur (interaktiver Builder)
+  // Tag 6 — Körpergefühl & Longevity (Momentum-Reveal + Wochengerüst)
   {
-    title: 'Deine Wochenstruktur',
+    title: 'Körpergefühl & Longevity',
     goal: 'Alles weglassen, was keinen Beitrag zur Stabilität leistet.',
     impulse: '„Jetzt wird es leicht — wenn du es richtig aufsetzt. Du bist seit fast einer Woche in diesem Rhythmus. Das ist kein Zufall — das ist ein System."',
     insight: 'Decision Fatigue — warum weniger Entscheidungen zu besserem Fettverlust führen: Jede Entscheidung kostet mentales Budget. Morgens Entscheidungen treffen = abends ist das Budget leer → schlechteste Optionen. Lösung: Entscheidungen eliminieren, nicht besser treffen.',
