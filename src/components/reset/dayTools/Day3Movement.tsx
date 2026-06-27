@@ -51,7 +51,8 @@ export default function Day3Movement() {
   };
 
   // ─── Result mode ─────────────────────────────────────────────────────────
-  if (saved && !editing) {
+  // Guard against legacy save shapes (pre-builder) — fall through to builder.
+  if (saved && !editing && Array.isArray(saved.picked) && typeof saved.total === 'number') {
     const blocks = MOVEMENT_BLOCKS.filter(b => saved.picked.includes(b.id));
     return (
       <div className="animate-fade-in">

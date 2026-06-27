@@ -67,7 +67,8 @@ export default function Day2Meals() {
   };
 
   // ─── Result mode ─────────────────────────────────────────────────────────
-  if (saved && !editing) {
+  // Guard against legacy save shapes (pre-builder) — fall through to builder.
+  if (saved && !editing && saved.selected && typeof saved.total === 'number') {
     return (
       <div className="animate-fade-in">
         <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-2">Dein Tag steht</p>

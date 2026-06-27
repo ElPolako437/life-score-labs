@@ -4,6 +4,7 @@ import { useReset, type Rating } from '@/contexts/ResetContext';
 import { DAY_CONTENT, type GoalKey } from '@/lib/dayContent';
 import { DAY_TOOLS } from '@/components/reset/dayTools';
 import CaliNote from '@/components/reset/CaliNote';
+import ToolErrorBoundary from '@/components/reset/ToolErrorBoundary';
 import { caliLine } from '@/lib/caliLines';
 import { track } from '@/lib/analytics';
 import { recordProgress } from '@/lib/resetBackend';
@@ -172,7 +173,11 @@ export default function ResetDay() {
         {toolEntry ? (
           /* Interactive-tool day: tool first, Tagesauftrag only once the tool is done */
           <>
-            {ToolComponent && <ToolComponent />}
+            {ToolComponent && (
+              <ToolErrorBoundary onReset={() => content?.toolId && reset.setTool(content.toolId, undefined)}>
+                <ToolComponent />
+              </ToolErrorBoundary>
+            )}
             {toolDone && (
               <div className="mt-8">
                 <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-3">Dein erster Tagesauftrag</p>

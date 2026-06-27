@@ -59,7 +59,7 @@ export default function Day6WeekBuilder() {
   };
 
   // ─── Result mode ─────────────────────────────────────────────────────────
-  if (saved && !editing) {
+  if (saved && !editing && Array.isArray(saved.days)) {
     return (
       <div>
         <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-2">Dein Longevity-Momentum</p>

@@ -41,7 +41,7 @@ export default function Day4Sleep() {
   };
 
   // ─── Result mode ─────────────────────────────────────────────────────────
-  if (saved && !editing) {
+  if (saved && !editing && saved.screw && SLEEP_SCREWS[saved.screw]) {
     const screw = SLEEP_SCREWS[saved.screw];
     return (
       <div className="animate-fade-in">

@@ -69,7 +69,7 @@ export default function Day5Saboteur() {
   };
 
   // ─── Result mode ─────────────────────────────────────────────────────────
-  if (saved && !editing) {
+  if (saved && !editing && saved.saboteur && SABOTEURS[saved.saboteur]) {
     const sab = SABOTEURS[saved.saboteur];
     return (
       <div>
