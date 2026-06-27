@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ResetProvider } from "./contexts/ResetContext";
 import { captureInstallPrompt } from "./lib/installPrompt";
 import AnimatedRoutes from "./components/reset/AnimatedRoutes";
+import ResetAura from "./components/reset/ResetAura";
 
 const App = () => {
   useEffect(() => { captureInstallPrompt(); }, []);
@@ -16,7 +17,10 @@ const App = () => {
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AnimatedRoutes />
+        <ResetAura />
+        <div className="relative z-10">
+          <AnimatedRoutes />
+        </div>
       </BrowserRouter>
     </TooltipProvider>
   </ResetProvider>

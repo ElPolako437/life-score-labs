@@ -122,6 +122,7 @@
 
   html {
     scroll-behavior: smooth;
+    background-color: hsl(var(--background));
   }
 
   body {
@@ -1285,3 +1286,50 @@
     100% { transform: scale(1.2); opacity: 0; filter: brightness(1) blur(10px); }
   }
 }
+
+/* ───────────────────────────────────────────────────────────────────────
+   Ambient aura — slow-drifting brand glows behind every Reset screen.
+   Turns the flat dark void into a living, premium backdrop.
+   ─────────────────────────────────────────────────────────────────────── */
+@keyframes aura-drift-a {
+  0%   { transform: translate(-8%, -6%) scale(1); }
+  50%  { transform: translate(6%, 8%) scale(1.18); }
+  100% { transform: translate(-8%, -6%) scale(1); }
+}
+@keyframes aura-drift-b {
+  0%   { transform: translate(6%, 4%) scale(1.1); }
+  50%  { transform: translate(-6%, -8%) scale(0.92); }
+  100% { transform: translate(6%, 4%) scale(1.1); }
+}
+@keyframes aura-breathe {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 0.9; }
+}
+
+.reset-aura { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; background-color: hsl(var(--background)); }
+.reset-aura__blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  will-change: transform, opacity;
+}
+.reset-aura__blob--a {
+  top: -18%; left: -12%;
+  width: 70vw; height: 70vw; max-width: 620px; max-height: 620px;
+  background: radial-gradient(circle, hsl(142 76% 46% / 0.18) 0%, transparent 70%);
+  animation: aura-drift-a 22s ease-in-out infinite, aura-breathe 9s ease-in-out infinite;
+}
+.reset-aura__blob--b {
+  bottom: -22%; right: -16%;
+  width: 60vw; height: 60vw; max-width: 540px; max-height: 540px;
+  background: radial-gradient(circle, hsl(155 70% 42% / 0.12) 0%, transparent 70%);
+  animation: aura-drift-b 28s ease-in-out infinite, aura-breathe 11s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reset-aura__blob--a, .reset-aura__blob--b { animation: none; }
+}
+
+/* Full-opacity page wrappers go transparent so the ambient aura shows through.
+   The dark base stays on <body> (applied via @apply, unaffected by this rule).
+   Opacity variants like bg-background/95 are separate classes and keep working. */
+.bg-background { background-color: transparent; }
