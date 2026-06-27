@@ -94,6 +94,17 @@ export const SLEEP_SCREWS: Record<SleepScrew, { label: string; line: string }> =
   },
 };
 
+/** Live sleep score 0–100 from current answers (unanswered = neutral). */
+export function computeSleepScore(answers: Record<string, string>): number {
+  let penalty = 0;
+  for (const q of SLEEP_QUESTIONS) {
+    const opt = q.options.find(o => o.value === answers[q.key]);
+    if (opt?.weight) penalty += opt.weight;
+  }
+  const maxPenalty = 14; // duration3 + screen3 + caffeine2 + meal3 + stress3
+  return Math.round(100 - (penalty / maxPenalty) * 62); // best 100, worst ~38
+}
+
 /** Pick the single biggest sleep lever from the answers. */
 export function computeSleepScrew(answers: Record<string, string>): SleepScrew {
   const score: Record<string, number> = {};
