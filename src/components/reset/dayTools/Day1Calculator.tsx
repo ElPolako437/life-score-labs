@@ -63,8 +63,10 @@ export default function Day1Calculator() {
         </h2>
 
         <div className="space-y-3 mb-5">
-          <div className="p-5 rounded-2xl border border-primary/25 bg-primary/5 shadow-glow-subtle">
+          <div className="relative p-5 rounded-2xl border border-primary/40 shadow-glow overflow-hidden [background:var(--gradient-glow)]">
+            <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
             <StatReveal
+              hero
               eyebrow="Dein Kalorienbereich"
               low={profile.calLow}
               high={profile.calHigh}

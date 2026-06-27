@@ -9,6 +9,7 @@ interface CountUpProps {
   /** Render hook — format the current value (e.g. add unit). */
   format?: (v: number) => string;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 /**
@@ -21,6 +22,7 @@ export default function CountUp({
   delay = 0,
   format = v => String(Math.round(v)),
   className,
+  style,
 }: CountUpProps) {
   const [value, setValue] = useState(from);
   const node = useRef<HTMLSpanElement>(null);
@@ -42,7 +44,7 @@ export default function CountUp({
   }, [to]);
 
   return (
-    <span ref={node} className={className}>
+    <span ref={node} className={className} style={style}>
       {format(value)}
     </span>
   );
