@@ -1,10 +1,36 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useReset, type Goal, type Hurdle } from '@/contexts/ResetContext';
 import { cn } from '@/lib/utils';
 import { track } from '@/lib/analytics';
 import { recordProgress } from '@/lib/resetBackend';
 import { Slider } from '@/components/ui/slider';
+
+/** Premium glowing selection row used for goal + hurdle steps. */
+function SelectRow({ label, active, onClick, index, reduce }: { label: string; active: boolean; onClick: () => void; index: number; reduce: boolean | null }) {
+  return (
+    <motion.button
+      onClick={onClick}
+      initial={reduce ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, delay: reduce ? 0 : 0.05 * index, ease: [0.22, 1, 0.36, 1] }}
+      className={cn(
+        'relative w-full text-left p-4 rounded-2xl border overflow-hidden flex items-center justify-between gap-3',
+        'transition-[transform,border-color,box-shadow,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.98]',
+        active
+          ? 'border-primary/80 text-foreground scale-[1.02] shadow-glow [background:var(--gradient-glow)]'
+          : 'border-border/50 bg-card/70 text-card-foreground hover:border-primary/40 hover:-translate-y-0.5 shadow-inner-light'
+      )}
+    >
+      {active && <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent" />}
+      <span className={cn('font-semibold text-sm transition-colors', active && 'text-primary')}>{label}</span>
+      <span className={cn('w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-colors', active ? 'border-primary bg-primary/20' : 'border-border/60')}>
+        {active && <span className="w-2 h-2 rounded-full bg-primary" />}
+      </span>
+    </motion.button>
+  );
+}
 
 const GOALS: { value: Goal; label: string }[] = [
   { value: 'energy', label: 'Mehr Energie im Alltag' },
@@ -31,6 +57,7 @@ const BASELINE_DIMS = [
 
 export default function ResetOnboarding() {
   const navigate = useNavigate();
+  const reduce = useReducedMotion();
   const { setGoal, setHurdle, setBaseline, email } = useReset();
   const [step, setStep] = useState(0);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
@@ -73,7 +100,16 @@ export default function ResetOnboarding() {
         />
       </div>
 
-      <div className="flex-1 flex flex-col animate-fade-in max-w-sm mx-auto w-full">
+      <div className="flex-1 flex flex-col max-w-sm mx-auto w-full">
+       <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={step}
+          className="flex-1 flex flex-col"
+          initial={reduce ? false : { opacity: 0, x: 24 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={reduce ? { opacity: 0 } : { opacity: 0, x: -24 }}
+          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+        >
         {step === 0 && (
           <>
             <h2 className="font-outfit text-2xl font-bold text-foreground mb-2">
@@ -81,19 +117,8 @@ export default function ResetOnboarding() {
             </h2>
             <p className="text-muted-foreground text-sm mb-8">Wähle das, was sich am dringendsten anfühlt.</p>
             <div className="space-y-3 flex-1">
-              {GOALS.map(g => (
-                <button
-                  key={g.value}
-                  onClick={() => handleGoalSelect(g.value)}
-                  className={cn(
-                    'w-full text-left p-4 rounded-2xl border transition-all duration-200',
-                    selectedGoal === g.value
-                      ? 'border-primary bg-primary/10 text-foreground shadow-glow-subtle'
-                      : 'border-border/60 bg-card text-card-foreground hover:border-primary/40 hover:bg-elevated-surface'
-                  )}
-                >
-                  <span className="font-medium text-sm">{g.label}</span>
-                </button>
+              {GOALS.map((g, i) => (
+                <SelectRow key={g.value} label={g.label} active={selectedGoal === g.value} onClick={() => handleGoalSelect(g.value)} index={i} reduce={reduce} />
               ))}
             </div>
           </>
@@ -106,19 +131,8 @@ export default function ResetOnboarding() {
             </h2>
             <p className="text-muted-foreground text-sm mb-8">Sei ehrlich — das hilft bei der Einordnung.</p>
             <div className="space-y-3 flex-1">
-              {HURDLES.map(h => (
-                <button
-                  key={h.value}
-                  onClick={() => handleHurdleSelect(h.value)}
-                  className={cn(
-                    'w-full text-left p-4 rounded-2xl border transition-all duration-200',
-                    selectedHurdle === h.value
-                      ? 'border-primary bg-primary/10 text-foreground shadow-glow-subtle'
-                      : 'border-border/60 bg-card text-card-foreground hover:border-primary/40 hover:bg-elevated-surface'
-                  )}
-                >
-                  <span className="font-medium text-sm">{h.label}</span>
-                </button>
+              {HURDLES.map((h, i) => (
+                <SelectRow key={h.value} label={h.label} active={selectedHurdle === h.value} onClick={() => handleHurdleSelect(h.value)} index={i} reduce={reduce} />
               ))}
             </div>
           </>
@@ -162,6 +176,8 @@ export default function ResetOnboarding() {
             </button>
           </>
         )}
+        </motion.div>
+       </AnimatePresence>
 
         {step < 2 && (
           <p className="text-xs text-muted-foreground/40 text-center pt-6 pb-4">
