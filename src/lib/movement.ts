@@ -44,3 +44,24 @@ export function computeMovement(
 
   return { stepTarget: steps, walkMin, line };
 }
+
+export interface MovementBlock {
+  id: string;
+  label: string;
+  steps: number;
+  icon: string;
+}
+
+/**
+ * Everyday NEAT actions the user can stack toward today's step target.
+ * Shows that the goal is reached through small, realistic moves — not the gym.
+ */
+export const MOVEMENT_BLOCKS: MovementBlock[] = [
+  { id: 'walk_meal', label: 'Spaziergang nach dem Essen', steps: 1800, icon: '🍽️' },
+  { id: 'evening', label: 'Abendrunde um den Block', steps: 2800, icon: '🌙' },
+  { id: 'stairs', label: 'Treppe statt Aufzug', steps: 400, icon: '🪜' },
+  { id: 'stop_early', label: 'Eine Station früher raus', steps: 1500, icon: '🚏' },
+  { id: 'call_walk', label: 'Telefonat im Gehen', steps: 1200, icon: '📞' },
+  { id: 'errands', label: 'Erledigung zu Fuß', steps: 2200, icon: '🛍️' },
+  { id: 'breaks', label: 'Geh-Pausen im Alltag', steps: 900, icon: '⏱️' },
+];
