@@ -108,7 +108,8 @@ export default function ResetWeek() {
         </div>
 
         {/* Reset profile — progress ring + personal anchor */}
-        <div className="mt-4 mb-8 p-5 rounded-2xl border border-border/50 bg-card/60 flex items-center gap-5">
+        <div className="relative mt-4 mb-8 p-5 rounded-2xl border border-primary/20 [background:var(--gradient-card)] shadow-card flex items-center gap-5 overflow-hidden">
+          <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
           <ProgressRing progress={completedDays / 7} size={104} stroke={7}>
             <CountUp to={completedDays} duration={0.9} className="font-outfit text-2xl font-bold text-foreground tabular-nums leading-none" />
             <span className="text-[10px] text-muted-foreground/50 mt-0.5">von 7 Tagen</span>
@@ -194,8 +195,8 @@ export default function ResetWeek() {
                   if (isActive || isCompleted) navigate(`/day/${dayNum}`);
                 }}
                 className={cn(
-                  'w-full text-left p-4 rounded-2xl border transition-colors duration-200 flex items-center gap-4',
-                  isActive && 'border-primary/60 bg-primary/5 shadow-glow-subtle',
+                  'relative w-full text-left p-4 rounded-2xl border transition-colors duration-200 flex items-center gap-4 overflow-hidden',
+                  isActive && 'border-primary/70 shadow-glow [background:var(--gradient-glow)]',
                   isCompleted && !isActive && 'border-border/30 bg-card/60',
                   isFuture && 'border-border/20 bg-card/30 cursor-not-allowed',
                   !isActive && !isCompleted && !isFuture && 'border-border/60 bg-card'
