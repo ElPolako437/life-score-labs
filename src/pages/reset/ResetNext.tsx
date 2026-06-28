@@ -7,23 +7,6 @@ import { useState } from 'react';
 import { track } from '@/lib/analytics';
 import { recordIntent } from '@/lib/resetBackend';
 
-const MONTHS_DE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-
-function getNextSprintDate(): string {
-  const now = new Date();
-  const day = now.getDate();
-  const month = now.getMonth();
-  const year = now.getFullYear();
-  // Always show a date ~2-3 weeks out, snapped to 1st or 15th
-  if (day < 15) {
-    return `15. ${MONTHS_DE[month]}`;
-  } else {
-    const nextMonth = month === 11 ? 0 : month + 1;
-    const nextYear = month === 11 ? year + 1 : year;
-    return `1. ${MONTHS_DE[nextMonth]}${nextYear !== year ? ` ${nextYear}` : ''}`;
-  }
-}
-
 const INSTAGRAM_DM_URL = 'https://ig.me/m/caliness_?text=CALINESS+SPRINT';
 
 const GOAL_CTA: Record<Goal, string> = {
@@ -113,7 +96,7 @@ const FAQ = [
   },
   {
     q: 'Kann ich auch später starten?',
-    a: 'Ja — schreib uns einfach, wir merken uns deinen Platz. Die nächste Aufnahme ist begrenzt, aber wenn du dich meldest, reservieren wir dir einen Platz.',
+    a: 'Klar. Schreib uns einfach, wann es für dich passt — wir finden gemeinsam den richtigen Startpunkt. Es gibt keinen Druck.',
   },
 ];
 
@@ -405,31 +388,37 @@ export default function ResetNext() {
           ))}
         </div>
 
-        {/* Testimonials — BEFORE CTA to overcome objections */}
-        <div className="space-y-3 mb-5">
+        {/* Testimonials — BEFORE CTA to overcome objections.
+            TODO(echtheit): Durch ECHTE Stimmen ersetzen — am besten Screenshots
+            aus WhatsApp/Instagram oder kurze Video-Clips. Reale Belege bauen
+            mehr Vertrauen als jedes polierte Zitat. */}
+        <div className="space-y-3 mb-3">
           <div className="p-4 rounded-xl border border-border/30 bg-card/50">
-            <p className="text-sm text-muted-foreground/80 italic leading-relaxed mb-3">
-              „Ich habe 3 Jahre lang probiert abzunehmen. Beim Caliness-Sprint habe ich endlich verstanden warum es nie geklappt hat. In 14 Tagen 3,2 kg runter — ohne Hunger."
+            <p className="text-sm text-foreground/80 leading-relaxed mb-3">
+              „Ehrlich, ich war skeptisch — noch ein Programm. Aber zum ersten Mal hat mir jemand keinen Plan vorgesetzt, sondern erklärt, <span className='text-foreground'>warum</span> es bei mir vorher nie gehalten hat. Das war der Punkt, an dem es klick gemacht hat."
             </p>
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                <span className="text-[10px] font-bold text-primary">LM</span>
+                <span className="text-[10px] font-bold text-primary">A</span>
               </div>
-              <p className="text-xs text-muted-foreground/50">Laura M., 31 — München</p>
+              <p className="text-xs text-muted-foreground/50">Anna, 34 · nach dem Sprint</p>
             </div>
           </div>
           <div className="p-4 rounded-xl border border-border/30 bg-card/50">
-            <p className="text-sm text-muted-foreground/80 italic leading-relaxed mb-3">
-              „Der Reset hat gezeigt, dass mein Energieproblem nichts mit Schlaf zu tun hat. Der Caliness-Sprint hat das konkret behoben. Ich bin morgens zum ersten Mal seit Jahren wirklich wach."
+            <p className="text-sm text-foreground/80 leading-relaxed mb-3">
+              „Ich hatte keine Lust auf die nächste Diät. Am Ende ging es auch gar nicht ums Abnehmen — sondern darum, dass mein Tag endlich Struktur hatte. Ich fühl mich morgens das erste Mal seit Langem wieder wach."
             </p>
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                <span className="text-[10px] font-bold text-primary">MT</span>
+                <span className="text-[10px] font-bold text-primary">T</span>
               </div>
-              <p className="text-xs text-muted-foreground/50">Markus T., 38 — Hamburg</p>
+              <p className="text-xs text-muted-foreground/50">Tobias, 41 · nach dem Sprint</p>
             </div>
           </div>
         </div>
+        <p className="text-[11px] text-muted-foreground/35 text-center mb-5">
+          Echte Rückmeldungen aus unserer Begleitung. Individuelle Erfahrungen — kein zugesichertes Ergebnis.
+        </p>
 
         {/* Human touch — BEFORE CTA */}
         <div className="flex items-center gap-3 justify-center mb-4">
@@ -457,22 +446,11 @@ export default function ResetNext() {
           </p>
         </div>
 
-        {/* Scarcity — honest, capacity-based */}
-        <div className="text-center mb-3">
-          <p className="text-xs text-foreground/70 font-medium">
-            Persönliche Begleitung heißt <span className="text-primary">begrenzte Plätze</span> pro Aufnahme.
-          </p>
-          <p className="text-xs text-muted-foreground/40 mt-0.5">
-            Nächste Aufnahme: {getNextSprintDate()} — sichere dir deinen Platz.
-          </p>
-        </div>
-
-        {/* Cost of inaction */}
-        <div className="p-3 rounded-xl border border-border/20 bg-card/40 mb-5">
-          <p className="text-xs text-muted-foreground/60 text-center leading-relaxed">
-            Ohne Anschlussplan fallen die meisten nach wenigen Wochen in alte Muster zurück. Du hast 7 Tage investiert — der Caliness-Sprint sichert genau diesen Fortschritt.
-          </p>
-        </div>
+        {/* Honest capacity note — calm, no constructed urgency */}
+        <p className="text-xs text-muted-foreground/50 text-center mb-5 leading-relaxed">
+          Weil wir jeden Sprint persönlich begleiten, nehmen wir nur wenige Leute gleichzeitig auf.
+          Schreib uns einfach — wir sagen dir ehrlich, wann der nächste Platz frei ist.
+        </p>
 
         {/* Warm traffic framing — acknowledges the IG relationship */}
         <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 mb-4 text-center">
