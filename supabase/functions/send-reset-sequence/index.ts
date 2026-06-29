@@ -31,8 +31,10 @@ const COACHING_URL = "https://calendly.com/team-calinessacademy/new-meeting";
 const UNSUBSCRIBE_BASE = `${SUPABASE_URL}/functions/v1/send-reset-sequence`;
 const IMPRESSUM_URL = "https://caliness-academy.de/impressum";
 const DATENSCHUTZ_URL = "https://caliness-academy.de/datenschutz";
-// Weißes Wortmark-Logo (transparent) — auf Lovable verifiziert erreichbar (200).
-const LOGO_URL = `${RESET_URL}/images/caliness-logo-white.png`;
+// Mail-Bilder über jsDelivr (GitHub-CDN, fester Commit) — unabhängig vom Lovable-Deploy,
+// damit Logo + Coach-Avatare immer laden (Repo ist öffentlich). Commit-Pin = unveränderlich.
+const IMG_CDN = "https://cdn.jsdelivr.net/gh/ElPolako437/life-score-labs@2dc07bb/public/images";
+const LOGO_URL = `${IMG_CDN}/caliness-logo-white.png`;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -74,8 +76,8 @@ function signature(): string {
           <tr>
             <td width="98" valign="middle">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-                <td><img src="${RESET_URL}/images/david-sm.jpg" width="46" height="46" alt="David" style="display:block;width:46px;height:46px;border-radius:50%;border:2px solid ${C.surface};outline:none;text-decoration:none;" /></td>
-                <td style="padding-left:6px;"><img src="${RESET_URL}/images/sarah-sm.jpg" width="46" height="46" alt="Sarah" style="display:block;width:46px;height:46px;border-radius:50%;border:2px solid ${C.surface};outline:none;text-decoration:none;" /></td>
+                <td><img src="${IMG_CDN}/david-sm.jpg" width="46" height="46" alt="David" style="display:block;width:46px;height:46px;border-radius:50%;border:2px solid ${C.surface};outline:none;text-decoration:none;" /></td>
+                <td style="padding-left:6px;"><img src="${IMG_CDN}/sarah-sm.jpg" width="46" height="46" alt="Sarah" style="display:block;width:46px;height:46px;border-radius:50%;border:2px solid ${C.surface};outline:none;text-decoration:none;" /></td>
               </tr></table>
             </td>
             <td valign="middle" style="padding-left:14px;">
