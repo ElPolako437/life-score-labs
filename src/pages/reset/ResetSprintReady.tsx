@@ -151,6 +151,18 @@ export default function ResetSprintReady() {
           </div>
         </div>
 
+        {/* Real session shot — community at the decision point */}
+        <div className="mb-5 rounded-2xl overflow-hidden border border-border/40 shadow-card">
+          <img
+            src="/images/caliness-session.jpg"
+            alt="Eine echte CALINESS-Session mit David & Sarah"
+            loading="lazy"
+            width={1600}
+            height={900}
+            className="w-full h-auto object-cover"
+          />
+        </div>
+
         {/* Two-path fork */}
         <div className="mb-2 text-left">
           <p className="font-outfit text-lg font-bold text-foreground mb-1">Wie willst du weitermachen?</p>
