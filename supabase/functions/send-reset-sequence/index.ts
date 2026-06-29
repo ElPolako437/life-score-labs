@@ -33,8 +33,8 @@ const IMPRESSUM_URL = "https://caliness-academy.de/impressum";
 const DATENSCHUTZ_URL = "https://caliness-academy.de/datenschutz";
 // Mail-Bilder über jsDelivr (GitHub-CDN, fester Commit) — unabhängig vom Lovable-Deploy,
 // damit Logo + Coach-Avatare immer laden (Repo ist öffentlich). Commit-Pin = unveränderlich.
-const IMG_CDN = "https://cdn.jsdelivr.net/gh/ElPolako437/life-score-labs@2dc07bb/public/images";
-const LOGO_URL = `${IMG_CDN}/caliness-logo-white.png`;
+const IMG_CDN = "https://cdn.jsdelivr.net/gh/ElPolako437/life-score-labs@9797251/public/images";
+const LOGO_URL = `${IMG_CDN}/caliness-logo-dark.png`;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -49,21 +49,22 @@ function getSupabase() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// HTML EMAIL BUILDER — dark theme, green #22c55e, matching bioage design
+// HTML EMAIL BUILDER — light theme (dark-mode-robust: Gmail invertiert helle
+// Mails sauber, statt dunkle aufzuhellen), grüner Akzent, dunkles Logo.
 // ═══════════════════════════════════════════════════════════════════════════
 
 const C = {
-  bg: "#08090b",
-  card: "#0f1115",
-  surface: "#15181f",
-  border: "rgba(255,255,255,0.07)",
-  hairline: "rgba(255,255,255,0.045)",
-  borderAccent: "rgba(34,197,94,0.28)",
-  accent: "#22c55e",
-  accentSoft: "rgba(34,197,94,0.10)",
-  text: "#f8fafc",
-  textSec: "#aebacb",
-  muted: "#6b7a8f",
+  bg: "#ffffff",
+  card: "#ffffff",
+  surface: "#f3f5f7",
+  border: "rgba(0,0,0,0.08)",
+  hairline: "rgba(0,0,0,0.07)",
+  borderAccent: "rgba(22,163,74,0.30)",
+  accent: "#16a34a",
+  accentSoft: "rgba(22,163,74,0.10)",
+  text: "#0f1115",
+  textSec: "#475569",
+  muted: "#94a3b8",
   font: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif",
 };
 
@@ -97,27 +98,12 @@ function shell(preheader: string, content: string, unsubUrl: string): string {
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
+  <meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light">
   <title>CALINESS Reset</title>
   <style>
-    :root { color-scheme: dark; supported-color-schemes: dark; }
-    /* Re-assert the brand-dark palette when a client applies its own dark-mode
-       recoloring, so the mail stays dark instead of being washed out / lightened. */
-    @media (prefers-color-scheme: dark) {
-      .cl-bg { background:#0f1115 !important; }
-      .cl-card { background:#0f1115 !important; }
-      .cl-surface { background:#15181f !important; }
-      .cl-text { color:#f8fafc !important; }
-      .cl-textsec { color:#aebacb !important; }
-      .cl-muted { color:#6b7a8f !important; }
-    }
-    /* Outlook.com dark mode injects [data-ogsc]/[data-ogsb] — counter its recoloring. */
-    [data-ogsc] .cl-text { color:#f8fafc !important; }
-    [data-ogsc] .cl-textsec { color:#aebacb !important; }
-    [data-ogsc] .cl-muted { color:#6b7a8f !important; }
-    [data-ogsb] .cl-bg { background:#0f1115 !important; }
-    [data-ogsb] .cl-card { background:#0f1115 !important; }
-    [data-ogsb] .cl-surface { background:#15181f !important; }
+    /* Helle Mail: Clients (inkl. Gmail) sollen sie als Light-Mail behandeln und
+       — falls überhaupt — sauber zu Dunkel invertieren, statt sie aufzuhellen. */
+    :root { color-scheme: light; supported-color-schemes: light; }
   </style>
 </head>
 <body class="cl-bg" style="margin:0;padding:0;background:${C.card};-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
@@ -189,8 +175,8 @@ function cta(label: string, url: string): string {
   return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:28px 0;">
     <tr><td align="center">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr><td align="center" style="border-radius:12px;background:${C.accent};box-shadow:0 8px 28px rgba(34,197,94,0.32);">
-          <a href="${url}" target="_blank" style="font-family:${C.font};font-size:15px;font-weight:700;color:#08090b;text-decoration:none;display:block;padding:17px 28px;border-radius:12px;letter-spacing:0.2px;">${label}&nbsp;&rarr;</a>
+        <tr><td align="center" style="border-radius:12px;background:${C.accent};box-shadow:0 6px 18px rgba(22,163,74,0.25);">
+          <a href="${url}" target="_blank" style="font-family:${C.font};font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;display:block;padding:17px 28px;border-radius:12px;letter-spacing:0.2px;">${label}&nbsp;&rarr;</a>
         </td></tr>
       </table>
     </td></tr></table>`;
