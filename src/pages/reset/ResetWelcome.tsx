@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { useReset } from '@/contexts/ResetContext';
 import { track, captureLead, triggerResetSignup } from '@/lib/analytics';
 import { recordSignup } from '@/lib/resetBackend';
-import SoftPhoto from '@/components/reset/SoftPhoto';
 
 export default function ResetWelcome() {
   const navigate = useNavigate();
@@ -41,36 +40,46 @@ export default function ResetWelcome() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 text-center relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-primary/8 blur-[120px] pointer-events-none" />
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
 
-      <div className="relative z-10 flex flex-col items-center gap-8 max-w-sm animate-fade-in">
-        {/* Logo */}
-        <div className="relative">
+      {/* HERO HEADER — blurred coaching shot with logo + headline overlaid */}
+      <div className="relative w-full overflow-hidden" style={{ minHeight: '42vh' }}>
+        <img
+          src="/images/caliness-coaching.jpg"
+          alt="David & Sarah coachen eine CALINESS-Gruppe"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ filter: 'blur(2px) brightness(0.6) saturate(1.05)', transform: 'scale(1.06)' }}
+        />
+        {/* Dark scrim — keeps text crisp + fades the image into the page */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to bottom, hsl(var(--background) / 0.5) 0%, hsl(var(--background) / 0.15) 32%, hsl(var(--background) / 0.7) 80%, hsl(var(--background)) 100%)',
+          }}
+        />
+        <div className="relative z-10 flex flex-col items-center justify-end text-center px-6 pt-12 pb-7 gap-4" style={{ minHeight: '42vh' }}>
           <img
             src="/images/caliness-logo-white.png"
             alt="CALINESS"
-            className="w-20 h-20 object-contain"
-            style={{ filter: 'drop-shadow(0 0 20px hsl(142 76% 46% / 0.15))' }}
+            className="w-16 h-16 object-contain"
+            style={{ filter: 'drop-shadow(0 0 24px hsl(0 0% 0% / 0.5))' }}
           />
-          <div
-            className="absolute inset-0 -m-3 rounded-full"
-            style={{ background: 'radial-gradient(circle, hsl(142 76% 46% / 0.08) 0%, transparent 70%)' }}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <h1 className="font-outfit font-bold text-[26px] tracking-tight text-foreground leading-[1.15] text-balance">
+          <h1
+            className="font-outfit font-bold text-[27px] tracking-tight text-foreground leading-[1.15] text-balance max-w-sm"
+            style={{ textShadow: '0 2px 24px hsl(0 0% 0% / 0.65)' }}
+          >
             Du machst nicht zu wenig.<br />Nur an der falschen Stelle.
           </h1>
         </div>
+      </div>
+
+      {/* CONTENT */}
+      <div className="relative z-10 flex-1 flex flex-col items-center text-center px-6 pb-10 gap-7 max-w-sm mx-auto w-full animate-fade-in">
 
         <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-xs">
           7 Tage. Etwa 10 Minuten am Tag. Danach weißt du, wo dein System gerade leerläuft. Und kannst aufhören, da Kraft reinzukippen.
         </p>
-
-        {/* Real coaching shot — soft, atmospheric trust at entry */}
-        <SoftPhoto src="/images/caliness-coaching.jpg" alt="David & Sarah coachen eine CALINESS-Gruppe" className="shadow-card" />
 
         {/* Trust signal — David & Sarah */}
         <div className="flex items-center gap-3">
