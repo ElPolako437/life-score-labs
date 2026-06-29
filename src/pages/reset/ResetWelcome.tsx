@@ -76,13 +76,19 @@ export default function ResetWelcome() {
         <div className="flex items-center gap-3">
           <div className="flex -space-x-2 flex-shrink-0">
             <img
-              src="/images/david.jpg"
+              src="/images/david-sm.jpg"
               alt="David"
+              width={32}
+              height={32}
+              loading="lazy"
               className="w-8 h-8 rounded-full object-cover ring-2 ring-background"
             />
             <img
-              src="/images/sarah.jpg"
+              src="/images/sarah-sm.jpg"
               alt="Sarah"
+              width={32}
+              height={32}
+              loading="lazy"
               className="w-8 h-8 rounded-full object-cover ring-2 ring-background"
             />
           </div>
