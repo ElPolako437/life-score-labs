@@ -19,9 +19,9 @@ const BREVO_API_KEY = Deno.env.get("BREVO_API_KEY")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-// Versand-Domain (Brevo-verifiziert) ist OHNE Bindestrich; Marken-Domain in Links + Footer
-// bleibt MIT Bindestrich (caliness-academy.de).
-const SENDER = { name: "CALI von CALINESS", email: "team@calinessacademy.de" };
+// Versand- UND Marken-Domain sind jetzt beide caliness-academy.de (MIT Bindestrich,
+// in Brevo per DKIM/SPF authentifiziert) → korrekte Signatur = Inbox statt Spam.
+const SENDER = { name: "CALI von CALINESS", email: "team@caliness-academy.de" };
 
 const RESET_URL = "https://life-score-labs.lovable.app";
 // App ist noch nicht live — URL führt zur Warteliste / Early Access.
@@ -447,7 +447,7 @@ async function sendViaBre(
       to: [{ email: to.email, name: to.name || to.email }],
       subject,
       htmlContent: html,
-      replyTo: { email: "team@calinessacademy.de", name: "CALINESS Team" },
+      replyTo: { email: "team@caliness-academy.de", name: "CALINESS Team" },
     }),
   });
 
