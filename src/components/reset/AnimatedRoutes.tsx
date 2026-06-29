@@ -21,6 +21,7 @@ import AdminLogin from '@/pages/admin/AdminLogin';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
 import AdminLeads from '@/pages/admin/AdminLeads';
 import AdminLeadDetail from '@/pages/admin/AdminLeadDetail';
+import AdminAnalytics from '@/pages/admin/AdminAnalytics';
 
 /**
  * App-grade page transitions. Each route change fades + glides the new screen in
@@ -85,6 +86,7 @@ export default function AnimatedRoutes() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/leads" element={<AdminLeads />} />
           <Route path="/admin/leads/:email" element={<AdminLeadDetail />} />
+          <Route path="/admin/analytics" element={<AdminAnalytics />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>

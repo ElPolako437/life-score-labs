@@ -14,6 +14,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
   const nav = [
     { to: '/admin', label: 'Dashboard' },
     { to: '/admin/leads', label: 'Leads' },
+    { to: '/admin/analytics', label: 'Analytics' },
   ];
   const isActive = (to: string) => (to === '/admin' ? pathname === '/admin' : pathname.startsWith(to));
 

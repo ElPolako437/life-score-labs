@@ -180,6 +180,50 @@ serve(async (req: Request) => {
       return json({ success: true });
     }
 
+    // ── ANALYTICS (aggregierte Funnel-/Inhalts-Auswertung) ──────────────────
+    if (action === "analytics") {
+      const [{ data: parts }, { data: profiles }, { data: progress }, { data: events }] = await Promise.all([
+        supabase.from("reset_participants").select("last_day_reached"),
+        supabase.from("reset_profiles").select("goal, hurdle, main_lever"),
+        supabase.from("reset_day_progress").select("day, rating, completed_at, tool_result"),
+        supabase.from("reset_events").select("event"),
+      ]);
+
+      const reached = (d: number) => (parts ?? []).filter(p => ((p.last_day_reached as number) ?? 0) >= d).length;
+      const perDay = [1, 2, 3, 4, 5, 6, 7].map(d => {
+        const rows = (progress ?? []).filter(r => r.day === d);
+        const completed = rows.filter(r => r.completed_at).length;
+        const ratings = rows.filter(r => typeof r.rating === "number").map(r => r.rating as number);
+        const r = reached(d);
+        return {
+          day: d, reached: r, completed,
+          completionRate: r ? Math.round((completed / r) * 100) : 0,
+          avgRating: ratings.length ? Math.round((ratings.reduce((n, v) => n + v, 0) / ratings.length) * 10) / 10 : null,
+        };
+      });
+
+      const topCount = (arr: unknown[]) => {
+        const m: Record<string, number> = {};
+        arr.forEach(v => { if (v) { const k = String(v); m[k] = (m[k] ?? 0) + 1; } });
+        return Object.entries(m).sort((a, b) => b[1] - a[1]).map(([key, count]) => ({ key, count }));
+      };
+
+      const topGoals = topCount((profiles ?? []).map(p => p.goal));
+      const topHurdles = topCount((profiles ?? []).map(p => p.hurdle));
+      const topLevers = topCount((profiles ?? []).map(p => p.main_lever));
+      const topSaboteurs = topCount(
+        (progress ?? []).filter(r => r.day === 5)
+          .map(r => (r.tool_result && typeof r.tool_result === "object") ? (r.tool_result as Record<string, unknown>).saboteur : null),
+      );
+      const ctaClicks = {
+        sprint: (events ?? []).filter(e => e.event === "sprint_cta_clicked").length,
+        app: (events ?? []).filter(e => e.event === "app_cta_clicked").length,
+        coaching: (events ?? []).filter(e => e.event === "coaching_cta_clicked").length,
+      };
+
+      return json({ perDay, topGoals, topHurdles, topLevers, topSaboteurs, ctaClicks });
+    }
+
     return json({ error: "unknown action" }, 400);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);

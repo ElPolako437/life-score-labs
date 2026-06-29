@@ -86,7 +86,17 @@ export interface LeadDetail {
   avg_rating: number | null; readiness_score: number; readiness_reasons: string[]; temperature: 'hot' | 'warm' | 'cold';
 }
 
+export interface AnalyticsData {
+  perDay: { day: number; reached: number; completed: number; completionRate: number; avgRating: number | null }[];
+  topGoals: { key: string; count: number }[];
+  topHurdles: { key: string; count: number }[];
+  topLevers: { key: string; count: number }[];
+  topSaboteurs: { key: string; count: number }[];
+  ctaClicks: { sprint: number; app: number; coaching: number };
+}
+
 export const getDashboard = () => call<DashboardData>('dashboard');
+export const getAnalytics = () => call<AnalyticsData>('analytics');
 export const getLeads = () => call<{ leads: Lead[] }>('leads');
 export const getLead = (email: string) => call<LeadDetail>('lead', { email });
 export const addNote = (email: string, note: string) => call<{ success: boolean }>('note', { email, note });
