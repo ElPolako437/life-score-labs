@@ -104,7 +104,7 @@ function shell(preheader: string, content: string, unsubUrl: string): string {
     /* Re-assert the brand-dark palette when a client applies its own dark-mode
        recoloring, so the mail stays dark instead of being washed out / lightened. */
     @media (prefers-color-scheme: dark) {
-      .cl-bg { background:#08090b !important; }
+      .cl-bg { background:#0f1115 !important; }
       .cl-card { background:#0f1115 !important; }
       .cl-surface { background:#15181f !important; }
       .cl-text { color:#f8fafc !important; }
@@ -115,16 +115,16 @@ function shell(preheader: string, content: string, unsubUrl: string): string {
     [data-ogsc] .cl-text { color:#f8fafc !important; }
     [data-ogsc] .cl-textsec { color:#aebacb !important; }
     [data-ogsc] .cl-muted { color:#6b7a8f !important; }
-    [data-ogsb] .cl-bg { background:#08090b !important; }
+    [data-ogsb] .cl-bg { background:#0f1115 !important; }
     [data-ogsb] .cl-card { background:#0f1115 !important; }
     [data-ogsb] .cl-surface { background:#15181f !important; }
   </style>
 </head>
-<body class="cl-bg" style="margin:0;padding:0;background:${C.bg};-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+<body class="cl-bg" style="margin:0;padding:0;background:${C.card};-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
   <div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:${C.bg};opacity:0;">${preheader}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="${C.bg}" class="cl-bg" style="background:${C.bg};">
-    <tr><td align="center" style="padding:48px 16px;">
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="${C.card}" class="cl-card" style="max-width:600px;background:${C.card};border-radius:22px;border:1px solid ${C.border};overflow:hidden;">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="${C.card}" class="cl-bg" style="background:${C.card};">
+    <tr><td align="center" style="padding:0;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="${C.card}" class="cl-card" style="max-width:600px;background:${C.card};overflow:hidden;">
 
         <!-- Top accent line -->
         <tr><td style="height:4px;line-height:4px;font-size:0;background:${C.accent};">&nbsp;</td></tr>
