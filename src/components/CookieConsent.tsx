@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Cookie, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { setAnalyticsConsent } from "@/lib/analytics";
 
 const COOKIE_CONSENT_KEY = "caliness_cookie_consent";
 
@@ -18,18 +19,12 @@ export const CookieConsent = () => {
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify({ 
-      accepted: true, 
-      timestamp: new Date().toISOString() 
-    }));
+    setAnalyticsConsent(true); // persists choice + opts PostHog in
     setIsVisible(false);
   };
 
   const handleDecline = () => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify({ 
-      accepted: false, 
-      timestamp: new Date().toISOString() 
-    }));
+    setAnalyticsConsent(false); // persists choice + keeps PostHog opted out
     setIsVisible(false);
   };
 

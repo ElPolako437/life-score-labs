@@ -1,19 +1,50 @@
 import posthog from 'posthog-js';
 
+const CONSENT_KEY = 'caliness_cookie_consent';
+
+/** Reads stored analytics consent. Defaults to FALSE (opt-out) until the user accepts. */
+function hasStoredConsent(): boolean {
+  try {
+    const raw = localStorage.getItem(CONSENT_KEY);
+    if (!raw) return false;
+    return !!JSON.parse(raw)?.accepted;
+  } catch {
+    return false;
+  }
+}
+
 // ---------------------------------------------------------------------------
-// Initialise PostHog — EU cloud, called once at module load
+// Initialise PostHog — EU cloud, called once at module load.
+// DSGVO: capturing is OPTED OUT by default and only enabled after explicit
+// cookie consent. No analytics cookies / events fire before the user accepts.
 // ---------------------------------------------------------------------------
 posthog.init('phc_yx1VeXfZ38hsx3K49MrYHYhXPhQZZG19kg2wLxKCsjgK', {
   api_host: 'https://eu.i.posthog.com',
   ui_host: 'https://eu.posthog.com',
-  // Don't track pageviews automatically — we fire explicit funnel events instead
   capture_pageview: false,
-  // Session recordings off by default (enable in PostHog dashboard if wanted)
   disable_session_recording: true,
-  // Respect DNT headers + no cross-site cookies
   respect_dnt: true,
   persistence: 'localStorage+cookie',
+  opt_out_capturing_by_default: true,
+  loaded: (ph) => {
+    if (hasStoredConsent()) ph.opt_in_capturing();
+  },
 });
+
+/**
+ * Records the user's cookie/analytics choice and flips PostHog accordingly.
+ * Call from the consent banner. While denied, all track()/identify calls below
+ * are silent no-ops (PostHog stays opted out).
+ */
+export function setAnalyticsConsent(granted: boolean): void {
+  try {
+    localStorage.setItem(CONSENT_KEY, JSON.stringify({ accepted: granted, timestamp: new Date().toISOString() }));
+    if (granted) posthog.opt_in_capturing();
+    else posthog.opt_out_capturing();
+  } catch {
+    /* never crash the app over consent storage */
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Event catalogue — every funnel step that matters for conversion analysis

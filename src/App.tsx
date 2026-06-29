@@ -7,6 +7,8 @@ import { ResetProvider } from "./contexts/ResetContext";
 import { captureInstallPrompt } from "./lib/installPrompt";
 import AnimatedRoutes from "./components/reset/AnimatedRoutes";
 import ResetAura from "./components/reset/ResetAura";
+import ResetFooter from "./components/reset/ResetFooter";
+import { CookieConsent } from "./components/CookieConsent";
 
 const App = () => {
   useEffect(() => { captureInstallPrompt(); }, []);
@@ -18,9 +20,13 @@ const App = () => {
       <Sonner />
       <BrowserRouter>
         <ResetAura />
-        <div className="relative z-10">
-          <AnimatedRoutes />
+        <div className="relative z-10 flex min-h-screen flex-col">
+          <div className="flex-1">
+            <AnimatedRoutes />
+          </div>
+          <ResetFooter />
         </div>
+        <CookieConsent />
       </BrowserRouter>
     </TooltipProvider>
   </ResetProvider>
