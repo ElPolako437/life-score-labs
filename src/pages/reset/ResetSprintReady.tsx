@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { buildResetSummary } from '@/lib/resetSummary';
 import { track } from '@/lib/analytics';
 import { recordIntent } from '@/lib/resetBackend';
+import SoftPhoto from '@/components/reset/SoftPhoto';
 
 const DIMENSION_LABELS: Record<string, string> = {
   energy: 'Energie',
@@ -151,17 +152,8 @@ export default function ResetSprintReady() {
           </div>
         </div>
 
-        {/* Real session shot — community at the decision point */}
-        <div className="mb-5 rounded-2xl overflow-hidden border border-border/40 shadow-card">
-          <img
-            src="/images/caliness-session.jpg"
-            alt="Eine echte CALINESS-Session mit David & Sarah"
-            loading="lazy"
-            width={1600}
-            height={900}
-            className="w-full h-auto object-cover"
-          />
-        </div>
+        {/* Real session shot — soft, atmospheric at the decision point */}
+        <SoftPhoto src="/images/caliness-session.jpg" alt="Eine echte CALINESS-Session mit David & Sarah" className="mb-5 shadow-card" />
 
         {/* Two-path fork */}
         <div className="mb-2 text-left">

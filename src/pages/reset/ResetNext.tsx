@@ -6,6 +6,7 @@ import { ArrowRight, ChevronDown, Share2, Check, TrendingUp, Shield } from 'luci
 import { useState } from 'react';
 import { track } from '@/lib/analytics';
 import { recordIntent } from '@/lib/resetBackend';
+import SoftPhoto from '@/components/reset/SoftPhoto';
 
 const INSTAGRAM_DM_URL = 'https://ig.me/m/caliness_?text=CALINESS+SPRINT';
 
@@ -420,17 +421,10 @@ export default function ResetNext() {
           Echte Rückmeldungen aus unserer Begleitung. Individuelle Erfahrungen — kein zugesichertes Ergebnis.
         </p>
 
-        {/* Human touch — real team photo BEFORE CTA */}
-        <div className="mb-5 rounded-2xl overflow-hidden border border-border/40 bg-card/40">
-          <img
-            src="/images/caliness-team.jpg"
-            alt="David & Sarah, CALINESS Coaches"
-            loading="lazy"
-            width={1400}
-            height={1045}
-            className="w-full h-auto object-cover"
-          />
-          <p className="text-xs text-muted-foreground/70 text-center leading-snug px-4 py-3">
+        {/* Human touch — real team photo BEFORE CTA (softly treated) */}
+        <div className="mb-5">
+          <SoftPhoto src="/images/caliness-team.jpg" alt="David & Sarah, CALINESS Coaches" blur={1} />
+          <p className="text-xs text-muted-foreground/70 text-center leading-snug mt-2.5">
             David &amp; Sarah — wir schauen uns deine Situation persönlich an.
           </p>
         </div>
