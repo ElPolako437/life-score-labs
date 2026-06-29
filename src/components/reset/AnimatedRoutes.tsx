@@ -17,6 +17,10 @@ import ResetNext from '@/pages/reset/ResetNext';
 import Datenschutz from '@/pages/Datenschutz';
 import Impressum from '@/pages/Impressum';
 import NotFound from '@/pages/NotFound';
+import AdminLogin from '@/pages/admin/AdminLogin';
+import AdminDashboard from '@/pages/admin/AdminDashboard';
+import AdminLeads from '@/pages/admin/AdminLeads';
+import AdminLeadDetail from '@/pages/admin/AdminLeadDetail';
 
 /**
  * App-grade page transitions. Each route change fades + glides the new screen in
@@ -76,6 +80,11 @@ export default function AnimatedRoutes() {
           <Route path="/next" element={<ResetNext />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/datenschutz" element={<Datenschutz />} />
+          {/* Admin-Backend (Token-geschützt via AdminShell) */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/leads" element={<AdminLeads />} />
+          <Route path="/admin/leads/:email" element={<AdminLeadDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
