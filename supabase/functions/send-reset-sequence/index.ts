@@ -72,8 +72,11 @@ function signature(): string {
       <tr><td style="padding:15px 18px;">
         <table role="presentation" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td width="56" valign="middle">
-              <img src="${RESET_URL}/images/david-sarah.png" width="56" height="56" alt="David &amp; Sarah" style="display:block;width:56px;height:56px;border-radius:12px;border:0;outline:none;text-decoration:none;" />
+            <td width="98" valign="middle">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+                <td><img src="${RESET_URL}/images/david-sm.jpg" width="46" height="46" alt="David" style="display:block;width:46px;height:46px;border-radius:50%;border:2px solid ${C.surface};outline:none;text-decoration:none;" /></td>
+                <td style="padding-left:6px;"><img src="${RESET_URL}/images/sarah-sm.jpg" width="46" height="46" alt="Sarah" style="display:block;width:46px;height:46px;border-radius:50%;border:2px solid ${C.surface};outline:none;text-decoration:none;" /></td>
+              </tr></table>
             </td>
             <td valign="middle" style="padding-left:14px;">
               <p class="cl-text" style="font-family:${C.font};font-size:15px;font-weight:700;color:${C.text};margin:0;letter-spacing:-0.2px;">David &amp; Sarah</p>
