@@ -53,7 +53,7 @@ export default function ResetWhatsApp() {
             Direkter Draht zu uns —<br />auf WhatsApp.
           </h1>
           <p className="text-sm text-muted-foreground/65 leading-relaxed max-w-xs mx-auto">
-            Fragen, Hürden oder kurz festhängen? Schreib David &amp; Sarah direkt — wir lesen mit und melden uns. Kein Bot-Spam, jederzeit Schluss.
+            Fragen, Hürden oder kurz festhängen? Schreib David &amp; Sarah direkt — wir lesen mit und melden uns. Kein Bot-Spam — schreib jederzeit „STOP" und wir melden uns nicht mehr.
           </p>
         </div>
 

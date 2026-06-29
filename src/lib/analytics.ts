@@ -1,22 +1,62 @@
 import posthog from 'posthog-js';
 
 const CONSENT_KEY = 'caliness_cookie_consent';
+/** Consent expires after ~6 months → the banner re-asks (DSGVO-konforme Erneuerung). */
+const CONSENT_TTL_MS = 1000 * 60 * 60 * 24 * 182;
 
-/** Reads stored analytics consent. Defaults to FALSE (opt-out) until the user accepts. */
-function hasStoredConsent(): boolean {
+interface ConsentRecord {
+  accepted: boolean;
+  timestamp: string;
+}
+
+/**
+ * Single source of truth for the stored consent record. Returns null on a
+ * missing, malformed, or expired value — so a corrupt entry can never silently
+ * suppress the banner or be mistaken for a valid decision.
+ */
+function readStoredConsent(): ConsentRecord | null {
   try {
     const raw = localStorage.getItem(CONSENT_KEY);
-    if (!raw) return false;
-    return !!JSON.parse(raw)?.accepted;
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed.accepted !== 'boolean' || typeof parsed.timestamp !== 'string') return null;
+    const ts = Date.parse(parsed.timestamp);
+    if (Number.isNaN(ts) || Date.now() - ts > CONSENT_TTL_MS) return null; // abgelaufen → wie „keine Entscheidung"
+    return { accepted: parsed.accepted, timestamp: parsed.timestamp };
   } catch {
-    return false;
+    return null;
   }
+}
+
+/** True only if the user actively accepted analytics and that consent is still fresh. */
+export function hasAnalyticsConsent(): boolean {
+  return readStoredConsent()?.accepted === true;
+}
+
+/**
+ * True when no valid (well-formed, non-expired) decision is on record →
+ * the consent banner should be shown. Covers missing, corrupt, and expired.
+ */
+export function needsConsentDecision(): boolean {
+  return readStoredConsent() === null;
+}
+
+/**
+ * Switches PostHog from in-memory to persisted storage and opts capturing in.
+ * Only ever called AFTER the user has accepted analytics — so no cookies or
+ * localStorage keys (distinct_id, device_id, session) exist before consent.
+ */
+function enablePersistedAnalytics(): void {
+  posthog.set_config({ persistence: 'localStorage+cookie' });
+  posthog.opt_in_capturing();
 }
 
 // ---------------------------------------------------------------------------
 // Initialise PostHog — EU cloud, called once at module load.
-// DSGVO: capturing is OPTED OUT by default and only enabled after explicit
-// cookie consent. No analytics cookies / events fire before the user accepts.
+// DSGVO: persistence defaults to 'memory' and capturing is OPTED OUT, so
+// PostHog writes NOTHING to disk (no cookies, no localStorage) and fires no
+// events before the user explicitly accepts. On accept we switch to
+// localStorage+cookie persistence (enablePersistedAnalytics).
 // ---------------------------------------------------------------------------
 posthog.init('phc_yx1VeXfZ38hsx3K49MrYHYhXPhQZZG19kg2wLxKCsjgK', {
   api_host: 'https://eu.i.posthog.com',
@@ -24,22 +64,22 @@ posthog.init('phc_yx1VeXfZ38hsx3K49MrYHYhXPhQZZG19kg2wLxKCsjgK', {
   capture_pageview: false,
   disable_session_recording: true,
   respect_dnt: true,
-  persistence: 'localStorage+cookie',
+  persistence: 'memory',
   opt_out_capturing_by_default: true,
-  loaded: (ph) => {
-    if (hasStoredConsent()) ph.opt_in_capturing();
+  loaded: () => {
+    if (hasAnalyticsConsent()) enablePersistedAnalytics();
   },
 });
 
 /**
  * Records the user's cookie/analytics choice and flips PostHog accordingly.
  * Call from the consent banner. While denied, all track()/identify calls below
- * are silent no-ops (PostHog stays opted out).
+ * are silent no-ops (PostHog stays opted out, in-memory only — no persistence).
  */
 export function setAnalyticsConsent(granted: boolean): void {
   try {
     localStorage.setItem(CONSENT_KEY, JSON.stringify({ accepted: granted, timestamp: new Date().toISOString() }));
-    if (granted) posthog.opt_in_capturing();
+    if (granted) enablePersistedAnalytics();
     else posthog.opt_out_capturing();
   } catch {
     /* never crash the app over consent storage */

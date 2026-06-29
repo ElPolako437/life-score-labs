@@ -2,16 +2,15 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Cookie, X } from "lucide-react";
 import { Link } from "react-router-dom";
-import { setAnalyticsConsent } from "@/lib/analytics";
-
-const COOKIE_CONSENT_KEY = "caliness_cookie_consent";
+import { setAnalyticsConsent, needsConsentDecision } from "@/lib/analytics";
 
 export const CookieConsent = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
-    if (!consent) {
+    // Same validated source of truth as the analytics init — a corrupt or
+    // expired stored value re-shows the banner instead of silently hiding it.
+    if (needsConsentDecision()) {
       // Small delay for better UX
       const timer = setTimeout(() => setIsVisible(true), 1000);
       return () => clearTimeout(timer);
@@ -32,7 +31,7 @@ export const CookieConsent = () => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6 animate-fade-in">
-      <div className="max-w-4xl mx-auto bg-card/95 backdrop-blur-md border border-border/50 rounded-2xl shadow-2xl p-5 md:p-6">
+      <div className="max-w-4xl mx-auto bg-card backdrop-blur-md border border-border/60 rounded-2xl shadow-2xl p-5 md:p-6">
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           {/* Icon & Text */}
           <div className="flex items-start gap-4 flex-1">
@@ -42,8 +41,11 @@ export const CookieConsent = () => {
             <div className="flex-1">
               <h3 className="font-semibold text-foreground mb-1">Cookie-Einstellungen</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Wir verwenden technisch notwendige Cookies, um die Funktionalität unserer Website sicherzustellen. 
-                Weitere Informationen findest du in unserer{" "}
+                Technisch notwendige Cookies brauchen wir für die Funktion der Seite — die laufen immer.
+                Mit <span className="text-foreground/80 font-medium">„Alle akzeptieren"</span> erlaubst du
+                zusätzlich anonyme Analyse-Cookies (PostHog), mit denen wir den Reset verbessern. Mit
+                {" "}<span className="text-foreground/80 font-medium">„Nur notwendige"</span> bleibt das aus.
+                Mehr in der{" "}
                 <Link to="/datenschutz" className="text-primary hover:underline">
                   Datenschutzerklärung
                 </Link>.
