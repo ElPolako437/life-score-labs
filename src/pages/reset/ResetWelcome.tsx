@@ -68,6 +68,18 @@ export default function ResetWelcome() {
           7 Tage. Etwa 10 Minuten am Tag. Danach weißt du, wo dein System gerade leerläuft. Und kannst aufhören, da Kraft reinzukippen.
         </p>
 
+        {/* Real coaching shot — trust at entry */}
+        <div className="w-full rounded-2xl overflow-hidden border border-border/40 shadow-card">
+          <img
+            src="/images/caliness-coaching.jpg"
+            alt="David & Sarah coachen eine CALINESS-Gruppe"
+            loading="eager"
+            width={1600}
+            height={893}
+            className="w-full h-auto object-cover"
+          />
+        </div>
+
         {/* Trust signal — David & Sarah */}
         <div className="flex items-center gap-3">
           <div className="flex -space-x-2 flex-shrink-0">
