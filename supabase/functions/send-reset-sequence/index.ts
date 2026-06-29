@@ -65,6 +65,27 @@ const C = {
   font: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif",
 };
 
+function signature(): string {
+  // Personal sign-off with David & Sarah's photo — warmth + brand trust on every mail.
+  return `<tr><td style="padding:6px 40px 30px;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="${C.surface}" class="cl-surface" style="background:${C.surface};border:1px solid ${C.border};border-radius:16px;">
+      <tr><td style="padding:15px 18px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td width="56" valign="middle">
+              <img src="${RESET_URL}/images/david-sarah.png" width="56" height="56" alt="David &amp; Sarah" style="display:block;width:56px;height:56px;border-radius:12px;border:0;outline:none;text-decoration:none;" />
+            </td>
+            <td valign="middle" style="padding-left:14px;">
+              <p class="cl-text" style="font-family:${C.font};font-size:15px;font-weight:700;color:${C.text};margin:0;letter-spacing:-0.2px;">David &amp; Sarah</p>
+              <p class="cl-muted" style="font-family:${C.font};font-size:13px;color:${C.muted};margin:3px 0 0;line-height:1.5;">Deine Coaches — wir begleiten dich durch den Reset.</p>
+            </td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>`;
+}
+
 function shell(preheader: string, content: string, unsubUrl: string): string {
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de">
@@ -73,12 +94,32 @@ function shell(preheader: string, content: string, unsubUrl: string): string {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark">
   <title>CALINESS Reset</title>
+  <style>
+    :root { color-scheme: dark; supported-color-schemes: dark; }
+    /* Re-assert the brand-dark palette when a client applies its own dark-mode
+       recoloring, so the mail stays dark instead of being washed out / lightened. */
+    @media (prefers-color-scheme: dark) {
+      .cl-bg { background:#08090b !important; }
+      .cl-card { background:#0f1115 !important; }
+      .cl-surface { background:#15181f !important; }
+      .cl-text { color:#f8fafc !important; }
+      .cl-textsec { color:#aebacb !important; }
+      .cl-muted { color:#6b7a8f !important; }
+    }
+    /* Outlook.com dark mode injects [data-ogsc]/[data-ogsb] — counter its recoloring. */
+    [data-ogsc] .cl-text { color:#f8fafc !important; }
+    [data-ogsc] .cl-textsec { color:#aebacb !important; }
+    [data-ogsc] .cl-muted { color:#6b7a8f !important; }
+    [data-ogsb] .cl-bg { background:#08090b !important; }
+    [data-ogsb] .cl-card { background:#0f1115 !important; }
+    [data-ogsb] .cl-surface { background:#15181f !important; }
+  </style>
 </head>
-<body style="margin:0;padding:0;background:${C.bg};-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+<body class="cl-bg" style="margin:0;padding:0;background:${C.bg};-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
   <div style="display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:${C.bg};opacity:0;">${preheader}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${C.bg};">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="${C.bg}" class="cl-bg" style="background:${C.bg};">
     <tr><td align="center" style="padding:48px 16px;">
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;background:${C.card};border-radius:22px;border:1px solid ${C.border};overflow:hidden;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="${C.card}" class="cl-card" style="max-width:600px;background:${C.card};border-radius:22px;border:1px solid ${C.border};overflow:hidden;">
 
         <!-- Top accent line -->
         <tr><td style="height:4px;line-height:4px;font-size:0;background:${C.accent};">&nbsp;</td></tr>
@@ -86,11 +127,13 @@ function shell(preheader: string, content: string, unsubUrl: string): string {
         <!-- Header: wordmark logo + eyebrow -->
         <tr><td align="center" style="padding:40px 40px 30px;">
           <img src="${LOGO_URL}" width="168" alt="CALINESS" style="display:block;width:168px;max-width:168px;height:auto;border:0;outline:none;text-decoration:none;margin:0 auto;" />
-          <p style="font-family:${C.font};font-size:11px;letter-spacing:3px;text-transform:uppercase;color:${C.muted};margin:20px 0 0;font-weight:600;">7-Tage Reset</p>
+          <p class="cl-muted" style="font-family:${C.font};font-size:11px;letter-spacing:3px;text-transform:uppercase;color:${C.muted};margin:20px 0 0;font-weight:600;">7-Tage Reset</p>
         </td></tr>
 
         <!-- Content -->
-        <tr><td style="padding:8px 40px 40px;">${content}</td></tr>
+        <tr><td style="padding:8px 40px 36px;">${content}</td></tr>
+
+        ${signature()}
 
         <!-- Footer -->
         <tr><td style="padding:34px 40px 36px;border-top:1px solid ${C.hairline};text-align:center;">
@@ -125,11 +168,11 @@ function badge(text: string): string {
 }
 
 function headline(text: string): string {
-  return `<p style="font-family:${C.font};font-size:26px;font-weight:700;color:${C.text};margin:0 0 18px;line-height:1.22;letter-spacing:-0.4px;">${text}</p>`;
+  return `<p class="cl-text" style="font-family:${C.font};font-size:26px;font-weight:700;color:${C.text};margin:0 0 18px;line-height:1.22;letter-spacing:-0.4px;">${text}</p>`;
 }
 
 function body(text: string): string {
-  return `<p style="font-family:${C.font};font-size:15px;color:${C.textSec};margin:0 0 20px;line-height:1.72;">${text}</p>`;
+  return `<p class="cl-textsec" style="font-family:${C.font};font-size:15px;color:${C.textSec};margin:0 0 20px;line-height:1.72;">${text}</p>`;
 }
 
 function divider(): string {
