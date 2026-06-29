@@ -113,7 +113,8 @@ const handler = async (req: Request): Promise<Response> => {
     const body = await req.json();
     const { step, email, vorname, ziel, whatsapp_nummer, consent, utm, last_day_reached, signal } = body;
 
-    if (!email) {
+    // E-Mail ist Pflicht — außer für anonyme Events (Funnel vor dem Signup).
+    if (!email && step !== "event") {
       return new Response(JSON.stringify({ error: "email required" }), {
         status: 400,
         headers: { "Content-Type": "application/json", ...corsHeaders },
@@ -123,7 +124,7 @@ const handler = async (req: Request): Promise<Response> => {
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const today = new Date().toISOString().split("T")[0];
 
-    const cleanEmail = email.toLowerCase().trim();
+    const cleanEmail = email ? email.toLowerCase().trim() : "";
 
     // ── SCHRITT 1: Registrierung ─────────────────────────────────────────────
     if (!step || step === "register") {
@@ -202,14 +203,98 @@ const handler = async (req: Request): Promise<Response> => {
       const arr = Array.isArray(current?.high_intent) ? current!.high_intent as unknown[] : [];
       arr.push({ signal: String(signal), at: new Date().toISOString() });
 
+      // Signal → Interesse ableiten (für Lead-Priorisierung im Admin)
+      const sig = String(signal).toLowerCase();
+      const intentRow: Record<string, unknown> = {
+        email: cleanEmail, start_datum: today, high_intent: arr, last_seen_at: new Date().toISOString(),
+      };
+      if (sig.includes("app")) intentRow.app_interest = "high";
+      if (sig.includes("coaching") || sig.includes("sprint")) intentRow.coaching_interest = "high";
+
       await supabase
         .from("reset_participants")
-        .upsert({ email: cleanEmail, start_datum: today, high_intent: arr, last_seen_at: new Date().toISOString() }, { onConflict: "email", ignoreDuplicates: false })
+        .upsert(intentRow, { onConflict: "email", ignoreDuplicates: false })
         .then(({ error }) => { if (error) console.warn("intent error:", error.message); });
 
       return new Response(JSON.stringify({ success: true, step: "intent", signal }), {
         status: 200,
         headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // ── PROFILE: Tag-1 Startprofil speichern ─────────────────────────────────
+    if (step === "profile" && body.profile && typeof body.profile === "object") {
+      const p = body.profile as Record<string, unknown>;
+      const prow = {
+        email: cleanEmail,
+        sex: p.sex ?? null, age: p.age ?? null, height: p.height ?? null, weight: p.weight ?? null,
+        activity: p.activity ?? null, daily: p.daily ?? null, goal: p.goal ?? null, hurdle: p.hurdle ?? null,
+        baseline: p.baseline ?? {},
+        bmr: p.bmr ?? null, tdee: p.tdee ?? null,
+        cal_low: p.calLow ?? null, cal_high: p.calHigh ?? null,
+        protein_low: p.proteinLow ?? null, protein_high: p.proteinHigh ?? null,
+        meal_count: p.mealCount ?? null, main_lever: p.mainLever ?? null,
+      };
+      await supabase.from("reset_profiles")
+        .upsert(prow, { onConflict: "email", ignoreDuplicates: false })
+        .then(({ error }) => { if (error) console.warn("profile error:", error.message); });
+      await supabase.from("reset_participants")
+        .upsert({ email: cleanEmail, start_datum: today, reset_status: "active", last_seen_at: new Date().toISOString() }, { onConflict: "email", ignoreDuplicates: false })
+        .then(({ error }) => { if (error) console.warn("profile participant error:", error.message); });
+      return new Response(JSON.stringify({ success: true, step: "profile" }), {
+        status: 200, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // ── DAY: Tagesfortschritt + Rating + Tool-Ergebnis ───────────────────────
+    if (step === "day" && typeof body.day === "number") {
+      const dayNum = Number(body.day);
+      const dprow: Record<string, unknown> = {
+        email: cleanEmail,
+        day: dayNum,
+        task_done: body.task_done === true,
+        tool_result: (body.tool_result && typeof body.tool_result === "object") ? body.tool_result : {},
+      };
+      if (typeof body.rating === "number") dprow.rating = body.rating;
+      if (body.freetext) dprow.freetext = String(body.freetext).slice(0, 2000);
+      if (body.completed === true) dprow.completed_at = new Date().toISOString();
+
+      await supabase.from("reset_day_progress")
+        .upsert(dprow, { onConflict: "email,day", ignoreDuplicates: false })
+        .then(({ error }) => { if (error) console.warn("day progress error:", error.message); });
+
+      // Funnel-Status am Teilnehmer spiegeln
+      const { data: cur } = await supabase
+        .from("reset_participants").select("last_day_reached").eq("email", cleanEmail).maybeSingle();
+      const prevDay = (cur?.last_day_reached as number) ?? 0;
+      const partUpd: Record<string, unknown> = {
+        email: cleanEmail, start_datum: today,
+        last_day_reached: Math.max(prevDay, dayNum),
+        reset_status: dayNum >= 7 ? "completed" : "active",
+        last_seen_at: new Date().toISOString(),
+      };
+      if (dayNum >= 7) partUpd.completed_at = new Date().toISOString();
+      await supabase.from("reset_participants")
+        .upsert(partUpd, { onConflict: "email", ignoreDuplicates: false })
+        .then(({ error }) => { if (error) console.warn("day participant error:", error.message); });
+
+      return new Response(JSON.stringify({ success: true, step: "day", day: dayNum }), {
+        status: 200, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // ── EVENT: eigenes Funnel-/CTA-Event-Log (auch anonym via anon_id) ───────
+    if (step === "event" && body.event) {
+      const ev = String(body.event).slice(0, 80);
+      await supabase.from("reset_events").insert({
+        email: cleanEmail || null,
+        anon_id: body.anon_id ? String(body.anon_id).slice(0, 80) : null,
+        event: ev,
+        payload: (body.payload && typeof body.payload === "object") ? body.payload : {},
+      }).then(({ error }) => { if (error) console.warn("event error:", error.message); });
+
+      return new Response(JSON.stringify({ success: true, step: "event", event: ev }), {
+        status: 200, headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     }
 

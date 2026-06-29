@@ -4,7 +4,7 @@ import { ArrowRight, Share2, Check, Sparkles, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { buildResetSummary } from '@/lib/resetSummary';
 import { track } from '@/lib/analytics';
-import { recordIntent } from '@/lib/resetBackend';
+import { recordIntent, recordEvent } from '@/lib/resetBackend';
 import SoftPhoto from '@/components/reset/SoftPhoto';
 
 const DIMENSION_LABELS: Record<string, string> = {
@@ -28,16 +28,20 @@ export default function ResetSprintReady() {
   useEffect(() => {
     track('reset_finished', { goal: goal ?? null });
     track('sprint_pitch_viewed', { goal: goal ?? null });
+    recordEvent(email, 'reset_completed', { goal: goal ?? null });
+    recordEvent(email, 'sprint_pitch_viewed', { goal: goal ?? null });
   }, [goal]);
 
   const goApp = () => {
     track('app_cta_clicked', { goal: goal ?? null, source: 'decision_hub' });
     recordIntent(email, 'app_cta');
+    recordEvent(email, 'app_cta_clicked', { goal: goal ?? null });
     navigate('/app');
   };
   const goCoaching = () => {
     track('coaching_cta_clicked', { goal: goal ?? null, source: 'decision_hub' });
     recordIntent(email, 'coaching_cta');
+    recordEvent(email, 'coaching_cta_clicked', { goal: goal ?? null });
     navigate('/next');
   };
 

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useReset } from '@/contexts/ResetContext';
 import { track, captureLead, triggerResetSignup } from '@/lib/analytics';
-import { recordSignup } from '@/lib/resetBackend';
+import { recordSignup, recordEvent } from '@/lib/resetBackend';
 
 export default function ResetWelcome() {
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ export default function ResetWelcome() {
       recordSignup(localEmail.trim(), localName.trim() || null, true);
     }
     track(hasProgress ? 'reset_resumed' : 'reset_started', { hasName: !!localName.trim(), hasEmail: !!localEmail.trim() });
+    recordEvent(localEmail.trim() || null, hasProgress ? 'reset_resumed' : 'reset_started');
     if (hasProgress) {
       // Returning user → straight to active day
       const activeDay = Math.min(currentDay, 7);

@@ -7,7 +7,7 @@ import CaliNote from '@/components/reset/CaliNote';
 import ToolErrorBoundary from '@/components/reset/ToolErrorBoundary';
 import { caliLine } from '@/lib/caliLines';
 import { track } from '@/lib/analytics';
-import { recordProgress } from '@/lib/resetBackend';
+import { recordProgress, recordDay, recordEvent } from '@/lib/resetBackend';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
@@ -116,6 +116,11 @@ export default function ResetDay() {
     track('day_completed', { day: dayNum, rating });
     track(`reset_day_${dayNum}_completed`, { rating });
     recordProgress(email, dayNum, goal);
+    // Server-side capture: rating, completion + this day's tool result.
+    const toolResult = content?.toolId ? (reset.tools?.[content.toolId] ?? {}) : {};
+    recordDay(email, dayNum, { rating, task_done: true, completed: true, tool_result: toolResult });
+    recordEvent(email, 'day_completed', { day: dayNum, rating });
+    recordEvent(email, 'rating_submitted', { day: dayNum, rating });
     localStorage.setItem('caliness_just_completed', String(dayNum));
     setShowRating(false);
     setCelebrating(true);

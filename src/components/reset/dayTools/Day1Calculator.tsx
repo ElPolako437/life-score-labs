@@ -7,6 +7,7 @@ import NumberField from '@/components/reset/NumberField';
 import StatReveal from '@/components/reset/StatReveal';
 import SprintHint from '@/components/reset/SprintHint';
 import { track } from '@/lib/analytics';
+import { recordProfile, recordEvent } from '@/lib/resetBackend';
 
 const ACTIVITY_OPTS: { value: Activity; label: string; hint: string }[] = [
   { value: 'low', label: 'Wenig', hint: '0–1× Sport' },
@@ -21,7 +22,7 @@ const DAILY_OPTS: { value: Daily; label: string; hint: string }[] = [
 ];
 
 export default function Day1Calculator() {
-  const { goal, hurdle, baseline, sex, weight, profile, setProfile } = useReset();
+  const { goal, hurdle, baseline, sex, weight, profile, setProfile, email } = useReset();
   const [editing, setEditing] = useState(false);
 
   // Inputs — prefilled from any legacy values.
@@ -48,6 +49,9 @@ export default function Day1Calculator() {
     const p = buildStartProfile(inputs, goal, hurdle, baseline);
     setProfile(p);
     track('profile_computed', { goal, activity: activity!, daily: daily!, lever: p.mainLever });
+    // Server-side capture: full Tag-1 profile + goal/hurdle/baseline context.
+    recordProfile(email, { ...p, goal, hurdle, baseline });
+    recordEvent(email, 'profile_calculated', { lever: p.mainLever, goal });
     setEditing(false);
   };
 
