@@ -420,29 +420,18 @@ export default function ResetNext() {
           Echte Rückmeldungen aus unserer Begleitung. Individuelle Erfahrungen — kein zugesichertes Ergebnis.
         </p>
 
-        {/* Human touch — BEFORE CTA */}
-        <div className="flex items-center gap-3 justify-center mb-4">
-          <div className="flex -space-x-3">
-            <img
-              src="/images/david.jpg"
-              alt="David"
-              loading="lazy"
-              width={44}
-              height={44}
-              className="w-11 h-11 rounded-full object-cover grayscale brightness-75 ring-2 ring-background"
-            />
-            <img
-              src="/images/sarah.jpg"
-              alt="Sarah"
-              loading="lazy"
-              width={44}
-              height={44}
-              className="w-11 h-11 rounded-full object-cover grayscale brightness-75 ring-2 ring-background"
-            />
-          </div>
-          <p className="text-xs text-muted-foreground/60 text-left leading-snug">
-            David & Sarah — wir schauen uns<br />
-            deine Situation persönlich an.
+        {/* Human touch — real team photo BEFORE CTA */}
+        <div className="mb-5 rounded-2xl overflow-hidden border border-border/40 bg-card/40">
+          <img
+            src="/images/caliness-team.jpg"
+            alt="David & Sarah, CALINESS Coaches"
+            loading="lazy"
+            width={1400}
+            height={1045}
+            className="w-full h-auto object-cover"
+          />
+          <p className="text-xs text-muted-foreground/70 text-center leading-snug px-4 py-3">
+            David &amp; Sarah — wir schauen uns deine Situation persönlich an.
           </p>
         </div>
 
