@@ -14,9 +14,11 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Props
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  // Admin check — role is in user_metadata or app_metadata set by Supabase
+  // Admin check — ONLY trust app_metadata.role (server-set, not user-editable).
+  // user_metadata is user-writable and must NEVER be used for authorization.
+  // Server-side admin operations additionally verify role in user_profiles.
   if (requireAdmin) {
-    const role = user.app_metadata?.role ?? user.user_metadata?.role;
+    const role = user.app_metadata?.role;
     if (role !== 'admin') {
       return <Navigate to="/app/home" replace />;
     }
