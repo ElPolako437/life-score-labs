@@ -9,6 +9,7 @@ import { recordIntent } from '@/lib/resetBackend';
 import SoftPhoto from '@/components/reset/SoftPhoto';
 
 const INSTAGRAM_DM_URL = 'https://ig.me/m/caliness_?text=CALINESS+SPRINT';
+const CALENDLY_URL = 'https://calendly.com/team-calinessacademy/new-meeting';
 
 const GOAL_CTA: Record<Goal, string> = {
   energy: 'Meine Energie zurückholen',
@@ -144,6 +145,12 @@ export default function ResetNext() {
     if (channel === 'whatsapp') track('whatsapp_clicked', { context: 'sprint_pitch', goal: goal ?? null });
     recordIntent(email, channel === 'whatsapp' ? 'coaching_whatsapp' : 'coaching_instagram');
     window.open(channel === 'instagram' ? instagramUrl : whatsappUrl, '_blank');
+  };
+
+  const handleBooking = () => {
+    track('coaching_cta_clicked', { channel: 'calendly', goal: goal ?? null, source: 'next_calendly' });
+    recordIntent(email, 'coaching_calendly');
+    window.open(CALENDLY_URL, '_blank');
   };
 
   const handleShare = async () => {
@@ -502,10 +509,18 @@ export default function ResetNext() {
         <p className="text-xs text-muted-foreground/40 text-center mb-1">Einmalig · ab 149€ · kein Abo · keine Bindung</p>
 
         {/* Guarantee badge */}
-        <div className="flex items-center justify-center gap-2 mb-8">
+        <div className="flex items-center justify-center gap-2 mb-4">
           <Shield className="w-3.5 h-3.5 text-muted-foreground/40" />
           <span className="text-xs text-muted-foreground/40">7-Tage Geld-zurück-Garantie — keine Fragen</span>
         </div>
+
+        {/* Self-serve booking — fast path for decided leads (no waiting on a reply) */}
+        <button
+          onClick={handleBooking}
+          className="text-xs text-muted-foreground/50 hover:text-primary transition-colors block mx-auto mb-8"
+        >
+          Schon entschieden? <span className="text-primary/80">Direkt einen Termin buchen →</span>
+        </button>
 
         {/* Reset wiederholen */}
         <button

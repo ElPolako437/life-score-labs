@@ -90,6 +90,22 @@ export default function ResetWelcome() {
           7 Tage. Etwa 10 Minuten am Tag. Danach weißt du, wo dein System gerade leerläuft. Und kannst aufhören, da Kraft reinzukippen.
         </p>
 
+        {/* What you actually get — concrete value above the fold */}
+        <div className="w-full max-w-xs space-y-2 text-left">
+          {[
+            'Dein echter Kalorien- & Protein-Bedarf — aus 6 Werten',
+            'Dein größter Hebel: wo dein System leerläuft',
+            'Ein 7-Tage-Plan, der in deinen Alltag passt',
+          ].map((b, i) => (
+            <div key={i} className="flex items-start gap-2.5">
+              <span className="mt-0.5 w-4 h-4 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0">
+                <span className="text-primary text-[9px] font-bold">✓</span>
+              </span>
+              <span className="text-[13px] text-foreground/80 leading-snug">{b}</span>
+            </div>
+          ))}
+        </div>
+
         {/* Trust signal — David & Sarah */}
         <div className="flex items-center gap-3">
           <div className="flex -space-x-2 flex-shrink-0">
