@@ -120,8 +120,8 @@ export default function ResetApp() {
               <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center mx-auto mb-2">
                 <Check className="w-5 h-5 text-primary" />
               </div>
-              <p className="text-sm font-semibold text-foreground">Du stehst auf der Liste.</p>
-              <p className="text-xs text-muted-foreground/60 mt-1">Wir melden uns, sobald die App für dich bereit ist.</p>
+              <p className="text-sm font-semibold text-foreground">Du bist beim Early Access dabei.</p>
+              <p className="text-xs text-muted-foreground/60 mt-1">Wir melden uns, sobald die App für dich bereit ist — du gehörst zu den Ersten.</p>
             </div>
           ) : (
             <Button
@@ -136,7 +136,7 @@ export default function ResetApp() {
           )}
 
           <p className="text-xs text-muted-foreground/40 text-center mt-3">
-            Kostenlos auf die Warteliste · keine Verpflichtung
+            Kostenloser Early Access · keine Verpflichtung
           </p>
         </motion.div>
 

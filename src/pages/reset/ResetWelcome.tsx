@@ -11,7 +11,9 @@ export default function ResetWelcome() {
   const { name, setName, setEmail, currentDay, goal } = useReset();
   const [localName, setLocalName] = useState(name || '');
   const [localEmail, setLocalEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
   const hasProgress = goal !== null;
+  const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
   // First touchpoint of the funnel — fires once per landing.
   useEffect(() => {
@@ -19,6 +21,12 @@ export default function ResetWelcome() {
   }, []);
 
   const handleStart = () => {
+    // First-timer: E-Mail ist Pflicht — sie ist der Lead UND der Kanal für die
+    // täglichen Reset-Impulse. Ohne sie würde der Funnel den Nutzer verlieren.
+    if (!hasProgress && !isValidEmail(localEmail)) {
+      setEmailError(true);
+      return;
+    }
     if (localName.trim()) setName(localName.trim());
     if (localEmail.trim()) {
       setEmail(localEmail.trim());
@@ -123,15 +131,19 @@ export default function ResetWelcome() {
             />
             <Input
               type="email"
-              placeholder="Deine E-Mail (optional)"
+              placeholder="Deine E-Mail"
               value={localEmail}
-              onChange={e => setLocalEmail(e.target.value.slice(0, 100))}
+              onChange={e => { setLocalEmail(e.target.value.slice(0, 100)); if (emailError) setEmailError(false); }}
               maxLength={100}
-              className="bg-card border-border/60 text-foreground placeholder:text-muted-foreground/40 h-12 rounded-xl text-center"
+              className={`bg-card text-foreground placeholder:text-muted-foreground/40 h-12 rounded-xl text-center ${emailError ? 'border-red-400/70' : 'border-border/60'}`}
             />
-            {localEmail.trim() && (
+            {emailError ? (
+              <p className="text-[11px] text-red-400/80 leading-snug px-1">
+                Bitte gib eine gültige E-Mail ein — dahin kommt dein persönlicher Tag-1-Plan.
+              </p>
+            ) : (
               <p className="text-[11px] text-muted-foreground/40 leading-snug px-1">
-                Mit „Loslegen" bekommst du deine täglichen Reset-Impulse per E-Mail. Jederzeit mit einem Klick abbestellbar.{' '}
+                Dahin schicken wir deinen Tag-1-Plan + deine täglichen Reset-Impulse. Jederzeit mit einem Klick abbestellbar.{' '}
                 <a href="/datenschutz" className="underline hover:text-muted-foreground/60">Datenschutz</a>
               </p>
             )}
@@ -144,7 +156,7 @@ export default function ResetWelcome() {
           className="w-full min-h-[48px]"
           onClick={handleStart}
         >
-          {hasProgress ? `Tag ${Math.min(currentDay, 7)} öffnen →` : 'Loslegen'}
+          {hasProgress ? `Tag ${Math.min(currentDay, 7)} öffnen →` : 'Meinen Plan starten →'}
         </Button>
       </div>
     </div>

@@ -435,10 +435,10 @@ export default function ResetNext() {
           Schreib uns einfach — wir sagen dir ehrlich, wann der nächste Platz frei ist.
         </p>
 
-        {/* Warm traffic framing — acknowledges the IG relationship */}
+        {/* Universal framing — works for every traffic source, not just Instagram */}
         <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 mb-4 text-center">
           <p className="text-sm text-foreground/80 leading-relaxed">
-            Du bist über Instagram zu uns gekommen — schreib uns einfach <span className="text-primary font-semibold">„SPRINT"</span> zurück. Wir antworten persönlich.
+            Schreib uns einfach <span className="text-primary font-semibold">„SPRINT"</span> — per WhatsApp oder Instagram. Wir antworten persönlich, meist innerhalb eines Tages.
           </p>
         </div>
 
