@@ -5,6 +5,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY") as string;
 
@@ -12,6 +13,13 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Service-role client used only to verify that record.id matches a real
+// bioage_submissions row before sending — prevents arbitrary email-blast abuse.
+const adminClient = createClient(
+  Deno.env.get("SUPABASE_URL") ?? "",
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+);
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ZENTRALE KONFIGURATION – ABSOLUTE URLS FÜR ZUVERLÄSSIGE ZUSTELLUNG
@@ -638,6 +646,25 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const { record } = (await req.json()) as { record: BioageRecord };
     console.log("send-bioage-email: Processing record for:", record.email);
+
+    // Anti-abuse: require a real bioage_submissions row id matching the email.
+    // Blocks the open-endpoint case where anyone could trigger arbitrary emails.
+    if (!record?.id || !record?.email) {
+      return new Response(JSON.stringify({ error: "Invalid record" }), {
+        status: 400, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    const { data: row, error: lookupErr } = await adminClient
+      .from("bioage_submissions")
+      .select("id,email")
+      .eq("id", record.id)
+      .maybeSingle();
+    if (lookupErr || !row || row.email !== record.email) {
+      console.warn("send-bioage-email: record validation failed", { lookupErr, found: !!row });
+      return new Response(JSON.stringify({ error: "Record not found" }), {
+        status: 404, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
 
     // Derive base URL from request (dynamic, works with custom domains)
     const baseUrl = getPublicBaseUrl(req);
