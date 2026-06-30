@@ -316,14 +316,17 @@ const handler = async (req: Request): Promise<Response> => {
     if (step === "whatsapp" && whatsapp_nummer) {
       const cleanedNumber = whatsapp_nummer.trim();
 
-      // 1. WhatsApp-Nummer in DB speichern
+      // 1. WhatsApp-Nummer in DB speichern (upsert → geht nie verloren, auch wenn
+      //    die Signup-Zeile durch ein Timing-Race noch nicht da ist)
       const { error: updateErr } = await supabase
         .from("reset_participants")
-        .update({ whatsapp_nummer: cleanedNumber })
-        .eq("email", email.toLowerCase().trim());
+        .upsert(
+          { email: cleanEmail, start_datum: today, whatsapp_nummer: cleanedNumber, last_seen_at: new Date().toISOString() },
+          { onConflict: "email", ignoreDuplicates: false },
+        );
 
       if (updateErr) {
-        console.warn("register-reset-participant: WhatsApp DB update error:", updateErr.message);
+        console.warn("register-reset-participant: WhatsApp DB upsert error:", updateErr.message);
       }
 
       // 2. ManyChat: Subscriber per Telefonnummer suchen

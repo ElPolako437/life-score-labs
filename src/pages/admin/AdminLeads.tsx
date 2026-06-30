@@ -11,7 +11,7 @@ const TEMP_BADGE: Record<string, string> = {
 const fmtDate = (s: string | null) => (s ? new Date(s).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' }) : '–');
 
 function toCsv(rows: Lead[]): string {
-  const cols = ['email', 'vorname', 'start_datum', 'last_seen_at', 'last_day_reached', 'reset_status', 'contact_status', 'ziel', 'main_lever', 'protein_low', 'protein_high', 'avg_rating', 'coaching_interest', 'app_interest', 'readiness_score', 'temperature', 'consent'];
+  const cols = ['email', 'vorname', 'whatsapp_nummer', 'start_datum', 'last_seen_at', 'last_day_reached', 'reset_status', 'contact_status', 'ziel', 'main_lever', 'protein_low', 'protein_high', 'avg_rating', 'coaching_interest', 'app_interest', 'readiness_score', 'temperature', 'consent'];
   const esc = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
   return [cols.join(','), ...rows.map(r => cols.map(c => esc((r as Record<string, unknown>)[c])).join(','))].join('\n');
 }

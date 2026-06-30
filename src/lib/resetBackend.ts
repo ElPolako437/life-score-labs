@@ -90,3 +90,9 @@ export function recordDay(
 export function recordEvent(email: string | null, event: string, payload?: Record<string, unknown>): void {
   invoke({ step: 'event', email: email?.trim() || null, event, payload: payload ?? {}, anon_id: getAnonId() });
 }
+
+/** Save the participant's WhatsApp/phone number → reset_participants.whatsapp_nummer. */
+export function recordWhatsapp(email: string | null, phone: string): void {
+  if (!email?.trim() || !phone?.trim()) return;
+  invoke({ step: 'whatsapp', email, whatsapp_nummer: phone.trim() });
+}

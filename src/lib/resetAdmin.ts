@@ -63,7 +63,7 @@ async function call<T>(action: string, extra: Record<string, unknown> = {}): Pro
 
 // ── Typen ──────────────────────────────────────────────────────────────────
 export interface Lead {
-  email: string; vorname: string | null; start_datum: string; created_at: string;
+  email: string; vorname: string | null; whatsapp_nummer: string | null; start_datum: string; created_at: string;
   last_seen_at: string | null; last_day_reached: number;
   reset_status: string; contact_status: string;
   coaching_interest: string; app_interest: string; consent: boolean;

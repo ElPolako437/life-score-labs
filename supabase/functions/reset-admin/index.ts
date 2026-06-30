@@ -92,7 +92,8 @@ serve(async (req: Request) => {
         };
         const { score, reasons } = scoreLead(p, agg);
         return {
-          email: p.email, vorname: p.vorname, start_datum: p.start_datum, created_at: p.created_at,
+          email: p.email, vorname: p.vorname, whatsapp_nummer: p.whatsapp_nummer ?? null,
+          start_datum: p.start_datum, created_at: p.created_at,
           last_seen_at: p.last_seen_at, last_day_reached: p.last_day_reached ?? 0,
           reset_status: p.reset_status, contact_status: p.contact_status,
           coaching_interest: p.coaching_interest, app_interest: p.app_interest,

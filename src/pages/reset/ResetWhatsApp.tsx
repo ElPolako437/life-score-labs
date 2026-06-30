@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useReset } from '@/contexts/ResetContext';
 import { track } from '@/lib/analytics';
+import { recordWhatsapp } from '@/lib/resetBackend';
 
 const WHATSAPP_NUMBER = '4917685912445';
 // Sobald der ManyChat-Flow auf das Keyword scharfgeschaltet ist, triggert diese
@@ -11,7 +13,14 @@ const WHATSAPP_TRIGGER_KEYWORD = 'Start Reset';
 
 export default function ResetWhatsApp() {
   const navigate = useNavigate();
-  const { name } = useReset();
+  const { name, email } = useReset();
+  const [phone, setPhone] = useState('');
+
+  // Optionale Nummer serverseitig sichern (landet in reset_participants → Admin).
+  const savePhone = () => {
+    const p = phone.trim();
+    if (p.length >= 6) recordWhatsapp(email, p);
+  };
 
   const proceedToReset = () => {
     navigate('/onboarding');
@@ -19,6 +28,7 @@ export default function ResetWhatsApp() {
 
   const handleOpenWhatsApp = () => {
     track('whatsapp_opted_in');
+    savePhone();
     const greeting = name?.trim() ? `Hi David — hier ist ${name.trim()}.` : 'Hi David.';
     const text = `${greeting} ${WHATSAPP_TRIGGER_KEYWORD}`;
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
@@ -29,6 +39,7 @@ export default function ResetWhatsApp() {
 
   const handleSkip = () => {
     track('whatsapp_skipped');
+    savePhone();
     proceedToReset();
   };
 
@@ -54,6 +65,20 @@ export default function ResetWhatsApp() {
           </h1>
           <p className="text-sm text-muted-foreground/65 leading-relaxed max-w-xs mx-auto">
             Fragen, Hürden oder kurz festhängen? Schreib David &amp; Sarah direkt — wir lesen mit und melden uns. Kein Bot-Spam — schreib jederzeit „STOP" und wir melden uns nicht mehr.
+          </p>
+        </div>
+
+        <div className="w-full">
+          <input
+            type="tel"
+            inputMode="tel"
+            value={phone}
+            onChange={e => setPhone(e.target.value.slice(0, 25))}
+            placeholder="Deine Nummer (optional)"
+            className="w-full h-12 px-4 rounded-xl bg-card border border-border/60 text-foreground placeholder:text-muted-foreground/40 text-center focus:outline-none focus:border-primary/50"
+          />
+          <p className="text-[11px] text-muted-foreground/35 text-center mt-2 leading-snug">
+            Optional — dann können David &amp; Sarah dich auch direkt erreichen.
           </p>
         </div>
 
