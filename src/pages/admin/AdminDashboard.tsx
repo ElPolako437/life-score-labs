@@ -43,7 +43,7 @@ export default function AdminDashboard() {
             <Kpi label="Aktiv im Reset" value={d.kpis.active} />
             <Kpi label="Abgeschlossen" value={d.kpis.completed} />
             <Kpi label="Completion-Rate" value={`${d.kpis.completionRate}%`} />
-            <Kpi label="Ø Rating" value={d.kpis.avgRating ?? '–'} hint="über alle Tage" />
+            <Kpi label="Ø Rating" value={d.kpis.avgRating ?? '–'} hint="Skala 1–3 · höher = besser" />
             <Kpi label="Coaching-ready" value={d.kpis.coachingReady} hint="heiße Leads" />
           </div>
 

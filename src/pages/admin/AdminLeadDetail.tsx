@@ -10,6 +10,9 @@ const TEMP: Record<string, { label: string; cls: string }> = {
 };
 const fmt = (s: unknown) => (s ? new Date(String(s)).toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' }) : '–');
 const val = (v: unknown) => (v === null || v === undefined || v === '' ? '–' : String(v));
+// Tages-Rating wird als int 3/2/1 gespeichert → lesbar machen.
+const RATING_LBL: Record<number, string> = { 3: 'Lief gut', 2: 'War okay', 1: 'Schwer' };
+const ratingText = (r: unknown) => (typeof r === 'number' ? (RATING_LBL[r] ?? String(r)) : '–');
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -117,7 +120,7 @@ export default function AdminLeadDetail() {
                     <div key={String(day.day)} className="flex items-center justify-between text-sm py-1.5 border-b border-white/5 last:border-0">
                       <span className="text-slate-300">Tag {val(day.day)}</span>
                       <span className="text-slate-400 text-xs">
-                        {day.completed_at ? '✓ abgeschlossen' : 'offen'} · Rating {val(day.rating)}
+                        {day.completed_at ? '✓ abgeschlossen' : 'offen'} · {ratingText(day.rating)}
                       </span>
                     </div>
                   ))}
