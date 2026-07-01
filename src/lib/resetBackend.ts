@@ -96,3 +96,31 @@ export function recordWhatsapp(email: string | null, phone: string): void {
   if (!email?.trim() || !phone?.trim()) return;
   invoke({ step: 'whatsapp', email, whatsapp_nummer: phone.trim() });
 }
+
+export interface RestorePayload {
+  found: boolean;
+  participant?: { vorname: string | null; ziel: string | null; last_day_reached: number | null; reset_status: string | null };
+  profile?: Record<string, unknown> | null;
+  days?: Record<string, unknown>[];
+}
+
+/**
+ * Holt den serverseitig erfassten Fortschritt per E-Mail zurück (Cross-Device /
+ * iOS-Homescreen). Gibt null zurück, wenn es keinen echten Fortschritt gibt.
+ * Blockierend (await), da der Aufrufer damit den Flow entscheidet.
+ */
+export async function restoreFromServer(email: string): Promise<RestorePayload | null> {
+  if (!email?.trim()) return null;
+  try {
+    const res = await fetch(`${FUNCTIONS_URL}/register-reset-participant`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ step: 'restore', email: email.trim() }),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as RestorePayload;
+    return data?.found ? data : null;
+  } catch {
+    return null;
+  }
+}

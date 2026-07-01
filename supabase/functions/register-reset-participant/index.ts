@@ -255,7 +255,11 @@ const handler = async (req: Request): Promise<Response> => {
         task_done: body.task_done === true,
         tool_result: (body.tool_result && typeof body.tool_result === "object") ? body.tool_result : {},
       };
-      if (typeof body.rating === "number") dprow.rating = body.rating;
+      // Rating kommt vom Frontend als Label ('good'|'difficult'|'failed') → auf
+      // 3/2/1 mappen (numerisch für Admin-Ø; beim restore-Step zurück gemappt).
+      const RMAP: Record<string, number> = { good: 3, difficult: 2, failed: 1 };
+      const rNum = typeof body.rating === "number" ? body.rating : RMAP[String(body.rating)];
+      if (typeof rNum === "number") dprow.rating = rNum;
       if (body.freetext) dprow.freetext = String(body.freetext).slice(0, 2000);
       if (body.completed === true) dprow.completed_at = new Date().toISOString();
 
@@ -294,6 +298,30 @@ const handler = async (req: Request): Promise<Response> => {
       }).then(({ error }) => { if (error) console.warn("event error:", error.message); });
 
       return new Response(JSON.stringify({ success: true, step: "event", event: ev }), {
+        status: 200, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // ── RESTORE: Fortschritt per E-Mail zurückgeben (Cross-Device / Homescreen) ─
+    // Behebt die iOS-Falle: die Standalone-App startet mit leerem localStorage →
+    // hier holt sie den serverseitig erfassten Stand zurück. found=false, wenn es
+    // noch keinen echten Fortschritt gibt (dann normaler Neu-Nutzer-Flow).
+    if (step === "restore") {
+      const [{ data: part }, { data: profile }, { data: days }] = await Promise.all([
+        supabase.from("reset_participants")
+          .select("vorname, ziel, last_day_reached, reset_status").eq("email", cleanEmail).maybeSingle(),
+        supabase.from("reset_profiles").select("*").eq("email", cleanEmail).maybeSingle(),
+        supabase.from("reset_day_progress")
+          .select("day, rating, tool_result, completed_at, task_done, freetext").eq("email", cleanEmail).order("day"),
+      ]);
+
+      const hasProgress = !!profile || (Array.isArray(days) && days.some((d) => d.completed_at));
+      if (!hasProgress) {
+        return new Response(JSON.stringify({ found: false }), {
+          status: 200, headers: { "Content-Type": "application/json", ...corsHeaders },
+        });
+      }
+      return new Response(JSON.stringify({ found: true, participant: part, profile, days: days ?? [] }), {
         status: 200, headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     }

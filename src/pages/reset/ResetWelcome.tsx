@@ -4,14 +4,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useReset } from '@/contexts/ResetContext';
 import { track, captureLead, triggerResetSignup } from '@/lib/analytics';
-import { recordSignup, recordEvent } from '@/lib/resetBackend';
+import { recordSignup, recordEvent, restoreFromServer } from '@/lib/resetBackend';
+import { reconstructState } from '@/lib/resetRestore';
 
 export default function ResetWelcome() {
   const navigate = useNavigate();
-  const { name, setName, setEmail, currentDay, goal } = useReset();
+  const { name, setName, setEmail, currentDay, goal, restoreState } = useReset();
   const [localName, setLocalName] = useState(name || '');
   const [localEmail, setLocalEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
+  const [checking, setChecking] = useState(false);
   const hasProgress = goal !== null;
   const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 
@@ -20,32 +22,50 @@ export default function ResetWelcome() {
     track('reset_viewed', { returning: goal !== null });
   }, []);
 
-  const handleStart = () => {
+  const handleStart = async () => {
     // First-timer: E-Mail ist Pflicht — sie ist der Lead UND der Kanal für die
     // täglichen Reset-Impulse. Ohne sie würde der Funnel den Nutzer verlieren.
     if (!hasProgress && !isValidEmail(localEmail)) {
       setEmailError(true);
       return;
     }
+    const emailVal = localEmail.trim();
     if (localName.trim()) setName(localName.trim());
-    if (localEmail.trim()) {
-      setEmail(localEmail.trim());
-      captureLead(localEmail, localName);
-      triggerResetSignup(localEmail, localName);
+    if (emailVal) {
+      setEmail(emailVal);
+      captureLead(emailVal, localName);
+      triggerResetSignup(emailVal, localName);
       // Server-side participant: consent (soft opt-in via disclosure) + UTM attribution
-      recordSignup(localEmail.trim(), localName.trim() || null, true);
+      recordSignup(emailVal, localName.trim() || null, true);
     }
-    track(hasProgress ? 'reset_resumed' : 'reset_started', { hasName: !!localName.trim(), hasEmail: !!localEmail.trim() });
-    recordEvent(localEmail.trim() || null, hasProgress ? 'reset_resumed' : 'reset_started');
+
+    // Returning user IM SELBEN Browser (lokaler Stand da) → direkt zum Tag.
     if (hasProgress) {
-      // Returning user → straight to active day
-      const activeDay = Math.min(currentDay, 7);
-      navigate(`/day/${activeDay}`);
-    } else {
-      // First-time: Install-Tutorial → WhatsApp → Onboarding
-      // /install redirected sich selbst weiter wenn Desktop oder schon Standalone
-      navigate('/install');
+      track('reset_resumed', { hasName: !!localName.trim(), hasEmail: !!emailVal });
+      recordEvent(emailVal || null, 'reset_resumed');
+      navigate(`/day/${Math.min(currentDay, 7)}`);
+      return;
     }
+
+    // Frischer Kontext (leerer lokaler Stand), aber bekannte E-Mail → Server nach
+    // vorhandenem Fortschritt fragen (behebt iOS-Homescreen / Gerätewechsel).
+    if (emailVal) {
+      setChecking(true);
+      const payload = await restoreFromServer(emailVal);
+      setChecking(false);
+      if (payload) {
+        restoreState(reconstructState(payload));
+        track('reset_restored', { source: 'welcome' });
+        recordEvent(emailVal, 'reset_restored');
+        navigate('/week'); // Wochen-Hub zeigt den wiederhergestellten Fortschritt
+        return;
+      }
+    }
+
+    // Neuer Nutzer → normaler Flow (Install-Tutorial → WhatsApp → Onboarding).
+    track('reset_started', { hasName: !!localName.trim(), hasEmail: !!emailVal });
+    recordEvent(emailVal || null, 'reset_started');
+    navigate('/install');
   };
 
   return (
@@ -171,8 +191,9 @@ export default function ResetWelcome() {
           size="lg"
           className="w-full min-h-[48px]"
           onClick={handleStart}
+          disabled={checking}
         >
-          {hasProgress ? `Tag ${Math.min(currentDay, 7)} öffnen →` : 'Meinen Plan starten →'}
+          {checking ? 'Einen Moment …' : hasProgress ? `Tag ${Math.min(currentDay, 7)} öffnen →` : 'Meinen Plan starten →'}
         </Button>
       </div>
     </div>

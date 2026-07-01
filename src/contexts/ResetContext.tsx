@@ -87,6 +87,7 @@ interface ResetContextValue extends ResetState {
   completeDay: (day: number, rating: Rating, note?: string) => void;
   setReflection: (data: ReflectionData) => void;
   markHomescreenHintShown: () => void;
+  restoreState: (partial: Partial<ResetState>) => void;
   resetAll: () => void;
   getDayData: (day: number) => DayData;
   completedTaskCount: (day: number) => number;
@@ -220,6 +221,11 @@ export function ResetProvider({ children }: { children: ReactNode }) {
     setState(s => ({ ...s, homescreenHintShown: true }));
   }, []);
 
+  const restoreState = useCallback((partial: Partial<ResetState>) => {
+    // Merge des serverseitig wiederhergestellten Stands über den (leeren) State.
+    setState(s => ({ ...s, ...partial }));
+  }, []);
+
   const resetAll = useCallback(() => {
     const fresh: ResetState = {
       email: null,
@@ -269,6 +275,7 @@ export function ResetProvider({ children }: { children: ReactNode }) {
         completeDay,
         setReflection,
         markHomescreenHintShown,
+        restoreState,
         resetAll,
         getDayData,
         completedTaskCount,
@@ -286,7 +293,7 @@ const FALLBACK: ResetContextValue = {
   setEmail: () => {}, setName: () => {}, setGoal: () => {}, setHurdle: () => {},
   setBody: () => {}, setProfile: () => {}, setTool: () => {}, setBaseline: () => {}, setMidFunnelIntent: () => {}, setFrictionNote: () => {},
   toggleTask: () => {}, completeDay: () => {}, setReflection: () => {},
-  markHomescreenHintShown: () => {}, resetAll: () => {},
+  markHomescreenHintShown: () => {}, restoreState: () => {}, resetAll: () => {},
   getDayData: (day: number) => getDefaultDay(day),
   completedTaskCount: () => 0,
 };
