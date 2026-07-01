@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { SOFT_CONVERSION, RETENTION_HOOKS } from '@/lib/dayContent';
 import { useReset } from '@/contexts/ResetContext';
 import InstallPromptSheet from '@/components/InstallPromptSheet';
+import SoftPhoto from '@/components/reset/SoftPhoto';
 import { isMobile, isStandalone } from '@/lib/installPrompt';
 import { track } from '@/lib/analytics';
 import { Check, ArrowRight } from 'lucide-react';
@@ -30,6 +31,19 @@ const RATING_RESPONSE: Record<string, string> = {
   good: 'Wenn es sich machbar anfühlt, springt dein System an — das ist kein Zufall, das ist Adaption.',
   difficult: 'Dass es Überwindung gekostet hat, ist normal. Genau an diesen Tagen entsteht die eigentliche Veränderung.',
   failed: 'Hart durchgezogen zählt am meisten. Nicht die leichten Tage formen dich — die schweren, an denen du trotzdem geblieben bist.',
+};
+
+// Team-/Community-Band pro Tag: dezentes weiches Foto + verbindende Copy, die den
+// Tag an die echte CALINESS-Gruppe knüpft (baut Vertrautheit → Coaching-Wunsch).
+// Bewusst rotierend über die 3 echten Szenen-Bilder + je Tag eigene Copy.
+const TEAM_BAND: Record<number, { img: string; caption: string }> = {
+  1: { img: '/images/caliness-coaching.jpg', caption: 'So starten wir jede CALINESS-Gruppe — mit Klarheit, nicht mit Diät.' },
+  2: { img: '/images/caliness-session.jpg', caption: 'Mahlzeiten-Struktur bauen wir mit unseren Leuten genau so auf.' },
+  3: { img: '/images/caliness-team.jpg', caption: 'Bewegung, die in echte Wochen passt — nicht in Diätpläne.' },
+  4: { img: '/images/caliness-coaching.jpg', caption: 'Regeneration ist bei uns kein Extra, sondern das Fundament.' },
+  5: { img: '/images/caliness-session.jpg', caption: 'Den Abend-Saboteur knacken wir Schritt für Schritt — gemeinsam.' },
+  6: { img: '/images/caliness-team.jpg', caption: 'Struktur, die im Leben hält. Genau daran arbeiten wir in der Gruppe.' },
+  7: { img: '/images/caliness-coaching.jpg', caption: 'Durchgezogen. Das schaffen die wenigsten — willkommen bei den CALINESS-Leuten.' },
 };
 
 export default function ResetCheckIn() {
@@ -114,6 +128,15 @@ export default function ResetCheckIn() {
           <p className="text-sm text-foreground/75 leading-relaxed italic mb-6 animate-fade-in">
             {RATING_RESPONSE[dayRating]}
           </p>
+        )}
+
+        {/* Team-/Community-Band — dezentes weiches Foto, das den Tag an die echte
+            CALINESS-Gruppe knüpft. Wechselt pro Tag. */}
+        {TEAM_BAND[dayNum] && (
+          <div className="mb-6 animate-fade-in">
+            <SoftPhoto src={TEAM_BAND[dayNum].img} alt="CALINESS Training & Community" blur={1.2} className="shadow-card" />
+            <p className="text-xs text-muted-foreground/70 leading-snug mt-2.5 px-2">{TEAM_BAND[dayNum].caption}</p>
+          </div>
         )}
 
         {/* Retention hook (days 1–6) */}
