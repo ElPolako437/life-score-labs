@@ -7,6 +7,7 @@ import InstallPromptSheet from '@/components/InstallPromptSheet';
 import SoftPhoto from '@/components/reset/SoftPhoto';
 import { isMobile, isStandalone } from '@/lib/installPrompt';
 import { track } from '@/lib/analytics';
+import { recordIntent } from '@/lib/resetBackend';
 import { Check, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -52,6 +53,7 @@ export default function ResetCheckIn() {
   const navigate = useNavigate();
   const {
     goal,
+    email,
     getDayData,
     homescreenHintShown,
     markHomescreenHintShown,
@@ -77,9 +79,13 @@ export default function ResetCheckIn() {
     }
   }, []);
 
-  const instagramUrl = goal
-    ? `https://ig.me/m/caliness_?text=${encodeURIComponent(`CALINESS SPRINT ${GOAL_LABEL[goal]}`)}`
-    : 'https://ig.me/m/caliness_?text=CALINESS+SPRINT';
+  // Mid-Funnel-Sprint-CTA auf WhatsApp — konsistent mit dem Haupt-Pitch (dort läuft
+  // Automatisierung + Follow-up). Vorher ging es auf Instagram-DM → Kanal-Bruch.
+  const whatsappSprintUrl = `https://wa.me/4917685912445?text=${encodeURIComponent(
+    goal
+      ? `Hi, ich mache gerade den CALINESS Reset (Tag ${dayNum}). Ziel: ${GOAL_LABEL[goal]}. Ich interessiere mich für den Caliness-Sprint.`
+      : `Hi, ich mache gerade den CALINESS Reset (Tag ${dayNum}) und interessiere mich für den Caliness-Sprint.`
+  )}`;
 
   const conversionEntry = SOFT_CONVERSION[dayNum];
   const retentionHook = RETENTION_HOOKS[dayNum];
@@ -250,7 +256,11 @@ export default function ResetCheckIn() {
             </p>
             {conversionEntry.cta && (
               <button
-                onClick={() => window.open(instagramUrl, '_blank')}
+                onClick={() => {
+                  track('coaching_cta_clicked', { source: 'checkin_soft', day: dayNum, goal: goal ?? null });
+                  recordIntent(email, 'coaching_whatsapp');
+                  window.open(whatsappSprintUrl, '_blank');
+                }}
                 className="mt-3 flex items-center gap-1.5 text-xs text-primary/80 hover:text-primary transition-colors"
               >
                 Caliness-Sprint kennenlernen <ArrowRight className="w-3 h-3" />
