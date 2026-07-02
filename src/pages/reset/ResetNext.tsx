@@ -11,6 +11,13 @@ import SoftPhoto from '@/components/reset/SoftPhoto';
 const INSTAGRAM_DM_URL = 'https://ig.me/m/caliness_?text=CALINESS+SPRINT';
 const CALENDLY_URL = 'https://calendly.com/team-calinessacademy/new-meeting';
 
+// Echte, mit Einwilligung geteilte WhatsApp-Screenshots (Dateien in
+// public/images/testimonials/, auf die Sprechblase zugeschnitten). Neue einfach
+// hier ergänzen — fehlende Bilder blenden sich automatisch aus.
+const TESTIMONIALS: { img: string; alt: string }[] = [
+  { img: '/images/testimonials/wa-1.jpg', alt: 'WhatsApp-Nachricht einer Klientin: fühlt sich fokussierter & selbstbestimmter, hat abgenommen.' },
+];
+
 const GOAL_CTA: Record<Goal, string> = {
   energy: 'Meine Energie zurückholen',
   fatloss: 'Meinen Fettabbau-Plan anfragen',
@@ -107,6 +114,7 @@ export default function ResetNext() {
   const { goal, hurdle, reflection, baseline, resetAll, name, midFunnelIntent, frictionNote, profile, email } = useReset();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [shared, setShared] = useState(false);
+  const [failedImgs, setFailedImgs] = useState<Set<number>>(new Set());
 
   const weakestKey = (() => {
     if (!reflection) return null;
@@ -396,37 +404,36 @@ export default function ResetNext() {
           ))}
         </div>
 
-        {/* Testimonials — BEFORE CTA to overcome objections.
-            TODO(echtheit): Durch ECHTE Stimmen ersetzen — am besten Screenshots
-            aus WhatsApp/Instagram oder kurze Video-Clips. Reale Belege bauen
-            mehr Vertrauen als jedes polierte Zitat. */}
-        <div className="space-y-3 mb-3">
-          <div className="p-4 rounded-xl border border-border/30 bg-card/50">
-            <p className="text-sm text-foreground/80 leading-relaxed mb-3">
-              „Ehrlich, ich war skeptisch — noch ein Programm. Aber zum ersten Mal hat mir jemand keinen Plan vorgesetzt, sondern erklärt, <span className='text-foreground'>warum</span> es bei mir vorher nie gehalten hat. Das war der Punkt, an dem es klick gemacht hat."
+        {/* Echte, mit Einwilligung geteilte WhatsApp-Screenshots — authentischer
+            Beweis direkt vor dem CTA. Blendet sich aus, wenn (noch) kein Bild da ist. */}
+        {TESTIMONIALS.some((_, i) => !failedImgs.has(i)) && (
+          <div className="mb-5">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-1 text-center">
+              Echte Nachrichten aus der Begleitung
             </p>
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                <span className="text-[10px] font-bold text-primary">A</span>
-              </div>
-              <p className="text-xs text-muted-foreground/50">Anna, 34 · nach dem Sprint</p>
-            </div>
-          </div>
-          <div className="p-4 rounded-xl border border-border/30 bg-card/50">
-            <p className="text-sm text-foreground/80 leading-relaxed mb-3">
-              „Ich hatte keine Lust auf die nächste Diät. Am Ende ging es auch gar nicht ums Abnehmen — sondern darum, dass mein Tag endlich Struktur hatte. Ich fühl mich morgens das erste Mal seit Langem wieder wach."
+            <p className="text-[11px] text-muted-foreground/50 text-center mb-3">
+              Nicht nur Kilos — vor allem, wie sie sich danach fühlen.
             </p>
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                <span className="text-[10px] font-bold text-primary">T</span>
-              </div>
-              <p className="text-xs text-muted-foreground/50">Tobias, 41 · nach dem Sprint</p>
+            <div className="space-y-3">
+              {TESTIMONIALS.map((t, i) => (
+                failedImgs.has(i) ? null : (
+                  <div key={i} className="rounded-2xl overflow-hidden border border-border/40 bg-card/40">
+                    <img
+                      src={t.img}
+                      alt={t.alt}
+                      loading="lazy"
+                      className="w-full h-auto block"
+                      onError={() => setFailedImgs(prev => new Set(prev).add(i))}
+                    />
+                  </div>
+                )
+              ))}
             </div>
+            <p className="text-[11px] text-muted-foreground/35 text-center mt-3 leading-snug">
+              Echte, mit Einwilligung geteilte Nachrichten. Individuelle Erfahrung · Zeitraum individuell · kein zugesichertes Ergebnis.
+            </p>
           </div>
-        </div>
-        <p className="text-[11px] text-muted-foreground/35 text-center mb-5">
-          Echte Rückmeldungen aus unserer Begleitung. Individuelle Erfahrungen — kein zugesichertes Ergebnis.
-        </p>
+        )}
 
         {/* Human touch — real team photo BEFORE CTA (softly treated) */}
         <div className="mb-5">
