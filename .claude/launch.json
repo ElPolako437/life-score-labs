@@ -6,12 +6,6 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 8080
-    },
-    {
-      "name": "caliness",
-      "runtimeExecutable": "sh",
-      "runtimeArgs": ["-c", "cd /Users/davidgogulla/caliness-age-decoded && npx vite --port 5199 --strictPort"],
-      "port": 5199
     }
   ]
 }
