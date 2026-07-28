@@ -1,4 +1,5 @@
 import posthog from 'posthog-js';
+import { getResetSource } from './attribution';
 
 const CONSENT_KEY = 'caliness_cookie_consent';
 /** Consent expires after ~6 months → the banner re-asks (DSGVO-konforme Erneuerung). */
@@ -159,6 +160,8 @@ export function triggerResetSignup(email: string, name?: string | null): void {
         trigger: 'reset_signup',
         email: email.trim().toLowerCase(),
         name: name?.trim() || undefined,
+        // First-Touch-Kanal, z.B. 'ig:reel-42' — Server fällt auf 'reset_webapp' zurück.
+        source: getResetSource() ?? undefined,
       }),
     }).catch(() => {});
   } catch {

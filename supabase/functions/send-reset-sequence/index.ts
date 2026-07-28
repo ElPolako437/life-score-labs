@@ -2,7 +2,7 @@
 // RESET 7-DAY EMAIL NURTURE SEQUENCE — CALINESS
 //
 // Two entry points:
-//   POST { trigger: "reset_signup", email, name }  → immediate welcome (day0)
+//   POST { trigger: "reset_signup", email, name, source? }  → immediate welcome (day0); source = Kanal-Attribution (z.B. "ig:reel-42")
 //   POST { trigger: "cron" }                       → daily batch for day1–day7
 //
 // One themed mail per reset day (Start · Ernährung · Bewegung · Schlaf ·
@@ -548,7 +548,8 @@ async function sendIfNotSent(
 async function handleSignup(
   supabase: ReturnType<typeof createClient>,
   email: string,
-  name: string | null
+  name: string | null,
+  source: string | null
 ): Promise<Response> {
   const cleanEmail = email.trim().toLowerCase();
 
@@ -560,11 +561,30 @@ async function handleSignup(
     });
   }
 
+  // Kanal-Attribution: Client liefert z.B. 'ig:reel-42' (utm_source:utm_content).
+  // Whitelist-Sanitizing + Fallback auf den bisherigen Default.
+  const cleanSource =
+    (typeof source === "string"
+      ? source.trim().slice(0, 120).replace(/[^\w.\-:/ ]/g, "")
+      : "") || "reset_webapp";
+
+  // First-Touch auch DB-seitig: eine bereits gespeicherte echte Quelle
+  // wird durch einen erneuten Signup NICHT überschrieben.
+  const { data: existingSub } = await supabase
+    .from("reset_subscribers")
+    .select("source")
+    .eq("email", cleanEmail)
+    .maybeSingle();
+  const keepSource =
+    existingSub?.source && existingSub.source !== "reset_webapp"
+      ? existingSub.source
+      : cleanSource;
+
   // Upsert subscriber (ignore conflict on existing email)
   const { error: subErr } = await supabase
     .from("reset_subscribers")
     .upsert(
-      { email: cleanEmail, name: name?.trim() || null, source: "reset_webapp" },
+      { email: cleanEmail, name: name?.trim() || null, source: keepSource },
       { onConflict: "email" }
     );
 
@@ -684,7 +704,7 @@ serve(async (req: Request): Promise<Response> => {
 
     if (body.trigger === "reset_signup") {
       console.log(`[reset-seq] SIGNUP trigger: ${body.email}`);
-      return handleSignup(supabase, body.email, body.name || null);
+      return handleSignup(supabase, body.email, body.name || null, body.source || null);
     }
 
     if (body.trigger === "cron") {

@@ -8,6 +8,8 @@
  * (der auf ein anderes Projekt zeigt). So landen alle Reset-Daten in EINER DB.
  */
 
+import { readAttribution } from './attribution';
+
 const FUNCTIONS_URL = 'https://zlmldahbtrwbemndclwm.supabase.co/functions/v1';
 
 function invoke(body: Record<string, unknown>): void {
@@ -37,8 +39,21 @@ function getAnonId(): string {
   }
 }
 
-/** Reads UTM params off the current URL (empty object if none). */
+/**
+ * UTM-Attribution fürs Backend: First-Touch aus localStorage gewinnt
+ * (reset_attribution, 90 Tage). Fallback: aktuelle URL — deckt den Fall ab,
+ * dass Signup und Landung im selben Aufruf mit Query-Parametern passieren.
+ */
 export function getUtm(): Record<string, string> {
+  const stored = readAttribution();
+  if (stored) {
+    const utm: Record<string, string> = {};
+    for (const k of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'ref', 'referrer_host'] as const) {
+      const v = stored[k];
+      if (v) utm[k] = v;
+    }
+    if (Object.keys(utm).length > 0) return utm;
+  }
   const utm: Record<string, string> = {};
   try {
     const p = new URLSearchParams(window.location.search);

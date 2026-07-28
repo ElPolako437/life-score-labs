@@ -5,13 +5,18 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter } from "react-router-dom";
 import { ResetProvider } from "./contexts/ResetContext";
 import { captureInstallPrompt } from "./lib/installPrompt";
+import { captureAttribution } from "./lib/attribution";
 import AnimatedRoutes from "./components/reset/AnimatedRoutes";
 import ResetAura from "./components/reset/ResetAura";
 import ResetFooter from "./components/reset/ResetFooter";
 import { CookieConsent } from "./components/CookieConsent";
 
 const App = () => {
-  useEffect(() => { captureInstallPrompt(); }, []);
+  useEffect(() => {
+    captureInstallPrompt();
+    // First-Touch-Kanal-Attribution (UTM/ref/Referrer) VOR jeder Navigation einfangen.
+    captureAttribution();
+  }, []);
 
   return (
   <ResetProvider>
