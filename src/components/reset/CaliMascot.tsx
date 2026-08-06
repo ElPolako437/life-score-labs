@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface CaliMascotProps {
-  /** Bildpfad, z.B. /images/cali/cali-hero.png */
+  /** Bildpfad, z.B. /images/cali/cali-head.png */
   src: string;
   alt?: string;
   className?: string;

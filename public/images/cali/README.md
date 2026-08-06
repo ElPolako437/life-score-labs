@@ -1,18 +1,25 @@
 # CALI — Maskottchen-Bilder
 
-Hier kommen die vier Bilder der mintgrünen Schildkröte mit goldenem Panzer rein.
-**PNG mit transparentem Hintergrund** (wichtig — die Bilder liegen auf dunklem Grund
-und teils über Fotos).
+Freigestellte PNGs (transparenter Hintergrund) der mintgrünen Schildkröte.
+Die Original-Renders haben grauen Hintergrund und müssen vor dem Einsatz
+freigestellt werden — sonst erscheint auf dem dunklen Reset ein grauer Kasten.
+
+## Im Einsatz
 
 | Datei | Wo im Reset | Angezeigte Größe |
 |---|---|---|
-| `cali-hero.png` | Startseite, unter/neben der Überschrift | 84px mobil · 120px ab Tablet |
-| `cali-explain.png` | Startseite, links neben "7 Tage. Etwa 10 Minuten…" | 48px |
-| `cali-day.png` | Wochenübersicht, kleines Icon bei allen 7 Tagen | 28px |
-| `cali-waitlist.png` | Wartelisten-Block (/app) | 160px mobil · 200px ab Tablet |
+| `cali-head.png` | Startseite, unter der Überschrift | 70px hoch mobil · 86px ab Tablet |
+| `cali-day.png` | Wochenübersicht, Icon bei allen 7 Tagen | 28px |
+| `cali-waitlist.png` | Wartelisten-Block (/app) | 180px hoch mobil · 200px ab Tablet |
 
-Empfohlene Dateigröße: mindestens doppelte Anzeigegröße (für Retina),
-z. B. `cali-waitlist.png` ~400–600px breit. Unter 300 KB halten.
+`cali-explain.png` liegt ungenutzt bereit (Portrait, 48px) — war ursprünglich
+neben der Reset-Erklärung geplant, dort steht jetzt bewusst kein zweites
+Maskottchen, weil zwei CALIs auf einem Screen beliebig wirkten.
 
-**Solange eine Datei fehlt, blendet sich der jeweilige Slot automatisch aus** —
-kein kaputtes Bild-Icon, kein Layout-Sprung. Du kannst also einzeln nachliefern.
+## Wichtig
+- Größen werden über die **Höhe** begrenzt (`h-[...] w-auto`), nicht über die
+  Breite: die Motive sind hochformatig, über die Breite begrenzt wächst der
+  Hero und drückt das E-Mail-Feld aus dem sichtbaren Bereich.
+- Fehlt eine Datei, blendet sich der jeweilige Slot automatisch aus
+  (kein kaputtes Bild-Icon) — einzeln nachliefern ist also gefahrlos.
+- Neue Motive einfach hier ablegen; Freistellen + Zuschneiden übernimmt Claude.
