@@ -114,9 +114,9 @@ export default function ResetWelcome() {
               Du machst nicht zu wenig.<br />Nur an der falschen Stelle.
             </h1>
             <CaliMascot
-              src="/images/cali/cali-hero.png"
+              src="/images/cali/cali-head.png"
               alt="CALI, das CALINESS-Maskottchen"
-              className="h-[118px] sm:h-[150px] w-auto flex-shrink-0"
+              className="h-[70px] sm:h-[86px] w-auto flex-shrink-0"
               style={{ filter: 'drop-shadow(0 6px 18px hsl(0 0% 0% / 0.45))' }}
             />
           </div>
@@ -128,17 +128,11 @@ export default function ResetWelcome() {
           bleiben (ab sm wieder luftig wie zuvor) */}
       <div className="relative z-10 flex-1 flex flex-col items-center text-center px-6 pb-10 gap-5 sm:gap-7 max-w-sm mx-auto w-full animate-fade-in">
 
-        {/* Was der Reset ist — CALI klein links, Text rechts */}
-        <div className="flex items-center gap-3 max-w-xs">
-          <CaliMascot
-            src="/images/cali/cali-explain.png"
-            className="w-12 h-auto flex-shrink-0"
-            decorative
-          />
-          <p className="text-sm text-muted-foreground/80 leading-relaxed text-left">
-            7 Tage. Etwa 10 Minuten am Tag. Danach weißt du, wo dein System gerade leerläuft. Und kannst aufhören, da Kraft reinzukippen.
-          </p>
-        </div>
+        {/* Was der Reset ist. Bewusst OHNE zweites CALI-Bild: direkt unter dem
+            Hero-CALI wirkten zwei Maskottchen auf einem Screen beliebig. */}
+        <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-xs">
+          7 Tage. Etwa 10 Minuten am Tag. Danach weißt du, wo dein System gerade leerläuft. Und kannst aufhören, da Kraft reinzukippen.
+        </p>
 
         {/* What you actually get — concrete value above the fold */}
         <div className="w-full max-w-xs space-y-2 text-left">
