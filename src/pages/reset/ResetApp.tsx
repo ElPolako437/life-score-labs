@@ -116,7 +116,7 @@ export default function ResetApp() {
             <CaliMascot
               src="/images/cali/cali-waitlist.png"
               alt="CALI, das CALINESS-Maskottchen"
-              className="w-[160px] sm:w-[200px] h-auto mx-auto mb-4"
+              className="h-[180px] sm:h-[200px] w-auto mx-auto mb-4"
               style={{ filter: 'drop-shadow(0 8px 24px hsl(0 0% 0% / 0.4))' }}
             />
             <h2 className="font-outfit text-xl font-bold text-foreground mb-2">

@@ -116,7 +116,7 @@ export default function ResetWelcome() {
             <CaliMascot
               src="/images/cali/cali-hero.png"
               alt="CALI, das CALINESS-Maskottchen"
-              className="w-[84px] sm:w-[120px] h-auto flex-shrink-0"
+              className="h-[118px] sm:h-[150px] w-auto flex-shrink-0"
               style={{ filter: 'drop-shadow(0 6px 18px hsl(0 0% 0% / 0.45))' }}
             />
           </div>
