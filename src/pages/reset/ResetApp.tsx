@@ -5,6 +5,7 @@ import { useReset } from '@/contexts/ResetContext';
 import { track } from '@/lib/analytics';
 import { recordIntent } from '@/lib/resetBackend';
 import { Button } from '@/components/ui/button';
+import CaliMascot from '@/components/reset/CaliMascot';
 import { ArrowRight, Check, Activity, LineChart, Sparkles, CalendarClock } from 'lucide-react';
 
 const APP_WAITLIST_URL = 'https://caliness-academy.de/app';
@@ -110,9 +111,26 @@ export default function ResetApp() {
 
         {/* Waitlist status / CTA */}
         <motion.div {...reveal(5)} className="mt-8">
+          {/* Launch-Block — CALI prominent, Dezember-Termin, Gründerpreis */}
+          <div className="rounded-2xl border border-primary/25 bg-primary/5 p-5 mb-5 text-center">
+            <CaliMascot
+              src="/images/cali/cali-waitlist.png"
+              alt="CALI, das CALINESS-Maskottchen"
+              className="w-[160px] sm:w-[200px] h-auto mx-auto mb-4"
+              style={{ filter: 'drop-shadow(0 8px 24px hsl(0 0% 0% / 0.4))' }}
+            />
+            <h2 className="font-outfit text-xl font-bold text-foreground mb-2">
+              CALI kommt im Dezember
+            </h2>
+            <p className="text-sm text-muted-foreground/80 leading-relaxed">
+              CALINESS ist die App, die aus dem Reset einen Alltag macht. Start im Dezember.
+              Wer auf der Liste steht, bekommt den Gründerpreis — und schon vorher Beta-Zugang.
+            </p>
+          </div>
+
           <div className="flex items-center gap-2 justify-center mb-4 text-xs text-muted-foreground/60">
             <CalendarClock className="w-3.5 h-3.5 text-primary/70" />
-            <span>Startet in den nächsten Wochen · Frühzugang vergünstigt</span>
+            <span>Start im Dezember · Beta-Zugang vorab · Gründerpreis</span>
           </div>
 
           {joined ? (

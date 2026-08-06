@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useReset } from '@/contexts/ResetContext';
-import { ArrowRight, Share2, Check, Sparkles, Users } from 'lucide-react';
+import { ArrowRight, Share2, Check, Sparkles } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { buildResetSummary } from '@/lib/resetSummary';
 import { track } from '@/lib/analytics';
@@ -167,54 +167,38 @@ export default function ResetSprintReady() {
           </p>
         </div>
 
-        {/* Door A — App (self-guided) */}
+        {/* Haupt-Weg — CALINESS App / Warteliste */}
         <button
           onClick={goApp}
-          className="w-full text-left p-5 rounded-2xl border border-border/50 bg-card/60 hover:border-primary/50 hover:bg-primary/[0.04] transition-all duration-200 active:scale-[0.99] mb-3 group"
+          className="w-full text-left p-5 rounded-2xl border border-primary/40 bg-primary/[0.06] hover:border-primary/60 hover:bg-primary/[0.09] transition-all duration-200 active:scale-[0.99] mb-4 group"
         >
           <div className="flex items-start gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
               <Sparkles className="w-5 h-5 text-primary" />
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-2 mb-1">
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground/50 font-semibold">Selbstständig</p>
-                <span className="text-[10px] text-primary/70 font-medium">Bald · Frühzugang</span>
+                <p className="text-[10px] uppercase tracking-widest text-primary/60 font-semibold">Dein nächster Schritt</p>
+                <span className="text-[10px] text-primary/70 font-medium">Dezember · Gründerpreis</span>
               </div>
-              <p className="text-base font-bold text-foreground mb-1">Mit der CALINESS App</p>
-              <p className="text-xs text-muted-foreground/70 leading-relaxed">
-                Dein täglicher Longevity-Coach. Auswertung, Plan und Fortschritt — passt sich jeden Tag an deine echten Daten an.
+              <p className="text-base font-bold text-foreground mb-1">Die CALINESS App mit CALI</p>
+              <p className="text-xs text-muted-foreground/75 leading-relaxed">
+                Dein täglicher Longevity-Coach. Auswertung, Plan und Fortschritt — passt sich jeden Tag an deine echten Daten an. Start im Dezember, Beta-Zugang schon vorher.
               </p>
               <p className="text-sm text-primary font-semibold mt-2.5 flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                Frühzugang ansehen <ArrowRight className="w-3.5 h-3.5" />
+                Auf die Warteliste <ArrowRight className="w-3.5 h-3.5" />
               </p>
             </div>
           </div>
         </button>
 
-        {/* Door B — Coaching (guided) */}
+        {/* Sekundär — persönliche Begleitung, bewusst dezent */}
         <button
           onClick={goCoaching}
-          className="w-full text-left p-5 rounded-2xl border border-primary/40 bg-primary/[0.06] hover:border-primary/60 hover:bg-primary/[0.09] transition-all duration-200 active:scale-[0.99] mb-6 group"
+          className="w-full text-center mb-6 text-xs text-muted-foreground/55 hover:text-muted-foreground/80 transition-colors"
         >
-          <div className="flex items-start gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
-              <Users className="w-5 h-5 text-primary" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center justify-between gap-2 mb-1">
-                <p className="text-[10px] uppercase tracking-widest text-primary/60 font-semibold">Begleitet</p>
-                <span className="text-[10px] text-muted-foreground/50 font-medium">Begrenzte Plätze</span>
-              </div>
-              <p className="text-base font-bold text-foreground mb-1">Mit dem Caliness-Sprint</p>
-              <p className="text-xs text-muted-foreground/75 leading-relaxed">
-                14 Tage persönlich begleitet von David &amp; Sarah. Individuelle Strategie, Accountability, schnellere Umsetzung — kein Alleinkampf.
-              </p>
-              <p className="text-sm text-primary font-semibold mt-2.5 flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                Sprint ansehen <ArrowRight className="w-3.5 h-3.5" />
-              </p>
-            </div>
-          </div>
+          Du willst nicht bis Dezember warten?{' '}
+          <span className="text-primary/80 underline underline-offset-2">Persönliche Begleitung ansehen</span>
         </button>
 
         {/* Share result */}

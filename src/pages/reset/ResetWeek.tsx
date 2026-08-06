@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import ProgressRing from '@/components/reset/ProgressRing';
 import CountUp from '@/components/reset/CountUp';
 import CollectedProfile from '@/components/reset/CollectedProfile';
+import CaliMascot from '@/components/reset/CaliMascot';
 
 const LAST_VISIT_KEY = 'caliness_week_last_visit';
 
@@ -158,7 +159,7 @@ export default function ResetWeek() {
           <div className="mb-6 p-4 rounded-xl border border-primary/30 bg-primary/5 animate-fade-in">
             <p className="text-sm font-semibold text-foreground mb-1">Du hast alle 7 Tage abgeschlossen.</p>
             <p className="text-xs text-muted-foreground/70 mb-4">
-              {reflection ? 'Sieh dir dein persönliches Caliness-Sprint-Angebot an.' : 'Zeit für die Reflexion — und dein Ergebnis.'}
+              {reflection ? 'Sieh dir deine persönliche Auswertung an.' : 'Zeit für die Reflexion — und dein Ergebnis.'}
             </p>
             <Button
               variant="premium"
@@ -166,7 +167,7 @@ export default function ResetWeek() {
               className="w-full gap-2"
               onClick={() => navigate(reflection ? '/sprint-ready' : '/reflection')}
             >
-              {reflection ? 'Zum Caliness-Sprint-Angebot' : 'Reset auswerten'}
+              {reflection ? 'Zu deinem Ergebnis' : 'Reset auswerten'}
               <ArrowRight className="w-3.5 h-3.5" />
             </Button>
           </div>
@@ -244,6 +245,16 @@ export default function ResetWeek() {
                     );
                   })()}
                 </div>
+
+                {/* CALI begleitet jeden Tag — dezent rechts, gleiches Bild überall */}
+                <CaliMascot
+                  src="/images/cali/cali-day.png"
+                  className={cn(
+                    'w-7 h-auto ml-auto flex-shrink-0 transition-opacity',
+                    isActive ? 'opacity-90' : isCompleted ? 'opacity-50' : 'opacity-25'
+                  )}
+                  decorative
+                />
               </motion.button>
             );
           })}

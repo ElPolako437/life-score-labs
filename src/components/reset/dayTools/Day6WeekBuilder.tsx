@@ -138,7 +138,7 @@ export default function Day6WeekBuilder() {
         <p className="text-[11px] text-muted-foreground/50 mb-2">🏋️ Training · jeden Tag: Spaziergang, Protein-Anker, Schlafanker</p>
 
         <SprintHint>
-          Das ist dein Gerüst. Im Sprint wird daraus eine Woche mit Check-ins, die sich anpasst, wenn das Leben dazwischenkommt.
+          Das ist dein Gerüst. In der CALINESS App wird daraus eine Woche mit Check-ins, die sich anpasst, wenn das Leben dazwischenkommt.
         </SprintHint>
 
         {/* Soft, optional BioAge offer — no compulsion */}

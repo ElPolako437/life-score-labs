@@ -153,6 +153,16 @@ const handler = async (req: Request): Promise<Response> => {
         console.error("register-reset-participant: DB upsert error:", dbErr.message);
       }
 
+      // Consent-Wortlaut (DSGVO-Nachweis) bewusst als SEPARATES Update: fehlt die
+      // Spalte noch, scheitert nur dieser Schritt — der Lead ist trotzdem gesichert.
+      if (consent === true && typeof body.consent_text === "string" && body.consent_text.trim()) {
+        const { error: ctErr } = await supabase
+          .from("reset_participants")
+          .update({ consent_text: String(body.consent_text).slice(0, 500) })
+          .eq("email", cleanEmail);
+        if (ctErr) console.warn("register-reset-participant: consent_text skipped:", ctErr.message);
+      }
+
       // Resend Audience — fire-and-forget
       addToResendAudience(email, vorname ?? null).catch(console.error);
 

@@ -101,7 +101,7 @@ export default function Day5Saboteur() {
         </motion.div>
 
         <SprintHint>
-          Im Sprint erkennen David & Sarah dein Muster gemeinsam mit dir — und bauen den Gegenhebel fest in deine Woche ein.
+          In der CALINESS App erkennt CALI dein Muster gemeinsam mit dir — und baut den Gegenhebel fest in deine Woche ein.
         </SprintHint>
 
         <button onClick={() => { setEditing(true); setPhase('input'); }} className="text-xs text-muted-foreground/40 hover:text-muted-foreground/60 transition-colors mt-4">

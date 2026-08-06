@@ -75,7 +75,7 @@ export default function Day3Movement() {
         </div>
 
         <SprintHint>
-          Im Sprint wird dein Bewegungsziel an deine echte Woche angepasst — nicht pauschal, sondern nach deinem Alltag.
+          In der CALINESS App wird dein Bewegungsziel an deine echte Woche angepasst — nicht pauschal, sondern nach deinem Alltag.
         </SprintHint>
 
         <button onClick={() => setEditing(true)} className="text-xs text-muted-foreground/40 hover:text-muted-foreground/60 transition-colors mt-4">

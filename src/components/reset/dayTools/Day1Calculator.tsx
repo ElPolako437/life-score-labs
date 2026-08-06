@@ -111,7 +111,7 @@ export default function Day1Calculator() {
         </div>
 
         <SprintHint>
-          Das ist deine Startschätzung aus 6 Werten. Im 14-Tage-Sprint wird daraus ein Plan, der sich jede Woche an deine echten Daten anpasst.
+          Das ist deine Startschätzung aus 6 Werten. In der CALINESS App wird daraus ab Dezember ein Plan, der sich jede Woche an deine echten Daten anpasst.
         </SprintHint>
 
         <button

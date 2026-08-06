@@ -79,13 +79,8 @@ export default function ResetCheckIn() {
     }
   }, []);
 
-  // Mid-Funnel-Sprint-CTA auf WhatsApp — konsistent mit dem Haupt-Pitch (dort läuft
-  // Automatisierung + Follow-up). Vorher ging es auf Instagram-DM → Kanal-Bruch.
-  const whatsappSprintUrl = `https://wa.me/4917685912445?text=${encodeURIComponent(
-    goal
-      ? `Hi, ich mache gerade den CALINESS Reset (Tag ${dayNum}). Ziel: ${GOAL_LABEL[goal]}. Ich interessiere mich für den Caliness-Sprint.`
-      : `Hi, ich mache gerade den CALINESS Reset (Tag ${dayNum}) und interessiere mich für den Caliness-Sprint.`
-  )}`;
+  // Mid-Funnel-CTA führt jetzt auf die CALI-Warteliste (/app) statt in den
+  // Coaching-Chat — die App ist der beworbene nächste Schritt bis Dezember.
 
   const conversionEntry = SOFT_CONVERSION[dayNum];
   const retentionHook = RETENTION_HOOKS[dayNum];
@@ -257,13 +252,13 @@ export default function ResetCheckIn() {
             {conversionEntry.cta && (
               <button
                 onClick={() => {
-                  track('coaching_cta_clicked', { source: 'checkin_soft', day: dayNum, goal: goal ?? null });
-                  recordIntent(email, 'coaching_whatsapp');
-                  window.open(whatsappSprintUrl, '_blank');
+                  track('app_cta_clicked', { source: 'checkin_soft', day: dayNum, goal: goal ?? null });
+                  recordIntent(email, 'app_waitlist_interest');
+                  navigate('/app');
                 }}
                 className="mt-3 flex items-center gap-1.5 text-xs text-primary/80 hover:text-primary transition-colors"
               >
-                Caliness-Sprint kennenlernen <ArrowRight className="w-3 h-3" />
+                CALI-Warteliste ansehen <ArrowRight className="w-3 h-3" />
               </button>
             )}
           </div>

@@ -66,7 +66,7 @@ export default function Day4Sleep() {
         </div>
 
         <SprintHint>
-          Im Sprint tracken wir deinen Schlaf über 2 Wochen und justieren Stellschraube für Stellschraube — bis dein Rhythmus steht.
+          In der CALINESS App verfolgt CALI deinen Schlaf über Wochen und justiert Stellschraube für Stellschraube — bis dein Rhythmus steht.
         </SprintHint>
 
         <button onClick={() => setEditing(true)} className="text-xs text-muted-foreground/40 hover:text-muted-foreground/60 transition-colors mt-4">

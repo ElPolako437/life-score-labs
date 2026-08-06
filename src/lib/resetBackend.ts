@@ -67,10 +67,25 @@ export function getUtm(): Record<string, string> {
   return utm;
 }
 
+/**
+ * Wortlaut der Einwilligung — EINE Quelle der Wahrheit. Genau dieser Text wird
+ * dem Nutzer an der Checkbox angezeigt UND als Nachweis gespeichert. Wird er
+ * geändert, ändert sich beides gemeinsam (sonst wäre der Nachweis wertlos).
+ */
+export const CONSENT_TEXT =
+  'Ja, schickt mir den 7-Tage-Reset und Infos zum CALINESS-Start. Abmeldung jederzeit möglich.';
+
 /** Signup: create/update participant with consent + UTM attribution. */
 export function recordSignup(email: string, vorname: string | null, consent: boolean): void {
   if (!email?.trim()) return;
-  invoke({ step: 'register', email, vorname, consent, utm: getUtm() });
+  invoke({
+    step: 'register',
+    email,
+    vorname,
+    consent,
+    consent_text: consent ? CONSENT_TEXT : null,
+    utm: getUtm(),
+  });
 }
 
 /** Mirror funnel progress (highest day reached) + optionally the goal. */

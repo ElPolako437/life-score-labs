@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useReset } from '@/contexts/ResetContext';
 import { track, captureLead, triggerResetSignup } from '@/lib/analytics';
-import { recordSignup, recordEvent, restoreFromServer } from '@/lib/resetBackend';
+import { recordSignup, recordEvent, restoreFromServer, CONSENT_TEXT } from '@/lib/resetBackend';
 import { reconstructState } from '@/lib/resetRestore';
+import CaliMascot from '@/components/reset/CaliMascot';
 
 export default function ResetWelcome() {
   const navigate = useNavigate();
@@ -13,6 +15,8 @@ export default function ResetWelcome() {
   const [localName, setLocalName] = useState(name || '');
   const [localEmail, setLocalEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
+  const [consentGiven, setConsentGiven] = useState(false);
+  const [consentError, setConsentError] = useState(false);
   const [checking, setChecking] = useState(false);
   const hasProgress = goal !== null;
   const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
@@ -27,6 +31,11 @@ export default function ResetWelcome() {
     // täglichen Reset-Impulse. Ohne sie würde der Funnel den Nutzer verlieren.
     if (!hasProgress && !isValidEmail(localEmail)) {
       setEmailError(true);
+      return;
+    }
+    // Einwilligung ist Pflicht (aktive Zustimmung, nie vorangehakt).
+    if (!hasProgress && !consentGiven) {
+      setConsentError(true);
       return;
     }
     const emailVal = localEmail.trim();
@@ -72,7 +81,7 @@ export default function ResetWelcome() {
     <div className="min-h-screen flex flex-col relative overflow-hidden">
 
       {/* HERO HEADER — blurred coaching shot with logo + headline overlaid */}
-      <div className="relative w-full overflow-hidden" style={{ minHeight: '42vh' }}>
+      <div className="relative w-full overflow-hidden min-h-[38vh] sm:min-h-[42vh]">
         <img
           src="/images/caliness-coaching.jpg"
           alt="David & Sarah coachen eine CALINESS-Gruppe"
@@ -87,28 +96,49 @@ export default function ResetWelcome() {
               'linear-gradient(to bottom, hsl(var(--background) / 0.5) 0%, hsl(var(--background) / 0.15) 32%, hsl(var(--background) / 0.7) 80%, hsl(var(--background)) 100%)',
           }}
         />
-        <div className="relative z-10 flex flex-col items-center justify-end text-center px-6 pt-12 pb-7 gap-4" style={{ minHeight: '42vh' }}>
+        <div className="relative z-10 flex flex-col items-center justify-end text-center px-6 pt-10 pb-6 gap-3.5 sm:gap-4 min-h-[38vh] sm:min-h-[42vh]">
           <img
             src="/images/caliness-logo-white.png"
             alt="CALINESS"
             className="w-16 h-16 object-contain"
             style={{ filter: 'drop-shadow(0 0 24px hsl(0 0% 0% / 0.5))' }}
           />
-          <h1
-            className="font-outfit font-bold text-[27px] tracking-tight text-foreground leading-[1.15] text-balance max-w-sm"
-            style={{ textShadow: '0 2px 24px hsl(0 0% 0% / 0.65)' }}
-          >
-            Du machst nicht zu wenig.<br />Nur an der falschen Stelle.
-          </h1>
+          {/* Headline + CALI — mobil CALI zentriert unter der Überschrift,
+              ab sm rechts daneben. Bewusst klein, damit der Hero nicht wächst
+              und das Formular nicht nach unten gedrückt wird. */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-5">
+            <h1
+              className="font-outfit font-bold text-[27px] tracking-tight text-foreground leading-[1.15] text-balance max-w-sm"
+              style={{ textShadow: '0 2px 24px hsl(0 0% 0% / 0.65)' }}
+            >
+              Du machst nicht zu wenig.<br />Nur an der falschen Stelle.
+            </h1>
+            <CaliMascot
+              src="/images/cali/cali-hero.png"
+              alt="CALI, das CALINESS-Maskottchen"
+              className="w-[84px] sm:w-[120px] h-auto flex-shrink-0"
+              style={{ filter: 'drop-shadow(0 6px 18px hsl(0 0% 0% / 0.45))' }}
+            />
+          </div>
         </div>
       </div>
 
       {/* CONTENT */}
-      <div className="relative z-10 flex-1 flex flex-col items-center text-center px-6 pb-10 gap-7 max-w-sm mx-auto w-full animate-fade-in">
+      {/* gap mobil enger, damit E-Mail-Feld + Einwilligung ohne Scrollen sichtbar
+          bleiben (ab sm wieder luftig wie zuvor) */}
+      <div className="relative z-10 flex-1 flex flex-col items-center text-center px-6 pb-10 gap-5 sm:gap-7 max-w-sm mx-auto w-full animate-fade-in">
 
-        <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-xs">
-          7 Tage. Etwa 10 Minuten am Tag. Danach weißt du, wo dein System gerade leerläuft. Und kannst aufhören, da Kraft reinzukippen.
-        </p>
+        {/* Was der Reset ist — CALI klein links, Text rechts */}
+        <div className="flex items-center gap-3 max-w-xs">
+          <CaliMascot
+            src="/images/cali/cali-explain.png"
+            className="w-12 h-auto flex-shrink-0"
+            decorative
+          />
+          <p className="text-sm text-muted-foreground/80 leading-relaxed text-left">
+            7 Tage. Etwa 10 Minuten am Tag. Danach weißt du, wo dein System gerade leerläuft. Und kannst aufhören, da Kraft reinzukippen.
+          </p>
+        </div>
 
         {/* What you actually get — concrete value above the fold */}
         <div className="w-full max-w-xs space-y-2 text-left">
@@ -173,14 +203,35 @@ export default function ResetWelcome() {
               maxLength={100}
               className={`bg-card text-foreground placeholder:text-muted-foreground/40 h-12 rounded-xl text-center ${emailError ? 'border-red-400/70' : 'border-border/60'}`}
             />
-            {emailError ? (
+            {emailError && (
               <p className="text-[11px] text-red-400/80 leading-snug px-1">
                 Bitte gib eine gültige E-Mail ein — dahin kommt dein persönlicher Tag-1-Plan.
               </p>
-            ) : (
-              <p className="text-[11px] text-muted-foreground/40 leading-snug px-1">
-                Dahin schicken wir deinen Tag-1-Plan + deine täglichen Reset-Impulse. Jederzeit mit einem Klick abbestellbar.{' '}
-                <a href="/datenschutz" className="underline hover:text-muted-foreground/60">Datenschutz</a>
+            )}
+
+            {/* Einwilligung — aktive Zustimmung, nie vorangehakt. Der Wortlaut kommt
+                aus CONSENT_TEXT und wird exakt so als Nachweis mitgespeichert. */}
+            <label className="flex items-start gap-2.5 text-left cursor-pointer px-1">
+              <Checkbox
+                checked={consentGiven}
+                onCheckedChange={v => { setConsentGiven(v === true); if (consentError) setConsentError(false); }}
+                className={`mt-0.5 flex-shrink-0 ${consentError ? 'border-red-400/70' : ''}`}
+                aria-label="Einwilligung zum Newsletter-Versand"
+              />
+              <span className="text-[11px] text-muted-foreground/55 leading-snug">
+                {CONSENT_TEXT}{' '}
+                <a
+                  href="/datenschutz"
+                  onClick={e => e.stopPropagation()}
+                  className="underline hover:text-muted-foreground/80"
+                >
+                  Datenschutz
+                </a>
+              </span>
+            </label>
+            {consentError && (
+              <p className="text-[11px] text-red-400/80 leading-snug px-1">
+                Bitte bestätige die Einwilligung, damit wir dir den Reset schicken dürfen.
               </p>
             )}
           </div>

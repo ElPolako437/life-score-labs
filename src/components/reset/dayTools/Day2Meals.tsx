@@ -93,7 +93,7 @@ export default function Day2Meals() {
         </div>
 
         <SprintHint>
-          Im Sprint kommt dein Tagesplan automatisch — abgestimmt auf das, was du magst und im Haus hast. Du musst nie wieder selbst rechnen.
+          In der CALINESS App kommt dein Tagesplan automatisch — abgestimmt auf das, was du magst und im Haus hast. Du musst nie wieder selbst rechnen.
         </SprintHint>
 
         <button

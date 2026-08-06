@@ -142,7 +142,7 @@ export default function ResetReflection() {
           disabled={!hardest}
           onClick={handleSubmit}
         >
-          Meine Caliness-Sprint-Empfehlung ansehen →
+          Meine Auswertung ansehen →
         </Button>
       </div>
     </div>
